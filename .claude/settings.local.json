@@ -17,7 +17,12 @@
       "Bash(python -m pytest:*)",
       "Bash(python3 -m pytest:*)",
       "WebFetch(domain:docs.anthropic.com)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:developers.facebook.com)",
+      "WebFetch(domain:developers.google.com)",
+      "WebSearch",
+      "WebFetch(domain:business-api.tiktok.com)",
+      "WebFetch(domain:developers.tiktok.com)"
     ],
     "deny": []
   }
