@@ -1,0 +1,101 @@
+# Docker Compose development override
+# This file is automatically loaded by docker-compose for development
+# Format version is auto-detected by Docker Compose
+
+services:
+  # Development overrides for the main application
+  factory-erp:
+    build:
+      target: production  # Still use production target but with dev settings
+    environment:
+      - DEBUG=true
+      - ENVIRONMENT=development
+      - LOG_LEVEL=debug
+      - WORKERS=2  # Fewer workers for development
+      - RUN_SEED_DATA=true  # Enable seed data in development
+      - HEALTH_CHECK_VERBOSE=true
+    volumes:
+      # Mount source code for development (optional)
+      - ./app:/app/app:ro
+      - ./migrations:/app/migrations:ro
+      - ./alembic.ini:/app/alembic.ini:ro
+      # Development logs and uploads
+      - ./dev-data/logs:/app/logs
+      - ./dev-data/uploads:/app/uploads
+    ports:
+      - "8000:8000"  # Direct access for development
+    command: ["/start-server.sh"]
+    # Remove health check in development to avoid noise
+    healthcheck:
+      disable: true
+
+  # Development database with local volume
+  postgres:
+    environment:
+      - POSTGRES_DB=factory_erp_dev
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=dev_password
+    volumes:
+      # Use local directory for development data
+      - ./dev-data/postgres:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"  # Different port to avoid conflicts
+
+  # Redis with simpler configuration for development
+  redis:
+    environment:
+      - REDIS_PASSWORD=dev_redis_password
+    volumes:
+      - ./dev-data/redis:/data
+    ports:
+      - "6380:6379"  # Different port to avoid conflicts
+
+  # Remove nginx from development (access app directly)
+  nginx:
+    profiles:
+      - disabled  # Disable nginx in development
+
+  # Add pgAdmin for database management in development
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: factory-erp-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@factory-erp.dev
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_CONFIG_SERVER_MODE=False
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - factory-erp-network
+    profiles:
+      - dev-tools
+
+  # Add Redis Commander for Redis management in development
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: factory-erp-redis-ui
+    environment:
+      - REDIS_HOSTS=local:redis:6379:0:dev_redis_password
+      - HTTP_USER=admin
+      - HTTP_PASSWORD=admin
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    networks:
+      - factory-erp-network
+    profiles:
+      - dev-tools
+
+volumes:
+  pgadmin_data:
+    driver: local
+
+# Additional development network settings
+networks:
+  factory-erp-network:
+    driver: bridge

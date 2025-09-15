@@ -1,0 +1,363 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Factory ERP System{% endblock %}
+
+{% block breadcrumb %}
+<nav class="flex" aria-label="Breadcrumb">
+    <ol class="flex items-center space-x-4">
+        <li>
+            <div>
+                <a href="/dashboard" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-home flex-shrink-0 h-5 w-5"></i>
+                    <span class="sr-only">Home</span>
+                </a>
+            </div>
+        </li>
+        <li>
+            <div class="flex items-center">
+                <i class="fas fa-chevron-right flex-shrink-0 h-5 w-5 text-gray-400"></i>
+                <span class="ml-4 text-sm font-medium text-gray-500">Dashboard</span>
+            </div>
+        </li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block page_header %}
+<div class="md:flex md:items-center md:justify-between">
+    <div class="min-w-0 flex-1">
+        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+            Dashboard
+        </h2>
+        <p class="mt-1 text-sm text-gray-500">
+            Welcome to your Factory ERP system. Monitor your operations in real-time.
+        </p>
+    </div>
+    <div class="mt-4 flex md:ml-4 md:mt-0">
+        <button type="button" 
+                class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+            <i class="fas fa-sync-alt -ml-0.5 mr-1.5 h-4 w-4"></i>
+            Refresh
+        </button>
+        <button type="button" 
+                class="ml-3 inline-flex items-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
+            <i class="fas fa-plus -ml-0.5 mr-1.5 h-4 w-4"></i>
+            Quick Action
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+    <!-- Total Orders -->
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="rounded-md bg-primary-500 p-3">
+                        <i class="fas fa-shopping-cart h-6 w-6 text-white"></i>
+                    </div>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Total Orders</dt>
+                        <dd class="text-lg font-medium text-gray-900">{{ stats.total_orders or 0 }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+                <a href="/sales/requirements" class="font-medium text-primary-700 hover:text-primary-900">
+                    View all orders
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Active Production -->
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="rounded-md bg-warning-500 p-3">
+                        <i class="fas fa-industry h-6 w-6 text-white"></i>
+                    </div>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Active Production</dt>
+                        <dd class="text-lg font-medium text-gray-900">{{ stats.active_production or 0 }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+                <a href="/production/orders" class="font-medium text-warning-700 hover:text-warning-900">
+                    View production
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Pending Deliveries -->
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="rounded-md bg-danger-500 p-3">
+                        <i class="fas fa-truck h-6 w-6 text-white"></i>
+                    </div>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Pending Deliveries</dt>
+                        <dd class="text-lg font-medium text-gray-900">{{ stats.pending_deliveries or 0 }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+                <a href="/sales/requirements?status=pending" class="font-medium text-danger-700 hover:text-danger-900">
+                    View pending
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Total Revenue -->
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+        <div class="p-5">
+            <div class="flex items-center">
+                <div class="flex-shrink-0">
+                    <div class="rounded-md bg-success-500 p-3">
+                        <i class="fas fa-dollar-sign h-6 w-6 text-white"></i>
+                    </div>
+                </div>
+                <div class="ml-5 w-0 flex-1">
+                    <dl>
+                        <dt class="text-sm font-medium text-gray-500 truncate">Monthly Revenue</dt>
+                        <dd class="text-lg font-medium text-gray-900">${{ stats.monthly_revenue or 0 | number_format }}</dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+        <div class="bg-gray-50 px-5 py-3">
+            <div class="text-sm">
+                <a href="/sales/dashboard" class="font-medium text-success-700 hover:text-success-900">
+                    View details
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
+    <!-- Recent Customer Requirements -->
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+        <div class="p-6">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Recent Customer Requirements
+                </h3>
+                <a href="/sales/requirements" class="text-sm font-medium text-primary-600 hover:text-primary-500">
+                    View all
+                </a>
+            </div>
+            <div class="mt-6 flow-root">
+                <ul role="list" class="-my-5 divide-y divide-gray-200">
+                    {% for requirement in recent_requirements %}
+                    <li class="py-4">
+                        <div class="flex items-center space-x-4">
+                            <div class="flex-shrink-0">
+                                <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <i class="fas fa-file-contract h-4 w-4 text-gray-600"></i>
+                                </div>
+                            </div>
+                            <div class="min-w-0 flex-1">
+                                <p class="text-sm font-medium text-gray-900 truncate">
+                                    {{ requirement.sale_no }} - {{ requirement.customer_name }}
+                                </p>
+                                <p class="text-sm text-gray-500 truncate">
+                                    {{ requirement.product_part_name }} ({{ requirement.po_quantity }} units)
+                                </p>
+                            </div>
+                            <div class="flex-shrink-0">
+                                {% if requirement.summary_status == 'Complete' %}
+                                <span class="inline-flex items-center rounded-full bg-success-100 px-2.5 py-0.5 text-xs font-medium text-success-800">
+                                    Complete
+                                </span>
+                                {% else %}
+                                <span class="inline-flex items-center rounded-full bg-warning-100 px-2.5 py-0.5 text-xs font-medium text-warning-800">
+                                    {{ requirement.summary_status }}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                    {% if not recent_requirements %}
+                    <li class="py-4">
+                        <p class="text-sm text-gray-500 text-center">No recent requirements found</p>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Production Orders Status -->
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+        <div class="p-6">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg leading-6 font-medium text-gray-900">
+                    Production Orders
+                </h3>
+                <a href="/production/orders" class="text-sm font-medium text-primary-600 hover:text-primary-500">
+                    View all
+                </a>
+            </div>
+            <div class="mt-6">
+                <!-- Production Status Chart -->
+                <div class="space-y-3">
+                    {% for status, count in production_status.items() %}
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            {% if status == 'completed' %}
+                            <div class="w-3 h-3 rounded-full bg-success-500 mr-3"></div>
+                            {% elif status == 'in_progress' %}
+                            <div class="w-3 h-3 rounded-full bg-warning-500 mr-3"></div>
+                            {% else %}
+                            <div class="w-3 h-3 rounded-full bg-gray-500 mr-3"></div>
+                            {% endif %}
+                            <span class="text-sm font-medium text-gray-900 capitalize">{{ status.replace('_', ' ') }}</span>
+                        </div>
+                        <span class="text-sm text-gray-500">{{ count }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Recent Production Orders -->
+                <div class="mt-6 pt-6 border-t border-gray-200">
+                    <h4 class="text-sm font-medium text-gray-900 mb-3">Recent Orders</h4>
+                    <ul role="list" class="space-y-3">
+                        {% for order in recent_production %}
+                        <li class="flex justify-between items-center">
+                            <div class="min-w-0 flex-1">
+                                <p class="text-sm font-medium text-gray-900 truncate">
+                                    {{ order.production_order_no }}
+                                </p>
+                                <p class="text-sm text-gray-500 truncate">
+                                    {{ order.product_part_name }}
+                                </p>
+                            </div>
+                            <div class="ml-4 flex-shrink-0">
+                                <div class="text-sm text-gray-500">
+                                    {{ order.completion_percentage }}%
+                                </div>
+                                <div class="w-16 bg-gray-200 rounded-full h-1.5">
+                                    <div class="bg-primary-600 h-1.5 rounded-full" style="width: {{ order.completion_percentage }}%"></div>
+                                </div>
+                            </div>
+                        </li>
+                        {% endfor %}
+                        {% if not recent_production %}
+                        <li>
+                            <p class="text-sm text-gray-500 text-center">No recent production orders</p>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="mt-8">
+    <div class="overflow-hidden rounded-lg bg-white shadow">
+        <div class="p-6">
+            <h3 class="text-lg leading-6 font-medium text-gray-900 mb-6">
+                Quick Actions
+            </h3>
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <!-- Upload Excel -->
+                <a href="/excel/upload" 
+                   class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500">
+                    <div class="flex-shrink-0">
+                        <div class="rounded-md bg-success-100 p-2">
+                            <i class="fas fa-file-upload h-5 w-5 text-success-600"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <span class="absolute inset-0"></span>
+                        <p class="text-sm font-medium text-gray-900">Upload Excel</p>
+                        <p class="text-sm text-gray-500 truncate">Import data from Excel files</p>
+                    </div>
+                </a>
+                
+                <!-- Create Product -->
+                <a href="/products/create" 
+                   class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500">
+                    <div class="flex-shrink-0">
+                        <div class="rounded-md bg-primary-100 p-2">
+                            <i class="fas fa-plus h-5 w-5 text-primary-600"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <span class="absolute inset-0"></span>
+                        <p class="text-sm font-medium text-gray-900">Add Product</p>
+                        <p class="text-sm text-gray-500 truncate">Create new product</p>
+                    </div>
+                </a>
+                
+                <!-- Sync ERPNext -->
+                <a href="/erpnext" 
+                   class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500">
+                    <div class="flex-shrink-0">
+                        <div class="rounded-md bg-warning-100 p-2">
+                            <i class="fas fa-sync h-5 w-5 text-warning-600"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <span class="absolute inset-0"></span>
+                        <p class="text-sm font-medium text-gray-900">Sync ERPNext</p>
+                        <p class="text-sm text-gray-500 truncate">Synchronize with ERP</p>
+                    </div>
+                </a>
+                
+                <!-- Download Reports -->
+                <a href="/excel/download" 
+                   class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-primary-500">
+                    <div class="flex-shrink-0">
+                        <div class="rounded-md bg-danger-100 p-2">
+                            <i class="fas fa-download h-5 w-5 text-danger-600"></i>
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <span class="absolute inset-0"></span>
+                        <p class="text-sm font-medium text-gray-900">Download Reports</p>
+                        <p class="text-sm text-gray-500 truncate">Export data to Excel</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for dashboard interactions -->
+<script>
+// Dashboard refresh functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Auto-refresh every 5 minutes
+    setInterval(function() {
+        window.location.reload();
+    }, 300000);
+});
+</script>
+{% endblock %}

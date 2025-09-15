@@ -1,0 +1,198 @@
+<!-- Logo and company name -->
+<div class="flex h-16 shrink-0 items-center">
+    <img class="h-8 w-auto" src="{{ url_for('static', path='/img/logo.svg') }}" alt="Factory ERP">
+    <span class="ml-3 text-xl font-bold text-gray-900">Factory ERP</span>
+</div>
+
+<!-- Navigation -->
+<nav class="flex flex-1 flex-col">
+    <ul role="list" class="flex flex-1 flex-col gap-y-7">
+        <!-- Main navigation -->
+        <li>
+            <ul role="list" class="-mx-2 space-y-1">
+                <!-- Dashboard -->
+                <li>
+                    <a href="/dashboard" 
+                       class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                        <i class="fas fa-chart-pie h-6 w-6 shrink-0"></i>
+                        Dashboard
+                    </a>
+                </li>
+                
+                <!-- Sales -->
+                <li x-data="{ open: window.location.pathname.includes('/sales') }">
+                    <button type="button" 
+                            class="group flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm leading-6 font-semibold text-gray-700 hover:text-primary-600 hover:bg-gray-50"
+                            @click="open = !open">
+                        <i class="fas fa-shopping-cart h-6 w-6 shrink-0"></i>
+                        Sales
+                        <i class="fas fa-chevron-right ml-auto h-4 w-4 shrink-0 transition-transform" 
+                           :class="open ? 'rotate-90' : ''"></i>
+                    </button>
+                    <ul x-show="open" x-transition class="mt-1 px-2">
+                        <li>
+                            <a href="/sales/customers" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-users mr-2"></i>Customers
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/sales/requirements" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-file-contract mr-2"></i>Requirements
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/sales/dashboard" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-chart-bar mr-2"></i>Sales Dashboard
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <!-- Production -->
+                <li x-data="{ open: window.location.pathname.includes('/production') }">
+                    <button type="button" 
+                            class="group flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm leading-6 font-semibold text-gray-700 hover:text-primary-600 hover:bg-gray-50"
+                            @click="open = !open">
+                        <i class="fas fa-industry h-6 w-6 shrink-0"></i>
+                        Production
+                        <i class="fas fa-chevron-right ml-auto h-4 w-4 shrink-0 transition-transform" 
+                           :class="open ? 'rotate-90' : ''"></i>
+                    </button>
+                    <ul x-show="open" x-transition class="mt-1 px-2">
+                        <li>
+                            <a href="/production/orders" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-clipboard-list mr-2"></i>Production Orders
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/production/tracking" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-stopwatch mr-2"></i>Tracking
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/production/dashboard" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-chart-line mr-2"></i>Production Dashboard
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <!-- Products -->
+                <li x-data="{ open: window.location.pathname.includes('/products') }">
+                    <button type="button" 
+                            class="group flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm leading-6 font-semibold text-gray-700 hover:text-primary-600 hover:bg-gray-50"
+                            @click="open = !open">
+                        <i class="fas fa-box h-6 w-6 shrink-0"></i>
+                        Products
+                        <i class="fas fa-chevron-right ml-auto h-4 w-4 shrink-0 transition-transform" 
+                           :class="open ? 'rotate-90' : ''"></i>
+                    </button>
+                    <ul x-show="open" x-transition class="mt-1 px-2">
+                        <li>
+                            <a href="/products" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-list mr-2"></i>Product List
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/products/create" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-plus mr-2"></i>Add Product
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/products/lookup" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-search mr-2"></i>Product Lookup
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <!-- Excel Integration -->
+                <li x-data="{ open: window.location.pathname.includes('/excel') }">
+                    <button type="button" 
+                            class="group flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm leading-6 font-semibold text-gray-700 hover:text-primary-600 hover:bg-gray-50"
+                            @click="open = !open">
+                        <i class="fas fa-file-excel h-6 w-6 shrink-0"></i>
+                        Excel
+                        <i class="fas fa-chevron-right ml-auto h-4 w-4 shrink-0 transition-transform" 
+                           :class="open ? 'rotate-90' : ''"></i>
+                    </button>
+                    <ul x-show="open" x-transition class="mt-1 px-2">
+                        <li>
+                            <a href="/excel/upload" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-upload mr-2"></i>Upload Data
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/excel/download" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-download mr-2"></i>Download Data
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/excel/templates" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-file-download mr-2"></i>Templates
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        
+        <!-- Settings and Admin -->
+        <li>
+            <div class="text-xs font-semibold leading-6 text-gray-400">Settings</div>
+            <ul role="list" class="-mx-2 mt-2 space-y-1">
+                <!-- ERPNext Integration -->
+                <li>
+                    <a href="/erpnext" 
+                       class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                        <i class="fas fa-sync h-6 w-6 shrink-0"></i>
+                        ERPNext Sync
+                    </a>
+                </li>
+                
+                <!-- User Management (Admin only) -->
+                <li>
+                    <a href="/users" 
+                       class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                        <i class="fas fa-user-cog h-6 w-6 shrink-0"></i>
+                        User Management
+                    </a>
+                </li>
+                
+                <!-- System Settings -->
+                <li>
+                    <a href="/settings" 
+                       class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                        <i class="fas fa-cogs h-6 w-6 shrink-0"></i>
+                        System Settings
+                    </a>
+                </li>
+            </ul>
+        </li>
+        
+        <!-- Help -->
+        <li class="mt-auto">
+            <ul role="list" class="-mx-2 space-y-1">
+                <li>
+                    <a href="/help" 
+                       class="group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                        <i class="fas fa-question-circle h-6 w-6 shrink-0"></i>
+                        Help & Support
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</nav>

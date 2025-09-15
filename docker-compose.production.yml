@@ -1,0 +1,229 @@
+# Docker Compose production configuration
+# Use with: docker-compose -f docker-compose.yml -f docker-compose.production.yml up
+# Format version is auto-detected by Docker Compose
+
+services:
+  # Production application configuration
+  factory-erp:
+    restart: always
+    environment:
+      - DEBUG=false
+      - ENVIRONMENT=production
+      - LOG_LEVEL=info
+      - WORKERS=auto  # Auto-detect optimal worker count
+      - RUN_SEED_DATA=false  # Never run seed data in production
+      - HEALTH_CHECK_VERBOSE=false
+    # Remove direct port exposure (use nginx)
+    ports: []
+    # Production security settings
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=100m
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    # Enhanced health check for production
+    healthcheck:
+      test: ["CMD", "python", "/healthcheck.py"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # Production database configuration
+  postgres:
+    restart: always
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    # Remove port exposure for security
+    ports: []
+    # Production database settings
+    command: [
+      "postgres",
+      "-c", "max_connections=200",
+      "-c", "shared_buffers=256MB",
+      "-c", "effective_cache_size=1GB",
+      "-c", "work_mem=4MB",
+      "-c", "maintenance_work_mem=64MB",
+      "-c", "random_page_cost=1.1",
+      "-c", "temp_file_limit=2GB",
+      "-c", "log_min_duration_statement=1000",
+      "-c", "log_connections=on",
+      "-c", "log_disconnections=on",
+      "-c", "log_lock_waits=on",
+      "-c", "log_statement=ddl",
+      "-c", "log_hostname=on",
+      "-c", "track_activities=on",
+      "-c", "track_counts=on",
+      "-c", "track_io_timing=on",
+      "-c", "track_functions=all",
+      "-c", "checkpoint_completion_target=0.9",
+      "-c", "wal_buffers=16MB",
+      "-c", "default_statistics_target=100"
+    ]
+    # Resource limits for database
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+          memory: 1G
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    # Security settings
+    security_opt:
+      - no-new-privileges:true
+    # Enhanced health check
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-factory_erp}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # Production Redis configuration
+  redis:
+    restart: always
+    # Remove port exposure for security
+    ports: []
+    # Production Redis settings
+    command: [
+      "redis-server",
+      "--appendonly", "yes",
+      "--requirepass", "${REDIS_PASSWORD}",
+      "--maxmemory", "256mb",
+      "--maxmemory-policy", "allkeys-lru",
+      "--save", "900 1",
+      "--save", "300 10",
+      "--save", "60 10000",
+      "--tcp-keepalive", "60",
+      "--timeout", "300"
+    ]
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.1'
+          memory: 128M
+    # Security settings
+    security_opt:
+      - no-new-privileges:true
+
+  # Enable Nginx in production
+  nginx:
+    restart: always
+    profiles: []  # Remove from profiles to enable
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.1'
+          memory: 64M
+    # Security settings
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /var/cache/nginx:rw,size=50m
+      - /var/run:rw,size=10m
+      - /tmp:rw,size=10m
+    # Additional production volumes
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/proxy_params:/etc/nginx/proxy_params:ro
+      - ./docker/ssl:/etc/nginx/ssl:ro
+      - app_static:/var/www/static:ro
+      - nginx_logs:/var/log/nginx
+    # Health check
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/nginx-health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # Production monitoring (optional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: factory-erp-prometheus
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - factory-erp-network
+    profiles:
+      - monitoring
+
+  # Grafana for metrics visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: factory-erp-grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+    ports:
+      - "3000:3000"
+    depends_on:
+      - prometheus
+    networks:
+      - factory-erp-network
+    profiles:
+      - monitoring
+
+# Additional production volumes
+volumes:
+  nginx_logs:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+# Production network with custom subnet
+networks:
+  factory-erp-network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
+    driver_opts:
+      com.docker.network.bridge.enable_icc: "true"
+      com.docker.network.bridge.enable_ip_masquerade: "true"
+      com.docker.network.driver.mtu: "1500"

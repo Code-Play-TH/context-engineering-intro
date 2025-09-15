@@ -1,0 +1,43 @@
+# Testing dependencies for Factory ERP System
+
+# Core testing framework
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+
+# HTTP testing
+httpx>=0.24.0
+
+# Test data generation and mocking
+factory-boy>=3.3.0
+faker>=19.0.0
+pytest-mock>=3.11.0
+
+# Database testing
+pytest-alembic>=0.10.0
+sqlalchemy-utils>=0.41.0
+
+# Excel testing
+openpyxl>=3.1.0
+xlrd>=2.0.0
+
+# Code quality and formatting
+flake8>=6.0.0
+black>=23.0.0
+isort>=5.12.0
+mypy>=1.5.0
+
+# Coverage reporting
+coverage>=7.2.0
+pytest-html>=3.2.0
+
+# Performance testing
+pytest-benchmark>=4.0.0
+
+# Parallel test execution
+pytest-xdist>=3.3.0
+
+# Test utilities
+freezegun>=1.2.0  # For mocking datetime
+responses>=0.23.0  # For mocking HTTP requests
+pytest-env>=0.8.0  # For environment variable management

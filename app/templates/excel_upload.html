@@ -1,0 +1,464 @@
+{% extends "base.html" %}
+
+{% block title %}Excel Upload - Factory ERP System{% endblock %}
+
+{% block breadcrumb %}
+<nav class="flex" aria-label="Breadcrumb">
+    <ol class="flex items-center space-x-4">
+        <li>
+            <div>
+                <a href="/dashboard" class="text-gray-400 hover:text-gray-500">
+                    <i class="fas fa-home flex-shrink-0 h-5 w-5"></i>
+                    <span class="sr-only">Home</span>
+                </a>
+            </div>
+        </li>
+        <li>
+            <div class="flex items-center">
+                <i class="fas fa-chevron-right flex-shrink-0 h-5 w-5 text-gray-400"></i>
+                <span class="ml-4 text-sm font-medium text-gray-500">Excel</span>
+            </div>
+        </li>
+        <li>
+            <div class="flex items-center">
+                <i class="fas fa-chevron-right flex-shrink-0 h-5 w-5 text-gray-400"></i>
+                <span class="ml-4 text-sm font-medium text-gray-500">Upload</span>
+            </div>
+        </li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block page_header %}
+<div class="md:flex md:items-center md:justify-between">
+    <div class="min-w-0 flex-1">
+        <h2 class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+            Excel Data Upload
+        </h2>
+        <p class="mt-1 text-sm text-gray-500">
+            Transform your Excel workflows into web-based data management. Upload customer requirements, products, and more.
+        </p>
+    </div>
+    <div class="mt-4 flex md:ml-4 md:mt-0">
+        <button type="button" 
+                onclick="FactoryERP.ExcelIntegration.downloadTemplate('vlookup')"
+                class="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+            <i class="fas fa-download -ml-0.5 mr-1.5 h-4 w-4"></i>
+            VLOOKUP Template
+        </button>
+        <button type="button" 
+                onclick="FactoryERP.ExcelIntegration.downloadTemplate('customer-requirements')"
+                class="ml-3 inline-flex items-center rounded-md bg-primary-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-500">
+            <i class="fas fa-file-download -ml-0.5 mr-1.5 h-4 w-4"></i>
+            Download Template
+        </button>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Upload Types Selection -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">Select Upload Type</h3>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2" x-data="{ selectedType: 'customer-requirements' }">
+            <!-- Customer Requirements -->
+            <div class="relative rounded-lg border p-4 cursor-pointer transition-colors"
+                 :class="selectedType === 'customer-requirements' ? 'border-primary-500 bg-primary-50' : 'border-gray-300 hover:border-gray-400'"
+                 @click="selectedType = 'customer-requirements'">
+                <div class="flex items-start">
+                    <div class="flex items-center h-5">
+                        <input type="radio" 
+                               name="uploadType" 
+                               value="customer-requirements"
+                               class="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300"
+                               x-model="selectedType">
+                    </div>
+                    <div class="ml-3">
+                        <label class="text-sm font-medium text-gray-900">Customer Requirements</label>
+                        <p class="text-sm text-gray-500">
+                            Upload sales orders, PO details, delivery schedules. 
+                            Includes VLOOKUP functionality and automatic calculations.
+                        </p>
+                        <div class="mt-2">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                <i class="fas fa-calculator mr-1"></i>
+                                Auto-calculations
+                            </span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 ml-2">
+                                <i class="fas fa-search mr-1"></i>
+                                VLOOKUP support
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Products -->
+            <div class="relative rounded-lg border p-4 cursor-pointer transition-colors"
+                 :class="selectedType === 'products' ? 'border-primary-500 bg-primary-50' : 'border-gray-300 hover:border-gray-400'"
+                 @click="selectedType = 'products'">
+                <div class="flex items-start">
+                    <div class="flex items-center h-5">
+                        <input type="radio" 
+                               name="uploadType" 
+                               value="products"
+                               class="focus:ring-primary-500 h-4 w-4 text-primary-600 border-gray-300"
+                               x-model="selectedType">
+                    </div>
+                    <div class="ml-3">
+                        <label class="text-sm font-medium text-gray-900">Products & Items</label>
+                        <p class="text-sm text-gray-500">
+                            Upload product catalog, part numbers, specifications, and pricing information.
+                        </p>
+                        <div class="mt-2">
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                <i class="fas fa-box mr-1"></i>
+                                Product catalog
+                            </span>
+                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 ml-2">
+                                <i class="fas fa-tags mr-1"></i>
+                                Pricing data
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- File Upload Area -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">Upload Excel File</h3>
+        
+        <!-- Upload Options -->
+        <div class="mb-4" x-data="{ validateOnly: false }">
+            <div class="flex items-center">
+                <input type="checkbox" 
+                       id="validateOnly" 
+                       class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
+                       x-model="validateOnly">
+                <label for="validateOnly" class="ml-2 block text-sm text-gray-900">
+                    Validate only (don't import data)
+                </label>
+            </div>
+            <p class="mt-1 text-sm text-gray-500">
+                Check this to validate your file without importing the data. Useful for testing file format and data quality.
+            </p>
+        </div>
+        
+        <!-- Drag and Drop Area -->
+        <div class="upload-area" id="uploadArea">
+            <input type="file" 
+                   id="fileInput" 
+                   accept=".xlsx,.xls" 
+                   class="hidden">
+            <div class="text-center">
+                <i class="fas fa-cloud-upload-alt mx-auto h-12 w-12 text-gray-400"></i>
+                <div class="mt-4">
+                    <label for="fileInput" class="cursor-pointer">
+                        <span class="text-primary-600 hover:text-primary-500 font-medium">
+                            Click to upload
+                        </span>
+                        <span class="text-gray-500"> or drag and drop</span>
+                    </label>
+                </div>
+                <p class="mt-2 text-sm text-gray-500">
+                    Excel files up to 10MB (.xlsx, .xls)
+                </p>
+            </div>
+        </div>
+        
+        <!-- File Preview -->
+        <div id="filePreview" class="mt-4 hidden">
+            <div class="rounded-md bg-green-50 p-4">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-check-circle h-5 w-5 text-green-400"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-green-800" id="fileName">
+                            File selected
+                        </h3>
+                        <div class="mt-2 text-sm text-green-700">
+                            <p id="fileDetails">Ready to upload</p>
+                        </div>
+                        <div class="mt-4">
+                            <div class="-mx-2 -my-1.5 flex">
+                                <button type="button" 
+                                        class="bg-green-50 px-2 py-1.5 rounded-md text-sm font-medium text-green-800 hover:bg-green-100"
+                                        onclick="uploadSelectedFile()">
+                                    Upload File
+                                </button>
+                                <button type="button" 
+                                        class="bg-green-50 px-2 py-1.5 rounded-md text-sm font-medium text-green-800 hover:bg-green-100 ml-3"
+                                        onclick="clearFileSelection()">
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Upload Progress -->
+    <div id="uploadProgress" class="bg-white shadow rounded-lg p-6 hidden">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">Upload Progress</h3>
+        <div class="space-y-4">
+            <div class="flex items-center justify-between">
+                <span class="text-sm font-medium text-gray-700">Processing file...</span>
+                <span class="text-sm text-gray-500" id="progressText">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar" style="width: 0%"></div>
+            </div>
+            <div id="uploadResults" class="hidden">
+                <div class="rounded-md bg-blue-50 p-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-info-circle h-5 w-5 text-blue-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-blue-800">
+                                Upload Results
+                            </h3>
+                            <div class="mt-2 text-sm text-blue-700">
+                                <div id="uploadSummary"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Excel Formula Examples -->
+    <div class="bg-white shadow rounded-lg p-6">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">
+            Excel Formula Support
+            <span class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                Web Compatible
+            </span>
+        </h3>
+        <p class="text-sm text-gray-600 mb-4">
+            Your Excel formulas are automatically converted to web-based calculations. Here are some examples:
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- VLOOKUP Example -->
+            <div class="border rounded-lg p-4">
+                <h4 class="font-medium text-gray-900 mb-2">
+                    <i class="fas fa-search text-blue-500 mr-2"></i>
+                    VLOOKUP Product Information
+                </h4>
+                <div class="bg-gray-50 rounded p-3 font-mono text-sm text-gray-700">
+                    =VLOOKUP(D2,ProductMaster!A:G,2,FALSE)
+                </div>
+                <p class="mt-2 text-sm text-gray-600">
+                    Automatically looks up product names, prices, and specifications from your product master data.
+                </p>
+            </div>
+            
+            <!-- Calculation Example -->
+            <div class="border rounded-lg p-4">
+                <h4 class="font-medium text-gray-900 mb-2">
+                    <i class="fas fa-calculator text-green-500 mr-2"></i>
+                    Shortage/Surplus Calculation
+                </h4>
+                <div class="bg-gray-50 rounded p-3 font-mono text-sm text-gray-700">
+                    =H2-G2
+                </div>
+                <p class="mt-2 text-sm text-gray-600">
+                    Automatically calculates shortage or surplus by comparing delivered quantity to PO quantity.
+                </p>
+            </div>
+            
+            <!-- Status Formula -->
+            <div class="border rounded-lg p-4">
+                <h4 class="font-medium text-gray-900 mb-2">
+                    <i class="fas fa-check-circle text-purple-500 mr-2"></i>
+                    Status Determination
+                </h4>
+                <div class="bg-gray-50 rounded p-3 font-mono text-sm text-gray-700">
+                    =IF(I2>=0,"Complete","Shortage")
+                </div>
+                <p class="mt-2 text-sm text-gray-600">
+                    Automatically sets order status based on delivery completion.
+                </p>
+            </div>
+            
+            <!-- Total Value -->
+            <div class="border rounded-lg p-4">
+                <h4 class="font-medium text-gray-900 mb-2">
+                    <i class="fas fa-dollar-sign text-yellow-500 mr-2"></i>
+                    Total Value Calculation
+                </h4>
+                <div class="bg-gray-50 rounded p-3 font-mono text-sm text-gray-700">
+                    =G2*K2
+                </div>
+                <p class="mt-2 text-sm text-gray-600">
+                    Calculates total order value by multiplying quantity and unit price.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let selectedFile = null;
+let currentUploadType = 'customer-requirements';
+
+// Initialize file upload functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    
+    // Update upload type when radio button changes
+    document.querySelectorAll('input[name="uploadType"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            currentUploadType = this.value;
+        });
+    });
+    
+    // Initialize drag and drop
+    FactoryERP.FileUpload.initDragDrop(uploadArea, fileInput, {
+        allowedTypes: ['.xlsx', '.xls'],
+        maxSize: 10 * 1024 * 1024, // 10MB
+        onFileSelect: (file) => {
+            selectedFile = file;
+            showFilePreview(file);
+        },
+        onError: (message) => {
+            FactoryERP.Utils.showNotification(message, 'error');
+        }
+    });
+});
+
+function showFilePreview(file) {
+    const preview = document.getElementById('filePreview');
+    const fileName = document.getElementById('fileName');
+    const fileDetails = document.getElementById('fileDetails');
+    
+    fileName.textContent = file.name;
+    fileDetails.textContent = `${FactoryERP.FileUpload.formatFileSize(file.size)} • ${file.type || 'Excel file'}`;
+    
+    preview.classList.remove('hidden');
+}
+
+function clearFileSelection() {
+    selectedFile = null;
+    document.getElementById('fileInput').value = '';
+    document.getElementById('filePreview').classList.add('hidden');
+    document.getElementById('uploadProgress').classList.add('hidden');
+}
+
+async function uploadSelectedFile() {
+    if (!selectedFile) {
+        FactoryERP.Utils.showNotification('Please select a file first', 'error');
+        return;
+    }
+    
+    const validateOnly = document.getElementById('validateOnly').checked;
+    const progressContainer = document.getElementById('uploadProgress');
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const uploadResults = document.getElementById('uploadResults');
+    const uploadSummary = document.getElementById('uploadSummary');
+    
+    // Show progress
+    progressContainer.classList.remove('hidden');
+    uploadResults.classList.add('hidden');
+    progressBar.style.width = '0%';
+    progressText.textContent = '0%';
+    
+    // Simulate progress
+    let progress = 0;
+    const progressInterval = setInterval(() => {
+        progress += Math.random() * 20;
+        if (progress > 90) progress = 90;
+        
+        progressBar.style.width = progress + '%';
+        progressText.textContent = Math.round(progress) + '%';
+    }, 200);
+    
+    try {
+        const result = await FactoryERP.ExcelIntegration.uploadFile(
+            selectedFile, 
+            currentUploadType, 
+            validateOnly
+        );
+        
+        // Complete progress
+        clearInterval(progressInterval);
+        progressBar.style.width = '100%';
+        progressText.textContent = '100%';
+        
+        // Show results
+        let summaryHtml = '';
+        
+        if (validateOnly) {
+            summaryHtml = `
+                <div class="space-y-2">
+                    <p><strong>Validation Results:</strong></p>
+                    <p>Total rows: ${result.total_processed}</p>
+                    <p>Valid rows: ${result.total_processed - result.errors.length}</p>
+                    <p>Errors: ${result.errors.length}</p>
+                    <p>Success rate: ${result.success_rate.toFixed(1)}%</p>
+                </div>
+            `;
+        } else {
+            summaryHtml = `
+                <div class="space-y-2">
+                    <p><strong>Import Results:</strong></p>
+                    <p>Total processed: ${result.total_processed}</p>
+                    <p>Created: ${result.created}</p>
+                    <p>Updated: ${result.updated}</p>
+                    <p>Errors: ${result.errors.length}</p>
+                    <p>Success rate: ${result.success_rate.toFixed(1)}%</p>
+                </div>
+            `;
+        }
+        
+        if (result.errors && result.errors.length > 0) {
+            summaryHtml += `
+                <div class="mt-4">
+                    <p class="font-medium text-red-800">Errors:</p>
+                    <ul class="mt-1 list-disc list-inside text-sm">
+                        ${result.errors.slice(0, 5).map(error => 
+                            `<li>Row ${error.row || 'N/A'}: ${error.error || error.errors?.join(', ') || 'Unknown error'}</li>`
+                        ).join('')}
+                    </ul>
+                    ${result.errors.length > 5 ? `<p class="text-sm text-gray-600 mt-1">... and ${result.errors.length - 5} more errors</p>` : ''}
+                </div>
+            `;
+        }
+        
+        uploadSummary.innerHTML = summaryHtml;
+        uploadResults.classList.remove('hidden');
+        
+        // Clear file selection after successful upload
+        if (!validateOnly && result.success_rate > 0) {
+            setTimeout(() => {
+                clearFileSelection();
+            }, 3000);
+        }
+        
+    } catch (error) {
+        clearInterval(progressInterval);
+        progressBar.style.width = '0%';
+        progressText.textContent = 'Failed';
+        progressBar.classList.add('danger');
+        
+        uploadSummary.innerHTML = `
+            <div class="text-red-700">
+                <p><strong>Upload Failed:</strong></p>
+                <p>${error.message}</p>
+            </div>
+        `;
+        uploadResults.classList.remove('hidden');
+    }
+}
+</script>
+{% endblock %}

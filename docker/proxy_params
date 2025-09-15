@@ -1,0 +1,101 @@
+# Nginx proxy parameters for Factory ERP System
+# Common proxy settings for backend communication
+
+proxy_http_version 1.1;
+proxy_cache_bypass $http_upgrade;
+
+# WebSocket and HTTP upgrade support
+proxy_set_header Upgrade $http_upgrade;
+proxy_set_header Connection "upgrade";
+
+# Forward client information
+proxy_set_header Host $host;
+proxy_set_header X-Real-IP $remote_addr;
+proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+proxy_set_header X-Forwarded-Proto $scheme;
+proxy_set_header X-Forwarded-Host $host;
+proxy_set_header X-Forwarded-Port $server_port;
+
+# Timeout settings
+proxy_connect_timeout 60s;
+proxy_send_timeout 60s;
+proxy_read_timeout 60s;
+
+# Buffer settings for optimal performance
+proxy_buffering on;
+proxy_buffer_size 4k;
+proxy_buffers 8 4k;
+proxy_busy_buffers_size 8k;
+
+# Rate limiting
+limit_req zone=api burst=20 nodelay;
+
+# Backend server
+proxy_pass http://factory_erp_backend;
+
+# Handle errors gracefully
+proxy_intercept_errors on;
+error_page 502 503 504 /50x.html;
+
+# Static file serving
+location /static/ {
+    alias /var/www/static/;
+    expires 1y;
+    add_header Cache-Control "public, immutable";
+    add_header Vary "Accept-Encoding";
+    
+    # Security for static files
+    location ~* \.(js|css)$ {
+        add_header Content-Security-Policy "default-src 'self';";
+    }
+}
+
+# File upload handling
+location /uploads/ {
+    internal;
+    alias /var/www/uploads/;
+    expires 1h;
+    add_header Cache-Control "private";
+}
+
+# API rate limiting
+location /api/ {
+    limit_req zone=api burst=50 nodelay;
+    limit_req_status 429;
+    
+    # CORS for API endpoints
+    add_header Access-Control-Allow-Origin "*" always;
+    add_header Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS" always;
+    add_header Access-Control-Allow-Headers "Authorization, Content-Type, Accept" always;
+    
+    if ($request_method = 'OPTIONS') {
+        return 204;
+    }
+    
+    include /etc/nginx/proxy_params;
+}
+
+# Authentication endpoints with stricter rate limiting
+location ~ ^/api/(auth|login|register) {
+    limit_req zone=login burst=10 nodelay;
+    limit_req_status 429;
+    
+    include /etc/nginx/proxy_params;
+}
+
+# Health check endpoint (bypass rate limiting)
+location /health {
+    access_log off;
+    include /etc/nginx/proxy_params;
+}
+
+# Documentation (if enabled)
+location ~ ^/(docs|redoc) {
+    # Optional: restrict access to documentation in production
+    # allow 10.0.0.0/8;
+    # allow 172.16.0.0/12;
+    # allow 192.168.0.0/16;
+    # deny all;
+    
+    include /etc/nginx/proxy_params;
+}
