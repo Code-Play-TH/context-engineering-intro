@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full bg-gray-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Factory ERP System</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Alpine.js for interactivity -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="h-full bg-gray-50">
+    <div class="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-md w-full space-y-8">
+            <!-- Logo and heading -->
+            <div class="text-center">
+                <img class="mx-auto h-12 w-auto" src="{{ url_for('static', path='/img/logo.svg') }}" alt="Factory ERP">
+                <h2 class="mt-6 text-3xl font-bold tracking-tight text-gray-900">
+                    Sign in to Factory ERP
+                </h2>
+                <p class="mt-2 text-sm text-gray-600">
+                    Access your manufacturing management system
+                </p>
+            </div>
+
+            <!-- Login form -->
+            <form class="mt-8 space-y-6" x-data="loginForm()" @submit.prevent="login">
+                <div class="space-y-4">
+                    <!-- Username field -->
+                    <div>
+                        <label for="username" class="sr-only">Username</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-user h-5 w-5 text-gray-400"></i>
+                            </div>
+                            <input 
+                                id="username" 
+                                name="username" 
+                                type="text" 
+                                required
+                                x-model="username"
+                                class="appearance-none relative block w-full px-12 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm" 
+                                placeholder="Username">
+                        </div>
+                    </div>
+                    
+                    <!-- Password field -->
+                    <div>
+                        <label for="password" class="sr-only">Password</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-lock h-5 w-5 text-gray-400"></i>
+                            </div>
+                            <input 
+                                id="password" 
+                                name="password" 
+                                type="password" 
+                                required
+                                x-model="password"
+                                class="appearance-none relative block w-full px-12 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm" 
+                                placeholder="Password">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error message -->
+                <div x-show="error" x-transition class="bg-red-50 border border-red-200 rounded-md p-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-circle h-5 w-5 text-red-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-red-800">
+                                Login Failed
+                            </h3>
+                            <div class="mt-2 text-sm text-red-700">
+                                <p x-text="error"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit button -->
+                <div>
+                    <button 
+                        type="submit" 
+                        :disabled="loading"
+                        class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                            <i class="fas fa-sign-in-alt h-5 w-5 text-primary-500 group-hover:text-primary-400" 
+                               x-show="!loading"></i>
+                            <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white" 
+                                 x-show="loading"></div>
+                        </span>
+                        <span x-text="loading ? 'Signing in...' : 'Sign in'"></span>
+                    </button>
+                </div>
+
+                <!-- Remember me and forgot password -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input 
+                            id="remember-me" 
+                            name="remember-me" 
+                            type="checkbox" 
+                            class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+                            Remember me
+                        </label>
+                    </div>
+
+                    <div class="text-sm">
+                        <a href="#" class="font-medium text-primary-600 hover:text-primary-500">
+                            Forgot your password?
+                        </a>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Footer -->
+            <div class="text-center">
+                <p class="text-xs text-gray-500">
+                    © 2024 Factory ERP System. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function loginForm() {
+            return {
+                username: '',
+                password: '',
+                loading: false,
+                error: '',
+
+                async login() {
+                    this.loading = true;
+                    this.error = '';
+
+                    try {
+                        const response = await fetch('/api/auth/login', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                username: this.username,
+                                password: this.password
+                            })
+                        });
+
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            // Store token in localStorage
+                            localStorage.setItem('access_token', data.access_token);
+                            localStorage.setItem('user', JSON.stringify(data.user));
+                            
+                            // Redirect to dashboard
+                            window.location.href = '/dashboard';
+                        } else {
+                            this.error = data.detail || 'Login failed';
+                        }
+                    } catch (error) {
+                        console.error('Login error:', error);
+                        this.error = 'Network error. Please try again.';
+                    } finally {
+                        this.loading = false;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

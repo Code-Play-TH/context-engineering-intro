@@ -5,7 +5,7 @@ Handles user login, logout, token refresh, and password management.
 """
 
 from datetime import timedelta
-from typing import Optional
+from typing import Optional, Dict, Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -52,12 +52,10 @@ async def login(
     Raises:
         HTTPException: If credentials are invalid
     """
-    # Get user with related data
+    # Get user (without joins first to avoid complexity)
     statement = (
         select(User)
         .where(User.username == login_data.username, User.is_active == True)
-        .join(Department)
-        .join(Role)
     )
     result = await db.execute(statement)
     user = result.scalar_one_or_none()
@@ -70,13 +68,16 @@ async def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
+    # Load related data
+    await db.refresh(user, ["department", "role"])
+    
     # Create access token
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
     token_data = {
         "sub": user.username,
         "user_id": user.id,
-        "department": user.department.code,
-        "role": user.role.code,
+        "department": user.department.code if user.department else "unknown",
+        "role": user.role.code if user.role else "user",
     }
     access_token = create_access_token(
         data=token_data,
@@ -242,7 +243,7 @@ async def verify_token_endpoint(
 @router.get("/permissions")
 async def get_user_permissions(
     current_user_info: CurrentUser = Depends(get_current_user_info)
-) -> dict[str, any]:
+) -> Dict[str, Any]:
     """
     Get current user's permissions.
     

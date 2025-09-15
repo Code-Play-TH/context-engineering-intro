@@ -103,8 +103,7 @@ class Product(BaseModel, table=True):
     
     # Relationships
     production_steps: List[ProductionStep] = Relationship(
-        back_populates="product",
-        cascade_delete=True
+        back_populates="product"
     )
     
     @property

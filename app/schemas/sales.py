@@ -5,7 +5,7 @@ Contains schemas for customer requirements and customer management.
 """
 
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 
 from pydantic import BaseModel, EmailStr, Field
 
@@ -220,7 +220,7 @@ class SalesDashboardData(BaseModel):
     status_breakdown: dict[str, int]
     
     # Monthly trends (last 12 months)
-    monthly_trends: List[dict[str, any]]
+    monthly_trends: List[Dict[str, Any]]
 
 
 class CustomerRequirementBulkImportRequest(BaseModel):
@@ -238,5 +238,5 @@ class CustomerRequirementBulkImportResponse(BaseModel):
     total_processed: int
     created: int
     updated: int
-    errors: List[dict[str, any]] = Field(default_factory=list)
+    errors: List[Dict[str, Any]] = Field(default_factory=list)
     success_rate: float

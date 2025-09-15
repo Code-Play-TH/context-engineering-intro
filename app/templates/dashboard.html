@@ -141,7 +141,7 @@
                 <div class="ml-5 w-0 flex-1">
                     <dl>
                         <dt class="text-sm font-medium text-gray-500 truncate">Monthly Revenue</dt>
-                        <dd class="text-lg font-medium text-gray-900">${{ stats.monthly_revenue or 0 | number_format }}</dd>
+                        <dd class="text-lg font-medium text-gray-900">${{ "{:,.2f}".format(stats.monthly_revenue or 0) }}</dd>
                     </dl>
                 </div>
             </div>

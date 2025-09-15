@@ -131,8 +131,7 @@ class PurchaseOrder(BaseModel, table=True):
     # Relationships
     supplier: Supplier = Relationship(back_populates="purchase_orders")
     items: list["PurchaseOrderItem"] = Relationship(
-        back_populates="purchase_order",
-        cascade_delete=True
+        back_populates="purchase_order"
     )
     
     @property

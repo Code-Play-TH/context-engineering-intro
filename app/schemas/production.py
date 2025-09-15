@@ -5,7 +5,7 @@ Contains schemas for production orders and production tracking.
 """
 
 from datetime import datetime
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 
 from pydantic import BaseModel, Field
 
@@ -245,7 +245,7 @@ class ProductionDashboardData(BaseModel):
     recent_tracking: List[ProductionTrackingSummary]
     
     # Capacity utilization
-    capacity_utilization: dict[str, any]
+    capacity_utilization: Dict[str, Any]
 
 
 class ProductionReportRequest(BaseModel):
@@ -273,6 +273,6 @@ class ProductionEfficiencyReport(BaseModel):
     quality_rate: float
     
     # Detailed breakdowns
-    by_product: List[dict[str, any]]
-    by_operator: List[dict[str, any]]
-    by_machine: List[dict[str, any]]
+    by_product: List[Dict[str, Any]]
+    by_operator: List[Dict[str, Any]]
+    by_machine: List[Dict[str, Any]]

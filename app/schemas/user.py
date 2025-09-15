@@ -227,3 +227,9 @@ class CurrentUser(BaseModel):
     last_login: Optional[datetime] = None
 
     model_config = {"from_attributes": True}
+
+
+# Rebuild models to resolve forward references
+LoginResponse.model_rebuild()
+UserResponse.model_rebuild()
+RoleResponse.model_rebuild()

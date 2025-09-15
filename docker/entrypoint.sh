@@ -153,8 +153,8 @@ setup_directories() {
         fi
     done
     
-    # Ensure proper permissions
-    chmod 755 logs uploads static
+    # Ensure proper permissions (ignore if volumes are mounted)
+    chmod 755 logs uploads static 2>/dev/null || warn "Could not change permissions (likely mounted volumes)"
     
     log "Directory setup completed"
 }

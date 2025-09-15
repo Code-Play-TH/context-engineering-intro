@@ -124,8 +124,8 @@ async def get_current_user(
     statement = (
         select(User)
         .where(User.username == token_data.username, User.is_active == True)
-        .join(Department)
-        .join(Role)
+        .join(Department, User.department_id == Department.id)
+        .join(Role, User.role_id == Role.id)
     )
     result = await db.execute(statement)
     user = result.scalar_one_or_none()
@@ -142,6 +142,41 @@ async def get_current_user(
     await db.commit()
     
     return user
+
+
+async def get_current_user_optional(
+    credentials: Optional[HTTPAuthorizationCredentials] = Depends(HTTPBearer(auto_error=False)),
+    db: AsyncSession = Depends(get_db)
+) -> Optional[User]:
+    """
+    Get current user if authenticated, otherwise return None.
+    
+    Args:
+        credentials: Optional HTTP bearer credentials
+        db: Database session
+        
+    Returns:
+        Optional[User]: Current user if authenticated, None otherwise
+    """
+    if credentials is None:
+        return None
+        
+    try:
+        token_data = verify_token(credentials.credentials)
+        
+        # Get user from database with related data
+        statement = (
+            select(User)
+            .where(User.username == token_data.username, User.is_active == True)
+            .join(Department, User.department_id == Department.id)
+            .join(Role, User.role_id == Role.id)
+        )
+        result = await db.execute(statement)
+        user = result.scalar_one_or_none()
+        
+        return user
+    except (JWTError, HTTPException):
+        return None
 
 
 async def get_current_active_user(

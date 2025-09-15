@@ -127,6 +127,7 @@ async def root() -> dict[str, str]:
 
 # Add API routers
 from app.api import auth, users, products, sales, production, excel, erpnext
+from app import web
 
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(users.router, prefix="/api", tags=["User Management"])
@@ -135,6 +136,9 @@ app.include_router(sales.router, prefix="/api/sales", tags=["Sales"])
 app.include_router(production.router, prefix="/api/production", tags=["Production"])
 app.include_router(excel.router, prefix="/api/excel", tags=["Excel Processing"])
 app.include_router(erpnext.router, prefix="/api/erpnext", tags=["ERPNext Integration"])
+
+# Add web routes for frontend
+app.include_router(web.router, tags=["Web Interface"])
 
 # TODO: Add remaining routers as they are implemented
 # from app.api import purchasing

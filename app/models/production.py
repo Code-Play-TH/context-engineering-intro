@@ -96,8 +96,7 @@ class ProductionOrder(BaseModel, table=True):
     product: "Product" = Relationship()
     assigned_to: "User" = Relationship()
     production_tracking: list["ProductionTracking"] = Relationship(
-        back_populates="production_order",
-        cascade_delete=True
+        back_populates="production_order"
     )
     
     @property
