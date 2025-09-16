@@ -57,3 +57,10 @@
 - **Never hallucinate libraries or functions** – only use known, verified Python packages.
 - **Always confirm file paths and module names** exist before referencing them in code or tests.
 - **Never delete or overwrite existing code** unless explicitly instructed to or if part of a task from `TASK.md`.
+
+### 🚀 Session Management
+- **Use SESSION_BRIEF_TEMPLATE.md** for starting each new work session
+- **Quick context check** before major tasks (3-5 minutes for small tasks, 10-15 minutes for large ones)
+- **Update documentation incrementally** - only change what's actually different
+- **See QUICK_START_EXAMPLES.md** for copy-paste templates for common scenarios
+- **Use templates to reduce setup time from 15-30 minutes to 3-5 minutes without losing quality**
