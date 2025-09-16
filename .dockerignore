@@ -1,0 +1,159 @@
+# Git and version control
+.git
+.gitignore
+.gitattributes
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+venv_linux/
+ENV/
+env.bak/
+venv.bak/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+tests/
+test_*.py
+
+# Documentation
+docs/
+*.md
+!README.md
+.readthedocs.yml
+mkdocs.yml
+
+# Development files
+.env.local
+.env.development
+.env.test
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+log/
+
+# Temporary files
+tmp/
+temp/
+.tmp/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files
+*.bak
+*.backup
+backups/
+
+# Node.js (if any frontend assets)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Development Docker files
+Dockerfile.dev
+docker-compose.dev.yml
+docker-compose.override.yml
+
+# Certificates and keys (for security)
+*.pem
+*.key
+*.crt
+*.cert
+certificates/
+ssl/
+
+# Upload directories (will be mounted)
+uploads/*
+!uploads/.gitkeep
+
+# Static files (will be collected)
+static/*
+!static/.gitkeep
+
+# Monitoring configs (will be mounted)
+docker/grafana/
+docker/prometheus/
+
+# Scripts
+scripts/
+*.sh
+
+# Development requirements
+requirements-dev.txt
+
+# Testing files
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Jupyter notebooks
+*.ipynb
+.jupyter/
+
+# Local configuration overrides
+docker-compose.local.yml
+.env.local

@@ -1,0 +1,162 @@
+# Docker Compose configuration for KOL Management System - Development
+# Optimized for development with hot reloading and debugging
+
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: kol_postgres_dev
+    environment:
+      POSTGRES_DB: kolsystem_dev
+      POSTGRES_USER: koluser
+      POSTGRES_PASSWORD: kolpassword
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - kol_dev_network
+    restart: unless-stopped
+
+  # Redis Cache and Message Broker
+  redis:
+    image: redis:7-alpine
+    container_name: kol_redis_dev
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_dev_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - kol_dev_network
+    restart: unless-stopped
+
+  # Main Web Application (Development)
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: kol_web_dev
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - DATABASE_URL=postgresql+asyncpg://koluser:kolpassword@postgres:5432/kolsystem_dev
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET_KEY=dev-secret-key-not-for-production
+      - API_BASE_URL=http://localhost:8000
+      - FRONTEND_URL=http://localhost:3000
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:8080,http://127.0.0.1:3000
+      - ALLOWED_HOSTS=localhost,127.0.0.1,kol_web_dev
+    ports:
+      - "8000:8000"
+      - "5678:5678"  # debugpy port
+    volumes:
+      - .:/app
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - kol_dev_network
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  # Celery Worker for Background Tasks (Development)
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: kol_worker_dev
+    command: ["worker"]
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - DATABASE_URL=postgresql+asyncpg://koluser:kolpassword@postgres:5432/kolsystem_dev
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    volumes:
+      - .:/app
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - kol_dev_network
+    restart: unless-stopped
+
+  # Flower - Celery Monitoring (Development)
+  flower:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: kol_flower_dev
+    command: ["flower"]
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - FLOWER_BASIC_AUTH=admin:flower
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+    networks:
+      - kol_dev_network
+    restart: unless-stopped
+
+  # MailHog - Email testing
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: kol_mailhog_dev
+    ports:
+      - "1025:1025"  # SMTP server
+      - "8025:8025"  # Web UI
+    networks:
+      - kol_dev_network
+
+  # pgAdmin - Database administration
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: kol_pgadmin_dev
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: pgadmin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_dev_data:/var/lib/pgadmin
+    depends_on:
+      - postgres
+    networks:
+      - kol_dev_network
+    profiles:
+      - admin
+
+networks:
+  kol_dev_network:
+    driver: bridge
+
+volumes:
+  postgres_dev_data:
+    driver: local
+  redis_dev_data:
+    driver: local
+  pgadmin_dev_data:
+    driver: local
