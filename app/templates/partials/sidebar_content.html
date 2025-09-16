@@ -89,7 +89,7 @@
                             class="group flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm leading-6 font-semibold text-gray-700 hover:text-primary-600 hover:bg-gray-50"
                             @click="open = !open">
                         <i class="fas fa-box h-6 w-6 shrink-0"></i>
-                        Products
+                        ATP Products
                         <i class="fas fa-chevron-right ml-auto h-4 w-4 shrink-0 transition-transform" 
                            :class="open ? 'rotate-90' : ''"></i>
                     </button>
@@ -97,24 +97,62 @@
                         <li>
                             <a href="/products" 
                                class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
-                                <i class="fas fa-list mr-2"></i>Product List
+                                <i class="fas fa-boxes mr-2"></i>Product Management
                             </a>
                         </li>
                         <li>
                             <a href="/products/create" 
                                class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
-                                <i class="fas fa-plus mr-2"></i>Add Product
+                                <i class="fas fa-plus-circle mr-2"></i>Create Product
                             </a>
                         </li>
                         <li>
                             <a href="/products/lookup" 
                                class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
-                                <i class="fas fa-search mr-2"></i>Product Lookup
+                                <i class="fas fa-search-plus mr-2"></i>Product Lookup
                             </a>
                         </li>
                     </ul>
                 </li>
                 
+                <!-- Master Data -->
+                <li x-data="{ open: window.location.pathname.includes('/master-data') }">
+                    <button type="button" 
+                            class="group flex w-full items-center gap-x-3 rounded-md p-2 text-left text-sm leading-6 font-semibold text-gray-700 hover:text-primary-600 hover:bg-gray-50"
+                            @click="open = !open">
+                        <i class="fas fa-database h-6 w-6 shrink-0"></i>
+                        Master Data
+                        <i class="fas fa-chevron-right ml-auto h-4 w-4 shrink-0 transition-transform" 
+                           :class="open ? 'rotate-90' : ''"></i>
+                    </button>
+                    <ul x-show="open" x-transition class="mt-1 px-2">
+                        <li>
+                            <a href="/master-data/materials" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-cubes mr-2"></i>Material Codes
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/master-data/materials/create" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-plus mr-2"></i>Add Material Code
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/master-data/colors" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-palette mr-2"></i>Color Codes
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/master-data/colors/create" 
+                               class="block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700 hover:text-primary-600 hover:bg-gray-50">
+                                <i class="fas fa-plus mr-2"></i>Add Color Code
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
                 <!-- Excel Integration -->
                 <li x-data="{ open: window.location.pathname.includes('/excel') }">
                     <button type="button" 

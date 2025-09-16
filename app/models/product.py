@@ -11,6 +11,12 @@ from sqlmodel import Field, Relationship
 
 from app.models.base import BaseModel
 
+# Forward references for relationships
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from app.models.master_data import MaterialCode, ColorCode
+    from app.models.atp_master_data import ATPMaterialCode, ATPColorCode
+
 
 class ProductionStep(BaseModel, table=True):
     """
@@ -59,10 +65,35 @@ class Product(BaseModel, table=True):
         max_length=100,
         description="Engineering drawing number"
     )
+    # Legacy material code field (for backwards compatibility)
     material_code: Optional[str] = Field(
         default=None,
         max_length=100,
-        description="Material specification code"
+        description="Material specification code (legacy)"
+    )
+    
+    # New relationships to master data
+    material_code_id: Optional[int] = Field(
+        default=None,
+        foreign_key="materialcode.id",
+        description="Reference to MaterialCode master data"
+    )
+    color_code_id: Optional[int] = Field(
+        default=None,
+        foreign_key="colorcode.id",
+        description="Reference to ColorCode master data"
+    )
+    
+    # ATP-specific master data relationships
+    atp_material_code_id: Optional[int] = Field(
+        default=None,
+        foreign_key="atp_material_code.id",
+        description="Reference to ATP MaterialCode master data"
+    )
+    atp_color_code_id: Optional[int] = Field(
+        default=None,
+        foreign_key="atp_color_code.id",
+        description="Reference to ATP ColorCode master data"
     )
     material_description: Optional[str] = Field(
         default=None,
@@ -104,6 +135,18 @@ class Product(BaseModel, table=True):
     # Relationships
     production_steps: List[ProductionStep] = Relationship(
         back_populates="product"
+    )
+    material_code_ref: Optional["MaterialCode"] = Relationship(
+        back_populates="products"
+    )
+    color_code_ref: Optional["ColorCode"] = Relationship(
+        back_populates="products"
+    )
+    atp_material_code_ref: Optional["ATPMaterialCode"] = Relationship(
+        back_populates="products"
+    )
+    atp_color_code_ref: Optional["ATPColorCode"] = Relationship(
+        back_populates="products"
     )
     
     @property

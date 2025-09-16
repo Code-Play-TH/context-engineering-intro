@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/crud-template.css') }}">
+{% block extra_crud_css %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="erp-container" x-data="{{ form_component_name | default('entityForm()') }}">
+    <!-- Page Header -->
+    <div class="erp-page-header">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h1 class="erp-page-title">
+                        <i class="{{ page_icon | default('fas fa-plus-circle') }} me-2"></i>
+                        {{ page_title }}
+                    </h1>
+                    <p class="erp-page-subtitle">{{ page_subtitle }}</p>
+                </div>
+                <div class="d-flex gap-2 flex-wrap">
+                    {% block header_actions %}
+                    <a href="{{ list_url | default('/') }}" class="erp-btn erp-btn-light">
+                        <i class="fas fa-arrow-left"></i>Back to List
+                    </a>
+                    {% if preview_function %}
+                    <button class="erp-btn erp-btn-info" @click="{{ preview_function }}">
+                        <i class="fas fa-eye"></i>Preview Data
+                    </button>
+                    {% endif %}
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <form @submit.prevent="saveEntity()">
+            {% block form_sections %}
+            <!-- Override this block to define form sections -->
+            {% endblock %}
+
+            <!-- Submit Section -->
+            <div class="text-center mt-4">
+                <button type="button" class="erp-btn erp-btn-light me-3" 
+                        onclick="window.location.href='{{ list_url | default('/') }}'">
+                    <i class="fas fa-times"></i>Cancel
+                </button>
+                <button type="submit" class="erp-btn erp-btn-primary" :disabled="saving">
+                    <span x-show="saving" class="spinner-border spinner-border-sm me-2"></span>
+                    <i class="fas fa-save" x-show="!saving"></i>
+                    <span x-text="saving ? 'Saving {{ entity_name }}...' : 'Save {{ entity_name }}'"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% block base_form_js %}
+<script>
+// Base form JavaScript functions
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `erp-alert erp-alert-${type === 'error' ? 'danger' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info'} position-fixed`;
+    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    toast.innerHTML = `
+        <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+        ${message}
+        <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        if (toast.parentElement) toast.remove();
+    }, 5000);
+}
+</script>
+{% endblock %}
+
+{% block custom_form_js %}
+<!-- Override this block for page-specific JavaScript -->
+{% endblock %}
+{% endblock %}

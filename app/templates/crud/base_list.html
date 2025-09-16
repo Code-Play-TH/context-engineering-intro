@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/crud-template.css') }}">
+{% block extra_crud_css %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="erp-container">
+    <!-- Page Header -->
+    <div class="erp-page-header">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h1 class="erp-page-title">
+                        <i class="{{ page_icon | default('fas fa-list') }} me-2"></i>
+                        {{ page_title }}
+                    </h1>
+                    <p class="erp-page-subtitle">{{ page_subtitle }}</p>
+                </div>
+                <div class="d-flex gap-2 flex-wrap">
+                    {% block header_actions %}
+                    <button class="erp-btn erp-btn-info" onclick="{{ preview_function | default('previewData()') }}">
+                        <i class="fas fa-eye"></i>Preview Data
+                    </button>
+                    <button class="erp-btn erp-btn-warning" onclick="{{ import_function | default('importData()') }}">
+                        <i class="fas fa-upload"></i>Import from Excel
+                    </button>
+                    <button class="erp-btn erp-btn-success" onclick="{{ create_function | default('showCreateModal()') }}">
+                        <i class="fas fa-plus"></i>Add {{ entity_name }}
+                    </button>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <!-- Search and Filter Section -->
+        <div class="erp-search-section" x-data="{{ search_component_name | default('searchFilters()') }}">
+            <div class="row">
+                {% block search_filters %}
+                <div class="col-md-4 mb-3">
+                    <label class="erp-form-label">Search {{ entity_name }}</label>
+                    <div class="input-group">
+                        <input type="text" class="erp-search-input form-control" 
+                               placeholder="{{ search_placeholder | default('Enter search term...') }}"
+                               x-model="search" @input="performSearch()">
+                        <button class="erp-btn erp-btn-primary" type="button" @click="performSearch()">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                {% endblock %}
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="erp-stats-grid" x-data="{{ stats_component_name | default('entityStats()') }}">
+            {% block statistics_cards %}
+            <div class="erp-stat-card">
+                <div class="erp-stat-number" x-text="stats.total">0</div>
+                <p class="erp-stat-label">Total {{ entity_name }}s</p>
+            </div>
+            <div class="erp-stat-card">
+                <div class="erp-stat-number" x-text="stats.active">0</div>
+                <p class="erp-stat-label">Active {{ entity_name }}s</p>
+            </div>
+            {% endblock %}
+        </div>
+
+        <!-- Main Content Section -->
+        <div class="row" x-data="{{ list_component_name | default('entityList()') }}">
+            <div class="col-12">
+                <!-- Loading State -->
+                <div x-show="loading" class="erp-loading">
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="erp-loading-text">Loading {{ entity_name | lower }}s...</p>
+                </div>
+
+                <!-- Error State -->
+                <div x-show="error && !loading" class="erp-alert erp-alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span x-text="error"></span>
+                    <button class="erp-btn erp-btn-outline ms-3" @click="loadData()">
+                        <i class="fas fa-redo"></i>Retry
+                    </button>
+                </div>
+
+                <!-- Items Grid -->
+                <div x-show="!loading && !error" class="erp-items-grid">
+                    {% block item_template %}
+                    <template x-for="item in items" :key="item.id">
+                        <div class="erp-item-card">
+                            <div class="erp-item-header">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="erp-item-title" x-text="item.{{ primary_field }}"></h6>
+                                        <small class="erp-item-subtitle" x-text="item.{{ secondary_field }}"></small>
+                                    </div>
+                                    <div class="dropdown">
+                                        <button class="erp-btn erp-btn-light btn-sm" data-bs-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li><a class="dropdown-item" href="#" @click="viewItem(item.id)">
+                                                <i class="fas fa-eye me-2"></i>View Details</a></li>
+                                            <li><a class="dropdown-item" href="#" @click="editItem(item.id)">
+                                                <i class="fas fa-edit me-2"></i>Edit</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-danger" href="#" @click="deleteItem(item.id, item.{{ primary_field }} || item.name || 'this item')">
+                                                <i class="fas fa-trash me-2"></i>Delete</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="erp-item-body">
+                                {% block item_body %}
+                                <!-- Override this block for custom item content -->
+                                {% endblock %}
+                            </div>
+                            <div class="erp-item-footer">
+                                <div>
+                                    <span class="erp-badge erp-badge-success" x-show="item.is_active">Active</span>
+                                    <span class="erp-badge erp-badge-light" x-show="!item.is_active">Inactive</span>
+                                </div>
+                                <small class="text-muted">
+                                    ID: <span x-text="item.id"></span>
+                                </small>
+                            </div>
+                        </div>
+                    </template>
+                    {% endblock %}
+                </div>
+
+                <!-- Empty State -->
+                <div x-show="!loading && !error && items.length === 0" class="erp-empty-state">
+                    <i class="{{ empty_icon | default('fas fa-inbox') }} erp-empty-icon"></i>
+                    <h4 class="erp-empty-title">No {{ entity_name }}s Found</h4>
+                    <p class="erp-empty-text">{{ empty_message | default('Try adjusting your search criteria or add your first item.') }}</p>
+                    <button class="erp-btn erp-btn-primary" onclick="{{ create_function | default('showCreateModal()') }}">
+                        <i class="fas fa-plus"></i>Add First {{ entity_name }}
+                    </button>
+                </div>
+
+                <!-- Pagination -->
+                <div x-show="!loading && !error && items.length > 0" class="erp-pagination">
+                    <a class="erp-pagination-item" href="#" 
+                       :class="{ disabled: currentPage <= 1 }" 
+                       @click="changePage(currentPage - 1)">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                    <template x-for="page in pageNumbers" :key="page">
+                        <a class="erp-pagination-item" href="#" 
+                           :class="{ active: page === currentPage }" 
+                           @click="changePage(page)" x-text="page"></a>
+                    </template>
+                    <a class="erp-pagination-item" href="#" 
+                       :class="{ disabled: !hasMore }" 
+                       @click="changePage(currentPage + 1)">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create/Edit Modal -->
+<div class="modal fade" id="{{ modal_id | default('entityModal') }}" tabindex="-1">
+    <div class="modal-dialog {{ modal_size | default('modal-xl') }}" x-data="{{ modal_component_name | default('entityModal()') }}">
+        <div class="modal-content erp-modal-content">
+            <div class="modal-header erp-modal-header">
+                <h5 class="modal-title erp-modal-title">
+                    <i class="{{ page_icon | default('fas fa-box') }}"></i>
+                    <span x-text="editMode ? 'Edit {{ entity_name }}' : 'Add New {{ entity_name }}'"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body erp-modal-body">
+                <form @submit.prevent="saveEntity()">
+                    {% block modal_form %}
+                    <!-- Override this block for custom form content -->
+                    {% endblock %}
+                </form>
+            </div>
+            <div class="modal-footer erp-modal-footer">
+                <button type="button" class="erp-btn erp-btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="erp-btn erp-btn-primary" @click="saveEntity()" :disabled="saving">
+                    <span x-show="saving" class="spinner-border spinner-border-sm me-2"></span>
+                    <i class="fas fa-save" x-show="!saving"></i>
+                    <span x-text="editMode ? 'Update {{ entity_name }}' : 'Create {{ entity_name }}'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% block base_crud_js %}
+<script>
+// Base CRUD JavaScript functions
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `erp-alert erp-alert-${type === 'error' ? 'danger' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info'} position-fixed`;
+    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    toast.innerHTML = `
+        <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+        ${message}
+        <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        if (toast.parentElement) toast.remove();
+    }, 5000);
+}
+</script>
+{% endblock %}
+
+{% block custom_crud_js %}
+<!-- Override this block for page-specific JavaScript -->
+{% endblock %}
+{% endblock %}

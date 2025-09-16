@@ -4,6 +4,7 @@ Authentication API endpoints.
 Handles user login, logout, token refresh, and password management.
 """
 
+import json
 from datetime import timedelta
 from typing import Optional, Dict, Any
 
@@ -52,9 +53,15 @@ async def login(
     Raises:
         HTTPException: If credentials are invalid
     """
-    # Get user (without joins first to avoid complexity)
+    # Get user with related data in a single query
+    from sqlalchemy.orm import selectinload
+    
     statement = (
         select(User)
+        .options(
+            selectinload(User.department), 
+            selectinload(User.role).selectinload(Role.department)
+        )
         .where(User.username == login_data.username, User.is_active == True)
     )
     result = await db.execute(statement)
@@ -67,9 +74,6 @@ async def login(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
-    # Load related data
-    await db.refresh(user, ["department", "role"])
     
     # Create access token
     access_token_expires = timedelta(minutes=settings.access_token_expire_minutes)
@@ -87,9 +91,44 @@ async def login(
     # Update last login
     user.update_last_login()
     await db.commit()
-    await db.refresh(user)
     
-    # Prepare user response
+    # Prepare user response with properly serialized relationships
+    from app.schemas.user import DepartmentResponse, RoleResponse
+    
+    department_response = DepartmentResponse(
+        id=user.department.id,
+        name=user.department.name,
+        code=user.department.code,
+        description=user.department.description,
+        is_active=user.department.is_active,
+        created_at=user.department.created_at,
+        updated_at=user.department.updated_at
+    ) if user.department else None
+    
+    # Create role department response (this might be the same as user department, but could be different)
+    role_department_response = DepartmentResponse(
+        id=user.role.department.id,
+        name=user.role.department.name,
+        code=user.role.department.code,
+        description=user.role.department.description,
+        is_active=user.role.department.is_active,
+        created_at=user.role.department.created_at,
+        updated_at=user.role.department.updated_at
+    ) if user.role and user.role.department else None
+    
+    role_response = RoleResponse(
+        id=user.role.id,
+        name=user.role.name,
+        code=user.role.code,
+        description=user.role.description,
+        department_id=user.role.department_id,
+        permissions=json.loads(user.role.permissions_json) if user.role.permissions_json else {},
+        is_active=user.role.is_active,
+        created_at=user.role.created_at,
+        updated_at=user.role.updated_at,
+        department=role_department_response
+    ) if user.role else None
+    
     user_response = UserResponse(
         id=user.id,
         username=user.username,
@@ -102,8 +141,8 @@ async def login(
         last_login=user.last_login,
         created_at=user.created_at,
         updated_at=user.updated_at,
-        department=user.department,
-        role=user.role
+        department=department_response,
+        role=role_response
     )
     
     return LoginResponse(

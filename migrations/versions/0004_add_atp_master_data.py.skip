@@ -1,0 +1,107 @@
+"""Add ATP master data tables
+
+Revision ID: 0004_add_atp_master_data
+Revises: 0003_seed_data
+Create Date: 2025-09-15 12:00:00.000000
+
+"""
+from alembic import op
+import sqlalchemy as sa
+
+
+# revision identifiers, used by Alembic.
+revision = '0004_add_atp_master_data'
+down_revision = '0002_add_master_data_tables'
+branch_labels = None
+depends_on = None
+
+
+def upgrade():
+    """Create ATP master data tables"""
+    # Create atp_material_code table
+    op.create_table('atp_material_code',
+        sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('atp_code', sa.String(length=50), nullable=False),
+        sa.Column('material_code', sa.String(length=50), nullable=False),
+        sa.Column('description_th', sa.String(length=500), nullable=False),
+        sa.Column('description_en', sa.String(length=500), nullable=True),
+        sa.Column('length_per_piece', sa.Float(), nullable=True),
+        sa.Column('grade', sa.String(length=50), nullable=True),
+        sa.Column('weight_per_line', sa.Float(), nullable=True),
+        sa.Column('material_type', sa.String(length=100), nullable=True),
+        sa.Column('cross_section', sa.String(length=200), nullable=True),
+        sa.Column('unit_cost', sa.Float(), nullable=True),
+        sa.Column('supplier', sa.String(length=255), nullable=True),
+        sa.Column('usage_notes', sa.String(length=1000), nullable=True),
+        sa.Column('is_active', sa.Boolean(), nullable=False, default=True),
+        sa.Column('created_at', sa.DateTime(), nullable=False),
+        sa.Column('updated_at', sa.DateTime(), nullable=False),
+        sa.PrimaryKeyConstraint('id'),
+        sa.UniqueConstraint('atp_code')
+    )
+    op.create_index('ix_atp_material_code_atp_code', 'atp_material_code', ['atp_code'], unique=False)
+    op.create_index('ix_atp_material_code_material_code', 'atp_material_code', ['material_code'], unique=False)
+    
+    # Create atp_color_code table
+    op.create_table('atp_color_code',
+        sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('color_code', sa.String(length=20), nullable=False),
+        sa.Column('color_name', sa.String(length=100), nullable=False),
+        sa.Column('color_name_th', sa.String(length=100), nullable=True),
+        sa.Column('color_type', sa.String(length=50), nullable=True),
+        sa.Column('finish_type', sa.String(length=50), nullable=True),
+        sa.Column('hex_value', sa.String(length=7), nullable=True),
+        sa.Column('pantone_reference', sa.String(length=50), nullable=True),
+        sa.Column('process_type', sa.String(length=100), nullable=True),
+        sa.Column('process_temperature', sa.Float(), nullable=True),
+        sa.Column('process_time', sa.Integer(), nullable=True),
+        sa.Column('cost_per_sqm', sa.Float(), nullable=True),
+        sa.Column('thickness', sa.Float(), nullable=True),
+        sa.Column('durability_rating', sa.String(length=50), nullable=True),
+        sa.Column('supplier', sa.String(length=255), nullable=True),
+        sa.Column('supplier_code', sa.String(length=100), nullable=True),
+        sa.Column('application_notes', sa.String(length=1000), nullable=True),
+        sa.Column('is_raw_material', sa.Boolean(), nullable=False, default=False),
+        sa.Column('requires_special_handling', sa.Boolean(), nullable=False, default=False),
+        sa.Column('is_active', sa.Boolean(), nullable=False, default=True),
+        sa.Column('created_at', sa.DateTime(), nullable=False),
+        sa.Column('updated_at', sa.DateTime(), nullable=False),
+        sa.PrimaryKeyConstraint('id'),
+        sa.UniqueConstraint('color_code')
+    )
+    op.create_index('ix_atp_color_code_color_code', 'atp_color_code', ['color_code'], unique=False)
+    
+    # Add foreign key columns to products table for ATP relationships
+    op.add_column('products', sa.Column('atp_material_code_id', sa.Integer(), nullable=True))
+    op.add_column('products', sa.Column('atp_color_code_id', sa.Integer(), nullable=True))
+    
+    # Create foreign key constraints
+    op.create_foreign_key(
+        'fk_products_atp_material_code',
+        'products', 'atp_material_code',
+        ['atp_material_code_id'], ['id']
+    )
+    op.create_foreign_key(
+        'fk_products_atp_color_code', 
+        'products', 'atp_color_code',
+        ['atp_color_code_id'], ['id']
+    )
+
+
+def downgrade():
+    """Drop ATP master data tables"""
+    # Drop foreign key constraints
+    op.drop_constraint('fk_products_atp_color_code', 'products', type_='foreignkey')
+    op.drop_constraint('fk_products_atp_material_code', 'products', type_='foreignkey')
+    
+    # Remove foreign key columns from products
+    op.drop_column('products', 'atp_color_code_id')
+    op.drop_column('products', 'atp_material_code_id')
+    
+    # Drop ATP tables
+    op.drop_index('ix_atp_color_code_color_code', table_name='atp_color_code')
+    op.drop_table('atp_color_code')
+    
+    op.drop_index('ix_atp_material_code_material_code', table_name='atp_material_code')
+    op.drop_index('ix_atp_material_code_atp_code', table_name='atp_material_code')
+    op.drop_table('atp_material_code')

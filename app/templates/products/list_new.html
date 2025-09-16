@@ -1,0 +1,590 @@
+{% extends "crud/base_list.html" %}
+{% from "crud/form_macros.html" import form_section, form_group, form_row, form_col, stat_card, badge, search_filter, action_dropdown, complexity_badge %}
+
+{% set page_title = "ATP Product Management" %}
+{% set page_subtitle = "Manage ATP products with materials, processes, and specifications" %}
+{% set page_icon = "fas fa-box" %}
+{% set entity_name = "Product" %}
+{% set search_placeholder = "Part No, Name, or Drawing No" %}
+{% set primary_field = "part_no" %}
+{% set secondary_field = "material_code" %}
+
+{% set search_component_name = "productSearchFilters()" %}
+{% set stats_component_name = "productStats()" %}
+{% set list_component_name = "productList()" %}
+{% set modal_component_name = "productModal()" %}
+
+{% set preview_function = "previewExcelImport()" %}
+{% set import_function = "importProducts()" %}
+{% set create_function = "showCreateProductModal()" %}
+
+{% block search_filters %}
+{{ search_filter("Search Products", "search", "text", search_placeholder, x_model="search") }}
+{{ search_filter("Material Code", "material", "select", options=[
+    ("", "All Materials"),
+    ("ATP0001", "ATP0001"),
+    ("ATP0002", "ATP0002"),
+    ("ATP0003", "ATP0003")
+], x_model="materialFilter") }}
+{{ search_filter("Complexity", "complexity", "select", options=[
+    ("", "All Complexity"),
+    ("Simple", "Simple"),
+    ("Medium", "Medium"),
+    ("Complex", "Complex")
+], x_model="complexityFilter") }}
+{{ search_filter("Color", "color", "select", options=[
+    ("", "All Colors"),
+    ("0", "Black"),
+    ("1", "Chrome"),
+    ("2", "White")
+], x_model="colorFilter") }}
+{{ search_filter("Status", "status", "select", options=[
+    ("active", "Active Only"),
+    ("all", "All Records"),
+    ("inactive", "Inactive Only")
+], x_model="statusFilter") }}
+<div class="col-md-1 mb-3">
+    <label class="erp-form-label">Per Page</label>
+    <select class="form-select" x-model="limit" @change="performSearch()">
+        <option value="20">20</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+    </select>
+</div>
+{% endblock %}
+
+{% block statistics_cards %}
+{{ stat_card("0", "Total Products", x_number="stats.total") }}
+{{ stat_card("0", "Active Products", x_number="stats.active") }}  
+{{ stat_card("0.0", "Avg Steps", x_number="stats.avgSteps") }}
+{{ stat_card("0", "With Color", x_number="stats.withColor") }}
+{% endblock %}
+
+{% block item_body %}
+<p class="erp-item-description fw-bold" x-text="item.part_name" style="font-size: 0.875rem;"></p>
+
+<!-- Complexity and Steps -->
+<div class="mb-2">
+    <span class="erp-badge erp-complexity-simple" x-show="item.complexity_level === 'Simple'">
+        <i class="fas fa-star"></i> Simple
+    </span>
+    <span class="erp-badge erp-complexity-medium" x-show="item.complexity_level === 'Medium'">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i> Medium
+    </span>
+    <span class="erp-badge erp-complexity-complex" x-show="item.complexity_level === 'Complex'">
+        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i> Complex
+    </span>
+    <span class="ms-2 text-muted" x-show="item.total_steps">
+        <i class="fas fa-cogs me-1"></i><span x-text="item.total_steps + ' steps'"></span>
+    </span>
+</div>
+
+<div class="erp-item-meta">
+    <div class="erp-meta-item" x-show="item.material_code">
+        <span class="erp-meta-label">Material</span>
+        <span class="erp-meta-value" x-text="item.material_code"></span>
+    </div>
+    <div class="erp-meta-item" x-show="item.color_description">
+        <span class="erp-meta-label">Color</span>
+        <span class="erp-meta-value" x-text="item.color_description"></span>
+    </div>
+</div>
+{% endblock %}
+
+{% block modal_form %}
+{% call form_section("Basic Information", "fas fa-info-circle") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Part Number", "part_no", required=true, placeholder="Enter part number", x_model="form.part_no") }}
+            {{ form_group("Part Name", "part_name", required=true, placeholder="Enter part name", x_model="form.part_name") }}
+            {{ form_group("Drawing Number", "drawing_no", placeholder="Engineering drawing number", x_model="form.drawing_no") }}
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Revision", "revision", placeholder="Drawing revision", x_model="form.revision") }}
+            {{ form_group("Unit of Measure", "unit_of_measure", type="select", options=[
+                ("PCS", "PCS (Pieces)"),
+                ("SET", "SET"),
+                ("KG", "KG (Kilograms)"),
+                ("M", "M (Meters)"),
+                ("L", "L (Liters)")
+            ], x_model="form.unit_of_measure") }}
+            {{ form_group("Active Product", "is_active", type="checkbox", x_model="form.is_active") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Material Information", "fas fa-cubes") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Material Code", "material_code", placeholder="Reference material code", x_model="form.material_code", help_text="Should match ATP Material Code master data") }}
+            {{ form_group("Material Length", "material_length", placeholder="Length specification (e.g., 6000mm, 12ft)", x_model="form.material_length") }}
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Material Description (Thai)", "material_description_th", type="textarea", placeholder="รายละเอียดวัตถุดิบภาษาไทย", x_model="form.material_description_th") }}
+            {{ form_group("Cuts per Box", "cuts_per_box", type="number", placeholder="Number of cuts per material box", x_model="form.cuts_per_box") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Production Process", "fas fa-cogs") %}
+    {% call form_row() %}
+        {% call form_col("col-md-4") %}
+            <div class="erp-form-group">
+                <label class="erp-form-label">Total Steps</label>
+                <input type="number" class="erp-form-control" x-model="form.total_steps" step="0.1"
+                       placeholder="Total production steps" @input="updateComplexity()">
+                <div class="erp-form-text">Automatically calculates complexity level</div>
+            </div>
+            <div class="erp-form-group" x-show="form.total_steps">
+                <label class="erp-form-label">Complexity Level</label>
+                <input type="text" class="erp-form-control" x-model="complexityLevel" readonly
+                       :class="{'erp-bg-light erp-text-success': complexityLevel === 'Simple', 
+                               'erp-bg-light erp-text-warning': complexityLevel === 'Medium',
+                               'erp-bg-light erp-text-danger': complexityLevel === 'Complex'}">
+            </div>
+        {% endcall %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Turning Steps", "turning_steps", type="number", placeholder="Lathe/turning operations", x_model="form.turning_steps") }}
+        {% endcall %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Milling Steps", "milling_steps", placeholder="Milling operations description", x_model="form.milling_steps") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Color & Finishing", "fas fa-palette") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Color Code", "color_code", type="select", options=[
+                ("", "Select Color Code"),
+                ("0", "0 - Black"),
+                ("1", "1 - Chrome"),
+                ("2", "2 - White"),
+                ("3", "3 - Gold"),
+                ("4", "4 - Yellow"),
+                ("5", "5 - Red"),
+                ("6", "6 - Blue"),
+                ("7", "7 - Orange"),
+                ("8", "8 - Matt Black")
+            ], x_model="form.color_code") }}
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Color Description", "color_description", placeholder="Detailed color description (e.g., MATT BLACK, ดำด้าน)", x_model="form.color_description") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Cost Information", "fas fa-dollar-sign") %}
+    {% call form_row() %}
+        {% call form_col("col-md-3") %}
+            <div class="erp-form-group">
+                <label class="erp-form-label">Standard Cost</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="erp-form-control" x-model="form.standard_cost" step="0.01"
+                           placeholder="0.00">
+                </div>
+            </div>
+        {% endcall %}
+        {% call form_col("col-md-3") %}
+            <div class="erp-form-group">
+                <label class="erp-form-label">Material Cost</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="erp-form-control" x-model="form.material_cost" step="0.01"
+                           placeholder="0.00">
+                </div>
+            </div>
+        {% endcall %}
+        {% call form_col("col-md-3") %}
+            <div class="erp-form-group">
+                <label class="erp-form-label">Labor Cost</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="erp-form-control" x-model="form.labor_cost" step="0.01"
+                           placeholder="0.00">
+                </div>
+            </div>
+        {% endcall %}
+        {% call form_col("col-md-3") %}
+            <div class="erp-form-group">
+                <label class="erp-form-label">Overhead Cost</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="erp-form-control" x-model="form.overhead_cost" step="0.01"
+                           placeholder="0.00">
+                </div>
+            </div>
+        {% endcall %}
+    {% endcall %}
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <div class="erp-alert erp-alert-info">
+                <strong>Total Cost:</strong> $<span x-text="calculateTotalCost().toFixed(2)">0.00</span>
+            </div>
+        </div>
+    </div>
+{% endcall %}
+
+{% call form_section("Classification & Notes", "fas fa-tags") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Product Category", "product_category", placeholder="Product category (e.g., Mechanical Parts)", x_model="form.product_category") }}
+            {{ form_group("Product Type", "product_type", placeholder="Product type (e.g., Housing, Bracket)", x_model="form.product_type") }}
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Manufacturing Notes", "manufacturing_notes", type="textarea", placeholder="Manufacturing instructions, quality requirements, special handling notes...", x_model="form.manufacturing_notes") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+{% endblock %}
+
+{% block custom_crud_js %}
+<script>
+// Product Search Filters Component
+function productSearchFilters() {
+    return {
+        search: '',
+        materialFilter: '',
+        complexityFilter: '',
+        colorFilter: '',
+        statusFilter: 'active',
+        limit: 20,
+        
+        performSearch() {
+            window.dispatchEvent(new CustomEvent('search-products', {
+                detail: {
+                    search: this.search,
+                    material: this.materialFilter,
+                    complexity: this.complexityFilter,
+                    color: this.colorFilter,
+                    status: this.statusFilter,
+                    limit: this.limit
+                }
+            }));
+        }
+    }
+}
+
+// Product Statistics Component
+function productStats() {
+    return {
+        stats: {
+            total: 0,
+            active: 0,
+            avgSteps: 0.0,
+            withColor: 0
+        },
+        
+        async init() {
+            await this.loadStats();
+        },
+        
+        async loadStats() {
+            try {
+                const response = await fetch('/api/atp/products?limit=1000');
+                if (response.ok) {
+                    const data = await response.json();
+                    const products = data.products || [];
+                    this.stats.total = products.length;
+                    this.stats.active = products.filter(p => p.is_active).length;
+                    this.stats.withColor = products.filter(p => p.color_description).length;
+                    
+                    const stepsData = products.filter(p => p.total_steps).map(p => p.total_steps);
+                    this.stats.avgSteps = stepsData.length > 0 
+                        ? (stepsData.reduce((a, b) => a + b, 0) / stepsData.length).toFixed(1)
+                        : 0.0;
+                }
+            } catch (error) {
+                console.error('Error loading product stats:', error);
+            }
+        }
+    }
+}
+
+// Product List Component
+function productList() {
+    return {
+        items: [],
+        loading: false,
+        error: null,
+        currentPage: 1,
+        hasMore: false,
+        pageNumbers: [],
+        
+        async init() {
+            await this.loadData();
+            window.addEventListener('search-products', (e) => {
+                this.loadData(e.detail);
+            });
+        },
+        
+        async loadData(filters = {}) {
+            this.loading = true;
+            this.error = null;
+            
+            try {
+                const params = new URLSearchParams({
+                    skip: ((this.currentPage - 1) * (filters.limit || 20)),
+                    limit: filters.limit || 20,
+                    active_only: filters.status !== 'all'
+                });
+                
+                if (filters.search) params.append('search', filters.search);
+                if (filters.material) params.append('material_code', filters.material);
+                if (filters.complexity) params.append('complexity_level', filters.complexity);
+                if (filters.color) params.append('color_code', filters.color);
+                
+                const response = await fetch(`/api/atp/products?${params}`);
+                if (!response.ok) throw new Error('Failed to load products');
+                
+                const data = await response.json();
+                this.items = data.products || [];
+                this.hasMore = data.has_more || false;
+                this.updatePagination();
+                
+            } catch (error) {
+                this.error = error.message;
+                console.error('Error loading products:', error);
+            } finally {
+                this.loading = false;
+            }
+        },
+        
+        updatePagination() {
+            this.pageNumbers = [];
+            for (let i = Math.max(1, this.currentPage - 2); i <= Math.min(this.currentPage + 2, this.currentPage + (this.hasMore ? 2 : 0)); i++) {
+                this.pageNumbers.push(i);
+            }
+        },
+        
+        changePage(page) {
+            if (page >= 1 && (this.hasMore || page <= this.currentPage)) {
+                this.currentPage = page;
+                this.loadData();
+            }
+        },
+        
+        viewItem(id) {
+            window.open(`/api/atp/products/${id}`, '_blank');
+        },
+        
+        editItem(id) {
+            window.editProduct(id);
+        },
+        
+        async deleteItem(id) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                try {
+                    const response = await fetch(`/api/atp/products/${id}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    if (response.ok) {
+                        showToast('Product deleted successfully', 'success');
+                        await this.loadData();
+                    } else {
+                        throw new Error('Failed to delete product');
+                    }
+                } catch (error) {
+                    showToast('Error deleting product: ' + error.message, 'error');
+                }
+            }
+        }
+    }
+}
+
+// Product Modal Component
+function productModal() {
+    return {
+        editMode: false,
+        saving: false,
+        complexityLevel: '',
+        form: {
+            part_no: '',
+            part_name: '',
+            drawing_no: '',
+            revision: '',
+            material_code: '',
+            material_description_th: '',
+            material_length: '',
+            cuts_per_box: null,
+            total_steps: null,
+            turning_steps: null,
+            milling_steps: '',
+            color_code: '',
+            color_description: '',
+            standard_cost: null,
+            material_cost: null,
+            labor_cost: null,
+            overhead_cost: null,
+            product_category: '',
+            product_type: '',
+            manufacturing_notes: '',
+            unit_of_measure: 'PCS',
+            is_active: true
+        },
+
+        updateComplexity() {
+            const steps = parseFloat(this.form.total_steps) || 0;
+            if (steps <= 2) {
+                this.complexityLevel = 'Simple';
+            } else if (steps <= 5) {
+                this.complexityLevel = 'Medium';
+            } else if (steps > 5) {
+                this.complexityLevel = 'Complex';
+            } else {
+                this.complexityLevel = '';
+            }
+        },
+
+        calculateTotalCost() {
+            const material = parseFloat(this.form.material_cost) || 0;
+            const labor = parseFloat(this.form.labor_cost) || 0;
+            const overhead = parseFloat(this.form.overhead_cost) || 0;
+            return material + labor + overhead;
+        },
+        
+        resetForm() {
+            this.form = {
+                part_no: '',
+                part_name: '',
+                drawing_no: '',
+                revision: '',
+                material_code: '',
+                material_description_th: '',
+                material_length: '',
+                cuts_per_box: null,
+                total_steps: null,
+                turning_steps: null,
+                milling_steps: '',
+                color_code: '',
+                color_description: '',
+                standard_cost: null,
+                material_cost: null,
+                labor_cost: null,
+                overhead_cost: null,
+                product_category: '',
+                product_type: '',
+                manufacturing_notes: '',
+                unit_of_measure: 'PCS',
+                is_active: true
+            };
+            this.complexityLevel = '';
+        },
+        
+        async saveEntity() {
+            this.saving = true;
+            
+            try {
+                // Validate required fields
+                if (!this.form.part_no.trim()) {
+                    throw new Error('Part Number is required');
+                }
+                if (!this.form.part_name.trim()) {
+                    throw new Error('Part Name is required');
+                }
+
+                const url = this.editMode 
+                    ? `/api/atp/products/${this.form.id}` 
+                    : '/api/atp/products';
+                const method = this.editMode ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        ...this.form,
+                        complexity_level: this.complexityLevel
+                    })
+                });
+                
+                if (response.ok) {
+                    showToast(`Product ${this.editMode ? 'updated' : 'created'} successfully`, 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();
+                    location.reload();
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to save product');
+                }
+            } catch (error) {
+                showToast('Error saving product: ' + error.message, 'error');
+            } finally {
+                this.saving = false;
+            }
+        }
+    }
+}
+
+// Global Functions
+function showCreateProductModal() {
+    const modal = new bootstrap.Modal(document.getElementById('productModal'));
+    modal.show();
+}
+
+async function editProduct(id) {
+    try {
+        const response = await fetch(`/api/atp/products/${id}`);
+        if (response.ok) {
+            const product = await response.json();
+            showToast('Edit functionality needs authentication', 'info');
+        }
+    } catch (error) {
+        showToast('Error loading product: ' + error.message, 'error');
+    }
+}
+
+async function importProducts() {
+    if (confirm('Import products from Excel? This may take several minutes.')) {
+        try {
+            showToast('Starting product import...', 'info');
+            const response = await fetch('/api/atp/excel-import', {
+                method: 'POST'
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                showToast(`Import completed! Created: ${result.created_count}, Updated: ${result.updated_count}`, 'success');
+                location.reload();
+            } else {
+                throw new Error('Import failed');
+            }
+        } catch (error) {
+            showToast('Import error: ' + error.message, 'error');
+        }
+    }
+}
+
+async function previewExcelImport() {
+    try {
+        showToast('Loading Excel preview...', 'info');
+        const response = await fetch('/api/atp/excel-preview?limit=5');
+        
+        if (response.ok) {
+            const result = await response.json();
+            const productCount = result.products_found || 0;
+            const errorCount = result.processing_errors?.length || 0;
+            
+            let message = `Excel Preview:\n\n`;
+            message += `Products found: ${productCount}\n`;
+            message += `Processing errors: ${errorCount}\n\n`;
+            
+            if (result.products && result.products.length > 0) {
+                message += `Sample products:\n`;
+                result.products.slice(0, 3).forEach((product, index) => {
+                    message += `${index + 1}. ${product.part_no} - ${product.part_name}\n`;
+                });
+            }
+            
+            alert(message);
+        } else {
+            throw new Error('Preview failed');
+        }
+    } catch (error) {
+        showToast('Preview error: ' + error.message, 'error');
+    }
+}
+</script>
+{% endblock %}

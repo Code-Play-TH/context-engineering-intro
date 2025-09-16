@@ -248,7 +248,7 @@ main() {
     preflight_checks
     wait_for_db
     run_migrations
-    init_seed_data
+    # init_seed_data  # TEMPORARILY DISABLED - missing MaterialCode model
     
     log "Initialization completed successfully"
     log "Starting application..."

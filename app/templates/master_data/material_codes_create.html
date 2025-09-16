@@ -1,0 +1,142 @@
+{% extends "crud/base_form.html" %}
+{% from "crud/form_macros.html" import form_section, form_group, form_row, form_col %}
+
+{% set page_title = "Create New Material Code" %}
+{% set page_subtitle = "Add a new ATP material code with specifications" %}
+{% set page_icon = "fas fa-plus-circle" %}
+{% set entity_name = "Material Code" %}
+{% set list_url = "/master-data/materials" %}
+{% set form_component_name = "createMaterialCode()" %}
+
+{% block extra_crud_css %}
+<script>
+// Ensure function is available before Alpine.js initialization
+function createMaterialCode() {
+    return {
+        saving: false,
+        form: {
+            atp_code: '',
+            material_code: '',
+            description_th: '',
+            description_en: '',
+            length_per_piece: null,
+            grade: '',
+            weight_per_line: null,
+            material_type: '',
+            cross_section: '',
+            unit_cost: null,
+            supplier: '',
+            usage_notes: ''
+        },
+
+        async saveEntity() {
+            this.saving = true;
+
+            try {
+                // Validate required fields
+                if (!this.form.atp_code.trim()) {
+                    throw new Error('ATP Code is required');
+                }
+                if (!this.form.material_code.trim()) {
+                    throw new Error('Material Code is required');
+                }
+                if (!this.form.description_th.trim()) {
+                    throw new Error('Thai Description is required');
+                }
+
+                // Get auth token
+                const token = localStorage.getItem('access_token');
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+
+                const response = await fetch('/api/atp/material-codes', {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(this.form)
+                });
+
+                if (response.ok) {
+                    const materialCode = await response.json();
+                    showToast('Material code created successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/master-data/materials';
+                    }, 1500);
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to create material code');
+                }
+            } catch (error) {
+                showToast('Error creating material code: ' + error.message, 'error');
+            } finally {
+                this.saving = false;
+            }
+        }
+    }
+}
+</script>
+{% endblock %}
+
+{% block header_actions %}
+<a href="/master-data/materials" class="erp-btn erp-btn-light">
+    <i class="fas fa-arrow-left"></i>Back to Materials
+</a>
+{% endblock %}
+
+{% block form_sections %}
+{% call form_section("Basic Information", "fas fa-info-circle") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("ATP Code", "atp_code", required=true, placeholder="Enter unique ATP code (e.g., ATP0001)", x_model="form.atp_code", help_text="Must be unique across all materials") }}
+            {{ form_group("Material Code", "material_code", required=true, placeholder="Enter material code", x_model="form.material_code") }}
+            {{ form_group("Description (Thai)", "description_th", required=true, placeholder="รายละเอียดวัตถุดิบภาษาไทย", x_model="form.description_th") }}
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Description (English)", "description_en", placeholder="Enter description in English", x_model="form.description_en") }}
+            {{ form_group("Material Type", "material_type", placeholder="Material type", x_model="form.material_type") }}
+            {{ form_group("Grade/Quality", "grade", placeholder="Material grade (e.g., 6061-T6, SS304)", x_model="form.grade") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Specifications", "fas fa-cogs") %}
+    {% call form_row() %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Length per Piece", "length_per_piece", type="number", placeholder="Length per piece", x_model="form.length_per_piece", help_text="Length in appropriate units") }}
+            {{ form_group("Weight per Line", "weight_per_line", type="number", placeholder="Weight per line", x_model="form.weight_per_line", help_text="Weight in kg") }}
+        {% endcall %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Cross Section", "cross_section", placeholder="Cross section description", x_model="form.cross_section") }}
+        {% endcall %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Supplier", "supplier", placeholder="Primary supplier name", x_model="form.supplier") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Cost Information", "fas fa-dollar-sign") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            <div class="erp-form-group">
+                <label class="erp-form-label">Unit Cost</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="erp-form-control" x-model="form.unit_cost" step="0.01"
+                           placeholder="0.00">
+                </div>
+            </div>
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Usage Notes", "usage_notes", type="textarea", placeholder="Usage instructions and special handling notes", x_model="form.usage_notes") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% endblock %}
+
+{% block custom_form_js %}
+<!-- JavaScript function already defined in extra_crud_css block -->
+{% endblock %}

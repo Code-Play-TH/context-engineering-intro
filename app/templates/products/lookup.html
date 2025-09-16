@@ -1,0 +1,565 @@
+{% extends "base.html" %}
+
+{% block title %}Product Lookup{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/crud-template.css') }}">
+<style>
+.erp-search-hero {
+    background: var(--erp-primary);
+    color: white;
+    padding: 3rem 0;
+    margin-bottom: 2rem;
+}
+
+.erp-search-box {
+    background: white;
+    border-radius: var(--erp-radius);
+    padding: 0.5rem;
+    box-shadow: var(--erp-shadow-lg);
+}
+
+.erp-search-box input {
+    border: none;
+    background: transparent;
+    padding: 0.75rem 1.5rem;
+}
+
+.erp-search-box input:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.erp-lookup-card {
+    transition: all 0.3s ease;
+    border: 1px solid var(--erp-border);
+    border-radius: var(--erp-radius);
+    box-shadow: var(--erp-shadow);
+    cursor: pointer;
+}
+
+.erp-lookup-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--erp-shadow-lg);
+}
+
+.erp-detail-section {
+    background: white;
+    border-radius: var(--erp-radius);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid var(--erp-border);
+}
+
+.erp-detail-header {
+    color: var(--erp-primary);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--erp-border);
+}
+
+.erp-spec-item {
+    border-bottom: 1px solid var(--erp-border-light);
+    padding: 0.5rem 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.erp-spec-item:last-child {
+    border-bottom: none;
+}
+
+.erp-complexity-simple { color: var(--erp-success); }
+.erp-complexity-medium { color: var(--erp-warning); }
+.erp-complexity-complex { color: var(--erp-danger); }
+
+.erp-filter-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: var(--erp-radius);
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+.erp-filter-btn:hover,
+.erp-filter-btn.active {
+    background: white;
+    color: var(--erp-primary);
+    border-color: white;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="erp-page-container" x-data="productLookup()">
+    <!-- Search Hero Section -->
+    <div class="erp-search-hero text-center">
+        <div class="container">
+            <h1 class="erp-page-title mb-3">
+                <i class="fas fa-search me-3"></i>Product Lookup
+            </h1>
+            <p class="erp-page-subtitle mb-4">Search and explore ATP products with detailed specifications</p>
+            
+            <!-- Search Box -->
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    <div class="erp-search-box d-flex">
+                        <input type="text" class="form-control form-control-lg flex-grow-1" 
+                               placeholder="Enter part number, name, or drawing number..."
+                               x-model="searchTerm" @keyup.enter="performSearch()" @input="debouncedSearch()">
+                        <button class="erp-btn erp-btn-primary" @click="performSearch()" :disabled="searching">
+                            <span x-show="searching" class="spinner-border spinner-border-sm me-2"></span>
+                            <i class="fas fa-search" x-show="!searching"></i>
+                            <span class="ms-2">Search</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Filters -->
+            <div class="row justify-content-center mt-3">
+                <div class="col-md-10">
+                    <div class="d-flex flex-wrap justify-content-center gap-2">
+                        <button class="erp-filter-btn" @click="quickSearch('Simple')" 
+                                :class="{ 'active': activeFilter === 'Simple' }">
+                            <i class="fas fa-star me-1"></i>Simple Products
+                        </button>
+                        <button class="erp-filter-btn" @click="quickSearch('Medium')"
+                                :class="{ 'active': activeFilter === 'Medium' }">
+                            <i class="fas fa-star me-1"></i><i class="fas fa-star me-1"></i>Medium Products
+                        </button>
+                        <button class="erp-filter-btn" @click="quickSearch('Complex')"
+                                :class="{ 'active': activeFilter === 'Complex' }">
+                            <i class="fas fa-star me-1"></i><i class="fas fa-star me-1"></i><i class="fas fa-star me-1"></i>Complex Products
+                        </button>
+                        <button class="erp-filter-btn" @click="quickSearch('color')"
+                                :class="{ 'active': activeFilter === 'color' }">
+                            <i class="fas fa-palette me-1"></i>With Colors
+                        </button>
+                        <button class="erp-filter-btn" @click="clearFilters()" x-show="activeFilter">
+                            <i class="fas fa-times me-1"></i>Clear
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="erp-content-area">
+        <!-- Loading State -->
+        <div x-show="searching" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Searching...</span>
+            </div>
+            <p class="mt-3 text-muted">Searching products...</p>
+        </div>
+
+        <!-- Error State -->
+        <div x-show="error && !searching" class="erp-alert erp-alert-danger" role="alert">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <span x-text="error"></span>
+            <button class="erp-btn erp-btn-danger erp-btn-sm ms-3" @click="performSearch()">
+                <i class="fas fa-redo me-1"></i>Retry
+            </button>
+        </div>
+
+        <!-- Results Summary -->
+        <div x-show="!searching && !error && products.length > 0" class="mb-4">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="erp-text-secondary">
+                            <i class="fas fa-list me-2"></i>
+                            Found <span x-text="products.length"></span> product(s)
+                            <span x-show="searchTerm" class="fw-bold">for "<span x-text="searchTerm"></span>"</span>
+                        </h4>
+                        <div class="d-flex gap-2">
+                            <select class="erp-form-control" x-model="sortBy" @change="sortResults()">
+                                <option value="part_no">Sort by Part Number</option>
+                                <option value="part_name">Sort by Name</option>
+                                <option value="complexity">Sort by Complexity</option>
+                                <option value="total_steps">Sort by Steps</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Cards -->
+        <div x-show="!searching && !error" class="row">
+            <template x-for="product in products" :key="product.id">
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+                    <div class="erp-lookup-card h-100" @click="selectProduct(product)">
+                        <div class="erp-card-header bg-primary text-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0 fw-bold" x-text="product.part_no"></h6>
+                                <button class="erp-btn erp-btn-light erp-btn-sm" @click.stop="viewProductDetails(product.id)">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="erp-card-body">
+                            <h6 class="erp-card-title text-truncate" x-text="product.part_name" :title="product.part_name"></h6>
+                            
+                            <!-- Complexity Badge -->
+                            <div class="mb-2">
+                                <span class="erp-badge erp-complexity-simple" x-show="product.complexity_level === 'Simple'">
+                                    <i class="fas fa-star me-1"></i>Simple
+                                </span>
+                                <span class="erp-badge erp-complexity-medium" x-show="product.complexity_level === 'Medium'">
+                                    <i class="fas fa-star me-1"></i><i class="fas fa-star me-1"></i>Medium
+                                </span>
+                                <span class="erp-badge erp-complexity-complex" x-show="product.complexity_level === 'Complex'">
+                                    <i class="fas fa-star me-1"></i><i class="fas fa-star me-1"></i><i class="fas fa-star me-1"></i>Complex
+                                </span>
+                            </div>
+
+                            <!-- Key Info -->
+                            <div class="erp-spec-item" x-show="product.material_code">
+                                <small class="text-muted">Material:</small>
+                                <span class="fw-bold" x-text="product.material_code"></span>
+                            </div>
+                            <div class="erp-spec-item" x-show="product.total_steps">
+                                <small class="text-muted">Steps:</small>
+                                <span x-text="product.total_steps"></span>
+                            </div>
+                            <div class="erp-spec-item" x-show="product.color_description">
+                                <small class="text-muted">Color:</small>
+                                <span x-text="product.color_description"></span>
+                            </div>
+                            
+                            <!-- Status -->
+                            <div class="mt-2">
+                                <span class="erp-badge erp-badge-success" x-show="product.is_active">Active</span>
+                                <span class="erp-badge erp-badge-secondary" x-show="!product.is_active">Inactive</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
+
+        <!-- Empty State -->
+        <div x-show="!searching && !error && products.length === 0 && hasSearched" class="text-center py-5">
+            <i class="fas fa-search-minus fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">No Products Found</h4>
+            <p class="text-muted">Try adjusting your search terms or browse all products.</p>
+            <a href="/products" class="erp-btn erp-btn-primary">
+                <i class="fas fa-list me-2"></i>Browse All Products
+            </a>
+        </div>
+
+        <!-- Initial State -->
+        <div x-show="!searching && !error && products.length === 0 && !hasSearched" class="text-center py-5">
+            <i class="fas fa-search fa-4x text-muted mb-3"></i>
+            <h4 class="text-muted">Ready to Search</h4>
+            <p class="text-muted">Enter a search term above or use the quick filter buttons to get started.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Product Detail Modal -->
+<div class="modal fade" id="productDetailModal" tabindex="-1">
+    <div class="modal-dialog modal-xl" x-data="productDetail()">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-box me-2"></i>
+                    <span x-text="product.part_no || 'Product Details'"></span>
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" x-show="product.id">
+                <div class="row">
+                    <!-- Basic Information -->
+                    <div class="col-md-6 mb-3">
+                        <div class="erp-detail-section">
+                            <h6 class="erp-detail-header">
+                                <i class="fas fa-info-circle me-2"></i>Basic Information
+                            </h6>
+                            <div class="erp-spec-item">
+                                <strong>Part Name:</strong>
+                                <span x-text="product.part_name || 'N/A'"></span>
+                            </div>
+                            <div class="erp-spec-item" x-show="product.drawing_no">
+                                <strong>Drawing No:</strong>
+                                <span x-text="product.drawing_no"></span>
+                            </div>
+                            <div class="erp-spec-item" x-show="product.revision">
+                                <strong>Revision:</strong>
+                                <span x-text="product.revision"></span>
+                            </div>
+                            <div class="erp-spec-item">
+                                <strong>Status:</strong>
+                                <span>
+                                    <span class="erp-badge erp-badge-success" x-show="product.is_active">Active</span>
+                                    <span class="erp-badge erp-badge-secondary" x-show="!product.is_active">Inactive</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Production Information -->
+                    <div class="col-md-6 mb-3">
+                        <div class="erp-detail-section">
+                            <h6 class="erp-detail-header">
+                                <i class="fas fa-cogs me-2"></i>Production Process
+                            </h6>
+                            <div class="erp-spec-item" x-show="product.total_steps">
+                                <strong>Total Steps:</strong>
+                                <span x-text="product.total_steps"></span>
+                            </div>
+                            <div class="erp-spec-item" x-show="product.turning_steps">
+                                <strong>Turning Steps:</strong>
+                                <span x-text="product.turning_steps"></span>
+                            </div>
+                            <div class="erp-spec-item" x-show="product.milling_steps">
+                                <strong>Milling Steps:</strong>
+                                <span x-text="product.milling_steps"></span>
+                            </div>
+                            <div class="erp-spec-item" x-show="product.complexity_level">
+                                <strong>Complexity:</strong>
+                                <span>
+                                    <span class="erp-badge erp-complexity-simple" x-show="product.complexity_level === 'Simple'">Simple</span>
+                                    <span class="erp-badge erp-complexity-medium" x-show="product.complexity_level === 'Medium'">Medium</span>
+                                    <span class="erp-badge erp-complexity-complex" x-show="product.complexity_level === 'Complex'">Complex</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Material Information -->
+                    <div class="col-md-6 mb-3" x-show="product.material_code || product.material_description_th">
+                        <div class="erp-detail-section">
+                            <h6 class="erp-detail-header">
+                                <i class="fas fa-cubes me-2"></i>Material Information
+                            </h6>
+                            <div class="erp-spec-item" x-show="product.material_code">
+                                <strong>Material Code:</strong>
+                                <span x-text="product.material_code"></span>
+                            </div>
+                            <div class="erp-spec-item" x-show="product.material_description_th">
+                                <strong>Description (TH):</strong>
+                                <span x-text="product.material_description_th"></span>
+                            </div>
+                            <div class="erp-spec-item" x-show="product.material_length">
+                                <strong>Length:</strong>
+                                <span x-text="product.material_length"></span>
+                            </div>
+                            <div class="erp-spec-item" x-show="product.cuts_per_box">
+                                <strong>Cuts per Box:</strong>
+                                <span x-text="product.cuts_per_box"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Color Information -->
+                    <div class="col-md-6 mb-3" x-show="product.color_code || product.color_description">
+                        <div class="erp-detail-section">
+                            <h6 class="erp-detail-header">
+                                <i class="fas fa-palette me-2"></i>Color & Finishing
+                            </h6>
+                            <div class="erp-spec-item" x-show="product.color_code">
+                                <strong>Color Code:</strong>
+                                <span x-text="product.color_code"></span>
+                            </div>
+                            <div class="erp-spec-item" x-show="product.color_description">
+                                <strong>Color Description:</strong>
+                                <span x-text="product.color_description"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Manufacturing Notes -->
+                    <div class="col-12" x-show="product.manufacturing_notes">
+                        <div class="erp-detail-section">
+                            <h6 class="erp-detail-header">
+                                <i class="fas fa-clipboard me-2"></i>Manufacturing Notes
+                            </h6>
+                            <p x-text="product.manufacturing_notes" class="mb-0"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="/products" class="erp-btn erp-btn-secondary">
+                    <i class="fas fa-list me-2"></i>View All Products
+                </a>
+                <button type="button" class="erp-btn erp-btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function productLookup() {
+    return {
+        searchTerm: '',
+        products: [],
+        searching: false,
+        error: null,
+        hasSearched: false,
+        activeFilter: null,
+        sortBy: 'part_no',
+        searchTimeout: null,
+
+        async performSearch() {
+            if (!this.searchTerm.trim() && !this.activeFilter) {
+                this.products = [];
+                this.hasSearched = false;
+                return;
+            }
+
+            this.searching = true;
+            this.error = null;
+            this.hasSearched = true;
+
+            try {
+                const params = new URLSearchParams({
+                    limit: 100,
+                    active_only: true
+                });
+
+                if (this.searchTerm.trim()) {
+                    params.append('search', this.searchTerm.trim());
+                }
+
+                if (this.activeFilter && this.activeFilter !== 'color') {
+                    params.append('complexity_level', this.activeFilter);
+                } else if (this.activeFilter === 'color') {
+                    // Filter will be applied client-side for products with color
+                }
+
+                const response = await fetch(`/api/atp/products?${params}`);
+                if (!response.ok) throw new Error('Failed to search products');
+
+                const data = await response.json();
+                this.products = data.products || [];
+
+                // Apply color filter if needed
+                if (this.activeFilter === 'color') {
+                    this.products = this.products.filter(p => p.color_description);
+                }
+
+                this.sortResults();
+
+            } catch (error) {
+                this.error = error.message;
+                console.error('Error searching products:', error);
+            } finally {
+                this.searching = false;
+            }
+        },
+
+        debouncedSearch() {
+            clearTimeout(this.searchTimeout);
+            this.searchTimeout = setTimeout(() => {
+                this.performSearch();
+            }, 500);
+        },
+
+        quickSearch(filter) {
+            if (this.activeFilter === filter) {
+                this.clearFilters();
+            } else {
+                this.activeFilter = filter;
+                this.performSearch();
+            }
+        },
+
+        clearFilters() {
+            this.activeFilter = null;
+            this.searchTerm = '';
+            this.products = [];
+            this.hasSearched = false;
+        },
+
+        sortResults() {
+            if (!this.products.length) return;
+
+            this.products.sort((a, b) => {
+                let aVal = a[this.sortBy];
+                let bVal = b[this.sortBy];
+
+                if (this.sortBy === 'complexity') {
+                    const complexityOrder = { 'Simple': 1, 'Medium': 2, 'Complex': 3 };
+                    aVal = complexityOrder[a.complexity_level] || 0;
+                    bVal = complexityOrder[b.complexity_level] || 0;
+                }
+
+                if (typeof aVal === 'string') {
+                    return (aVal || '').localeCompare(bVal || '');
+                } else {
+                    return (aVal || 0) - (bVal || 0);
+                }
+            });
+        },
+
+        selectProduct(product) {
+            this.viewProductDetails(product.id);
+        },
+
+        async viewProductDetails(productId) {
+            try {
+                const response = await fetch(`/api/atp/products/${productId}`);
+                if (response.ok) {
+                    const productData = await response.json();
+                    
+                    // Set product data for modal
+                    const modalElement = document.getElementById('productDetailModal');
+                    const modal = new bootstrap.Modal(modalElement);
+                    
+                    // Update modal data
+                    window.productDetailData = productData;
+                    modal.show();
+                } else {
+                    throw new Error('Failed to load product details');
+                }
+            } catch (error) {
+                showToast('Error loading product details: ' + error.message, 'error');
+            }
+        }
+    }
+}
+
+function productDetail() {
+    return {
+        product: {},
+
+        init() {
+            // Listen for modal show events
+            const modal = document.getElementById('productDetailModal');
+            modal.addEventListener('show.bs.modal', () => {
+                if (window.productDetailData) {
+                    this.product = window.productDetailData;
+                }
+            });
+        }
+    }
+}
+
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `erp-alert erp-alert-${type === 'error' ? 'danger' : type === 'success' ? 'success' : 'info'} position-fixed`;
+    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    toast.innerHTML = `
+        <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : type === 'success' ? 'check-circle' : 'info-circle'}"></i>
+        ${message}
+        <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        if (toast.parentElement) toast.remove();
+    }, 5000);
+}
+</script>
+{% endblock %}

@@ -1,0 +1,339 @@
+{% extends "crud/base_form.html" %}
+{% from "crud/form_macros.html" import form_section, form_group, form_row, form_col %}
+
+{% set page_title = "Edit Product" %}
+{% set page_subtitle = "Update ATP product specifications" %}
+{% set page_icon = "fas fa-edit" %}
+{% set entity_name = "Product" %}
+{% set list_url = "/products" %}
+{% set form_component_name = "editProduct()" %}
+
+{% block extra_crud_css %}
+<script>
+// Ensure function is available before Alpine.js initialization
+function editProduct() {
+    return {
+        saving: false,
+        loading: false,
+        productId: null,
+        complexityLevel: '',
+        form: {
+            id: null,
+            part_no: '',
+            part_name: '',
+            drawing_no: '',
+            revision: '',
+            material_code: '',
+            material_description_th: '',
+            material_length: '',
+            cuts_per_box: null,
+            total_steps: null,
+            turning_steps: null,
+            milling_steps: '',
+            color_code: '',
+            color_description: '',
+            standard_cost: null,
+            material_cost: null,
+            labor_cost: null,
+            overhead_cost: null,
+            product_category: '',
+            product_type: '',
+            manufacturing_notes: '',
+            unit_of_measure: 'PCS',
+            is_active: true
+        },
+
+        async init() {
+            // Get product ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            this.productId = urlParams.get('id');
+            
+            if (this.productId) {
+                await this.loadProductData();
+            }
+        },
+
+        async loadProductData() {
+            if (!this.productId) {
+                showToast('No product ID provided', 'error');
+                return;
+            }
+
+            this.loading = true;
+            try {
+                // Get auth token for API requests
+                const token = localStorage.getItem('access_token');
+                const headers = {};
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+
+                const response = await fetch(`/api/atp/products/${this.productId}`, {
+                    headers: headers
+                });
+                if (response.ok) {
+                    const productData = await response.json();
+                    
+                    // Populate form with existing data
+                    this.form = {
+                        ...this.form,
+                        ...productData
+                    };
+                    
+                    // Update complexity level
+                    this.updateComplexity();
+                    
+                    showToast('Product data loaded successfully', 'success');
+                } else {
+                    throw new Error('Failed to load product data');
+                }
+            } catch (error) {
+                showToast('Error loading product: ' + error.message, 'error');
+                // Redirect back to list if product not found
+                setTimeout(() => {
+                    window.location.href = '/products';
+                }, 2000);
+            } finally {
+                this.loading = false;
+            }
+        },
+
+        updateComplexity() {
+            const steps = parseFloat(this.form.total_steps) || 0;
+            if (steps <= 2) {
+                this.complexityLevel = 'Simple';
+            } else if (steps <= 5) {
+                this.complexityLevel = 'Medium';
+            } else if (steps > 5) {
+                this.complexityLevel = 'Complex';
+            } else {
+                this.complexityLevel = '';
+            }
+        },
+
+        calculateTotalCost() {
+            const material = parseFloat(this.form.material_cost) || 0;
+            const labor = parseFloat(this.form.labor_cost) || 0;
+            const overhead = parseFloat(this.form.overhead_cost) || 0;
+            return material + labor + overhead;
+        },
+
+        async saveEntity() {
+            this.saving = true;
+
+            try {
+                // Validate required fields
+                if (!this.form.part_no.trim()) {
+                    throw new Error('Part Number is required');
+                }
+                if (!this.form.part_name.trim()) {
+                    throw new Error('Part Name is required');
+                }
+
+                // Get auth token
+                const token = localStorage.getItem('access_token');
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+
+                const response = await fetch(`/api/atp/products/${this.productId}`, {
+                    method: 'PUT',
+                    headers: headers,
+                    body: JSON.stringify({
+                        ...this.form,
+                        complexity_level: this.complexityLevel
+                    })
+                });
+
+                if (response.ok) {
+                    const product = await response.json();
+                    showToast('Product updated successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/products';
+                    }, 1500);
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to update product');
+                }
+            } catch (error) {
+                showToast('Error updating product: ' + error.message, 'error');
+            } finally {
+                this.saving = false;
+            }
+        }
+    }
+}
+</script>
+{% endblock %}
+
+{% block header_actions %}
+<a href="/products" class="erp-btn erp-btn-light">
+    <i class="fas fa-arrow-left"></i>Back to Products
+</a>
+<button class="erp-btn erp-btn-info" @click="loadProductData()" x-show="!form.id">
+    <i class="fas fa-sync"></i>Load Product Data
+</button>
+{% endblock %}
+
+{% block form_sections %}
+{% call form_section("Basic Information", "fas fa-info-circle") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Part Number", "part_no", required=true, placeholder="Enter unique part number", x_model="form.part_no", help_text="Must be unique across all products") }}
+            {{ form_group("Part Name", "part_name", required=true, placeholder="Enter descriptive part name", x_model="form.part_name") }}
+            {{ form_group("Drawing Number", "drawing_no", placeholder="Engineering drawing number", x_model="form.drawing_no") }}
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Revision", "revision", placeholder="Drawing revision (e.g., A, B, 01)", x_model="form.revision") }}
+            {{ form_group("Unit of Measure", "unit_of_measure", type="select", options=[
+                ("PCS", "PCS (Pieces)"),
+                ("SET", "SET"),
+                ("KG", "KG (Kilograms)"),
+                ("M", "M (Meters)"),
+                ("L", "L (Liters)")
+            ], x_model="form.unit_of_measure") }}
+            {{ form_group("Active Product", "is_active", type="checkbox", x_model="form.is_active") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Material Information", "fas fa-cubes") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Material Code", "material_code", placeholder="Reference material code", x_model="form.material_code", help_text="Should match ATP Material Code master data") }}
+            {{ form_group("Material Length", "material_length", placeholder="Length specification (e.g., 6000mm, 12ft)", x_model="form.material_length") }}
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Material Description (Thai)", "material_description_th", type="textarea", placeholder="รายละเอียดวัตถุดิบภาษาไทย", x_model="form.material_description_th") }}
+            {{ form_group("Cuts per Box", "cuts_per_box", type="number", placeholder="Number of cuts per material box", x_model="form.cuts_per_box") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Production Process", "fas fa-cogs") %}
+    {% call form_row() %}
+        {% call form_col("col-md-4") %}
+            <div class="erp-form-group">
+                <label class="erp-form-label">Total Steps</label>
+                <input type="number" class="erp-form-control" x-model="form.total_steps" step="0.1"
+                       placeholder="Total production steps" @input="updateComplexity()">
+                <div class="erp-form-text">Automatically calculates complexity level</div>
+            </div>
+            <div class="erp-form-group" x-show="form.total_steps">
+                <label class="erp-form-label">Complexity Level</label>
+                <input type="text" class="erp-form-control" x-model="complexityLevel" readonly
+                       :class="{'erp-bg-success erp-text-white': complexityLevel === 'Simple', 
+                               'erp-bg-warning erp-text-dark': complexityLevel === 'Medium',
+                               'erp-bg-danger erp-text-white': complexityLevel === 'Complex'}">
+            </div>
+        {% endcall %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Turning Steps", "turning_steps", type="number", placeholder="Lathe/turning operations", x_model="form.turning_steps") }}
+        {% endcall %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Milling Steps", "milling_steps", placeholder="Milling operations description", x_model="form.milling_steps") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Color & Finishing", "fas fa-palette") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Color Code", "color_code", type="select", options=[
+                ("", "Select Color Code"),
+                ("0", "0 - Black"),
+                ("1", "1 - Chrome"),
+                ("2", "2 - White"),
+                ("3", "3 - Gold"),
+                ("4", "4 - Yellow"),
+                ("5", "5 - Red"),
+                ("6", "6 - Blue"),
+                ("7", "7 - Orange"),
+                ("8", "8 - Matt Black")
+            ], x_model="form.color_code") }}
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Color Description", "color_description", placeholder="Detailed color description (e.g., MATT BLACK, ดำด้าน)", x_model="form.color_description") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Cost Information", "fas fa-dollar-sign") %}
+    {% call form_row() %}
+        {% call form_col("col-md-3") %}
+            <div class="erp-form-group">
+                <label class="erp-form-label">Standard Cost</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="erp-form-control" x-model="form.standard_cost" step="0.01"
+                           placeholder="0.00">
+                </div>
+            </div>
+        {% endcall %}
+        {% call form_col("col-md-3") %}
+            <div class="erp-form-group">
+                <label class="erp-form-label">Material Cost</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="erp-form-control" x-model="form.material_cost" step="0.01"
+                           placeholder="0.00">
+                </div>
+            </div>
+        {% endcall %}
+        {% call form_col("col-md-3") %}
+            <div class="erp-form-group">
+                <label class="erp-form-label">Labor Cost</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="erp-form-control" x-model="form.labor_cost" step="0.01"
+                           placeholder="0.00">
+                </div>
+            </div>
+        {% endcall %}
+        {% call form_col("col-md-3") %}
+            <div class="erp-form-group">
+                <label class="erp-form-label">Overhead Cost</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="erp-form-control" x-model="form.overhead_cost" step="0.01"
+                           placeholder="0.00">
+                </div>
+            </div>
+        {% endcall %}
+    {% endcall %}
+    <div class="row mt-3">
+        <div class="col-md-3">
+            <div class="erp-alert erp-alert-info">
+                <strong>Total Cost:</strong> $<span x-text="calculateTotalCost().toFixed(2)">0.00</span>
+            </div>
+        </div>
+    </div>
+{% endcall %}
+
+{% call form_section("Classification & Notes", "fas fa-tags") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Product Category", "product_category", placeholder="Product category (e.g., Mechanical Parts)", x_model="form.product_category") }}
+            {{ form_group("Product Type", "product_type", placeholder="Product type (e.g., Housing, Bracket)", x_model="form.product_type") }}
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Manufacturing Notes", "manufacturing_notes", type="textarea", placeholder="Manufacturing instructions, quality requirements, special handling notes...", x_model="form.manufacturing_notes") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+<!-- Loading State -->
+<div x-show="loading" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-2 text-muted">Loading product data...</p>
+</div>
+{% endblock %}
+
+{% block custom_form_js %}
+<!-- JavaScript function already defined in extra_crud_css block -->
+{% endblock %}

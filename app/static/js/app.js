@@ -25,6 +25,12 @@ const Utils = {
             }
         };
 
+        // Add JWT token if available
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            defaultOptions.headers['Authorization'] = `Bearer ${token}`;
+        }
+
         // Add CSRF token if available
         if (APP_CONFIG.csrfToken) {
             defaultOptions.headers['X-CSRF-Token'] = APP_CONFIG.csrfToken;
@@ -44,6 +50,15 @@ const Utils = {
             
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
+                
+                // Handle authentication errors
+                if (response.status === 401) {
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('user');
+                    window.location.href = '/auth/login';
+                    return;
+                }
+                
                 throw new Error(errorData.detail || `HTTP ${response.status}: ${response.statusText}`);
             }
 
@@ -736,6 +751,89 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+// Global helper functions for templates
+window.getAuthHeaders = function() {
+    const token = localStorage.getItem('access_token');
+    const headers = {};
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    return headers;
+};
+
+window.getAuthHeadersWithContent = function() {
+    const token = localStorage.getItem('access_token');
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    return headers;
+};
+
+window.handleAuthError = function(response) {
+    if (response.status === 401) {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user');
+        window.location.href = '/auth/login';
+        return true;
+    }
+    return false;
+};
+
+// Global showToast function for all templates
+window.showToast = function(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `erp-alert erp-alert-${type === 'error' ? 'danger' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info'} position-fixed`;
+    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px; max-width: 400px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-radius: 0.375rem; padding: 1rem; margin-bottom: 1rem;';
+    
+    const iconMap = {
+        'success': 'fas fa-check-circle',
+        'error': 'fas fa-exclamation-triangle', 
+        'warning': 'fas fa-exclamation-triangle',
+        'info': 'fas fa-info-circle'
+    };
+    
+    const colorMap = {
+        'success': '#10b981',
+        'error': '#ef4444',
+        'warning': '#f59e0b', 
+        'info': '#3b82f6'
+    };
+    
+    toast.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <i class="${iconMap[type]}" style="color: ${colorMap[type]}; font-size: 1.25rem;"></i>
+            <span style="flex: 1; color: #374151; font-weight: 500;">${message}</span>
+            <button type="button" style="background: none; border: none; color: #6b7280; cursor: pointer; padding: 0; font-size: 1.125rem;" onclick="this.closest('.erp-alert').remove()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    `;
+    
+    document.body.appendChild(toast);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+        if (toast.parentElement) {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(100%)';
+            toast.style.transition = 'all 0.3s ease-out';
+            setTimeout(() => toast.remove(), 300);
+        }
+    }, 5000);
+    
+    // Add entrance animation
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(100%)';
+    toast.style.transition = 'all 0.3s ease-out';
+    setTimeout(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateX(0)';
+    }, 10);
+};
 
 // Export for global use
 window.FactoryERP = {

@@ -1,0 +1,579 @@
+{% extends "crud/base_list.html" %}
+{% from "crud/form_macros.html" import form_section, form_group, form_row, form_col, stat_card, badge, search_filter, action_dropdown %}
+
+{% set page_title = "Color Code Management" %}
+{% set page_subtitle = "Manage ATP color codes and finishing specifications" %}
+{% set page_icon = "fas fa-palette" %}
+{% set entity_name = "Color Code" %}
+{% set search_placeholder = "Color Code or Name" %}
+{% set primary_field = "color_code" %}
+{% set secondary_field = "color_name" %}
+
+{% set search_component_name = "colorSearchFilters()" %}
+{% set stats_component_name = "colorStats()" %}
+{% set list_component_name = "colorList()" %}
+{% set modal_component_name = "colorModal()" %}
+{% set modal_id = "colorModal" %}
+
+{% set preview_function = "previewColorData()" %}
+{% set import_function = "importColors()" %}
+{% set create_function = "createColor()" %}
+{% set create_url = "/master-data/colors/create" %}
+
+{% block extra_crud_css %}
+<style>
+.color-preview {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: var(--erp-shadow);
+    flex-shrink: 0;
+}
+</style>
+{% endblock %}
+
+{% block search_filters %}
+{{ search_filter("Search Colors", "search", "text", search_placeholder, x_model="search") }}
+{{ search_filter("Color Type", "colorType", "select", options=[
+    ("", "All Types"),
+    ("Raw Material", "Raw Material"),
+    ("Anodized", "Anodized"),
+    ("Chrome Plating", "Chrome Plating"),
+    ("Paint", "Paint")
+], x_model="colorTypeFilter") }}
+{{ search_filter("Status", "status", "select", options=[
+    ("active", "Active Only"),
+    ("all", "All Records"),
+    ("inactive", "Inactive Only")
+], x_model="statusFilter") }}
+{{ search_filter("Per Page", "limit", "select", options=[
+    ("20", "20"),
+    ("50", "50"),
+    ("100", "100")
+], x_model="limit") }}
+{% endblock %}
+
+{% block statistics_cards %}
+{{ stat_card("0", "Total Colors", x_number="stats.total") }}
+{{ stat_card("0", "Raw Materials", x_number="stats.rawMaterials") }}  
+{{ stat_card("0", "With Process", x_number="stats.withProcess") }}
+{{ stat_card("0", "Active Colors", x_number="stats.active") }}
+{% endblock %}
+
+{% block item_template %}
+<template x-for="item in items" :key="item.id">
+    <div class="erp-item-card">
+        <div class="erp-item-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center">
+                    <div class="color-preview me-3"
+                         :style="'background: ' + getColorPreview(item.color_name)"></div>
+                    <div>
+                        <h6 class="erp-item-title" x-text="item.color_code"></h6>
+                        <small class="erp-item-subtitle" x-text="item.color_name"></small>
+                    </div>
+                </div>
+                {{ action_dropdown() }}
+            </div>
+        </div>
+        <div class="erp-item-body">
+            <!-- Color Type Badge -->
+            <div class="mb-2">
+                {{ badge("Raw Material", "success", x_show="item.is_raw_material") }}
+                <span class="erp-badge erp-badge-info" x-show="item.color_type && !item.is_raw_material" 
+                      x-text="item.color_type"></span>
+            </div>
+
+            <div class="erp-item-meta">
+                <div class="erp-meta-item" x-show="item.process_type">
+                    <span class="erp-meta-label">Process</span>
+                    <span class="erp-meta-value" x-text="item.process_type"></span>
+                </div>
+                <div class="erp-meta-item" x-show="item.finish_type">
+                    <span class="erp-meta-label">Finish</span>
+                    <span class="erp-meta-value" x-text="item.finish_type"></span>
+                </div>
+                <div class="erp-meta-item" x-show="item.cost_per_sqm">
+                    <span class="erp-meta-label">Cost</span>
+                    <span class="erp-meta-value" x-text="formatCurrency(item.cost_per_sqm) + '/m²'"></span>
+                </div>
+            </div>
+        </div>
+        <div class="erp-item-footer">
+            <div>
+                {{ badge("Active", "success", x_show="item.is_active") }}
+                {{ badge("Inactive", "light", x_show="!item.is_active") }}
+                {{ badge("Special", "warning", x_show="item.requires_special_handling") }}
+            </div>
+            <small class="text-muted">
+                <span x-text="formatDate(item.updated_at)"></span>
+            </small>
+        </div>
+    </div>
+</template>
+{% endblock %}
+
+{% block modal_form %}
+{% call form_section("Basic Information", "fas fa-info-circle") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Color Code", "color_code", required=true, placeholder="0, 1, 2, A, etc.", x_model="form.color_code") }}
+            {{ form_group("Color Name", "color_name", required=true, placeholder="BLACK, WHITE, CHROME, etc.", x_model="form.color_name") }}
+            {{ form_group("Color Name (Thai)", "color_name_th", placeholder="ชื่อสีภาษาไทย", x_model="form.color_name_th") }}
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            <div class="erp-form-group">
+                <label class="erp-form-label">Hex Color Value</label>
+                <div class="input-group">
+                    <span class="input-group-text">#</span>
+                    <input type="text" class="erp-form-control" x-model="form.hex_value"
+                           placeholder="FF0000" maxlength="6">
+                    <div class="input-group-text" 
+                         :style="'background-color: #' + (form.hex_value || 'FFFFFF') + '; width: 30px;'"></div>
+                </div>
+            </div>
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Classification", "fas fa-tags") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Color Type", "color_type", type="select", options=[
+                ("", "Select Type"),
+                ("Raw Material", "Raw Material"),
+                ("Anodized", "Anodized"),
+                ("Chrome Plating", "Chrome Plating"),
+                ("Paint", "Paint"),
+                ("Powder Coat", "Powder Coat")
+            ], x_model="form.color_type") }}
+            {{ form_group("Finish Type", "finish_type", type="select", options=[
+                ("", "Select Finish"),
+                ("Gloss", "Gloss"),
+                ("Matte", "Matte"),
+                ("Satin", "Satin"),
+                ("Hard Anodized", "Hard Anodized"),
+                ("Textured", "Textured")
+            ], x_model="form.finish_type") }}
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Pantone Reference", "pantone_reference", placeholder="185 C, Process Black, etc.", x_model="form.pantone_reference") }}
+            <div class="erp-form-group">
+                <div class="row">
+                    <div class="col-6">
+                        {{ form_group("Raw Material", "is_raw_material", type="checkbox", x_model="form.is_raw_material") }}
+                    </div>
+                    <div class="col-6">
+                        {{ form_group("Special Handling", "requires_special_handling", type="checkbox", x_model="form.requires_special_handling") }}
+                    </div>
+                </div>
+            </div>
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Process Information", "fas fa-cogs") %}
+    {% call form_row() %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Process Type", "process_type", type="select", options=[
+                ("", "Select Process"),
+                ("Anodizing", "Anodizing"),
+                ("Hard Anodizing", "Hard Anodizing"),
+                ("Electroplating", "Electroplating"),
+                ("Powder Coating", "Powder Coating"),
+                ("Painting", "Painting")
+            ], x_model="form.process_type") }}
+        {% endcall %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Process Temperature (°C)", "process_temperature", type="number", placeholder="Temperature", x_model="form.process_temperature") }}
+        {% endcall %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Process Time (minutes)", "process_time", type="number", placeholder="Time", x_model="form.process_time") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Cost & Quality", "fas fa-dollar-sign") %}
+    {% call form_row() %}
+        {% call form_col("col-md-3") %}
+            {{ form_group("Cost per m²", "cost_per_sqm", type="number", placeholder="0.00", x_model="form.cost_per_sqm") }}
+        {% endcall %}
+        {% call form_col("col-md-3") %}
+            {{ form_group("Thickness (microns)", "thickness", type="number", placeholder="0.0", x_model="form.thickness") }}
+        {% endcall %}
+        {% call form_col("col-md-3") %}
+            {{ form_group("Durability Rating", "durability_rating", type="select", options=[
+                ("", "Select Rating"),
+                ("Excellent", "Excellent"),
+                ("Good", "Good"),
+                ("Fair", "Fair"),
+                ("Poor", "Poor")
+            ], x_model="form.durability_rating") }}
+        {% endcall %}
+        {% call form_col("col-md-3") %}
+            {{ form_group("Supplier", "supplier", placeholder="Supplier name", x_model="form.supplier") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Notes and Status", "fas fa-clipboard") %}
+    {% call form_row() %}
+        {% call form_col("col-md-8") %}
+            {{ form_group("Application Notes", "application_notes", type="textarea", placeholder="Application and usage notes", x_model="form.application_notes") }}
+        {% endcall %}
+        {% call form_col("col-md-4") %}
+            <div class="d-flex flex-column justify-content-center">
+                {{ form_group("Active Color", "is_active", type="checkbox", x_model="form.is_active") }}
+            </div>
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+{% endblock %}
+
+{% block custom_crud_js %}
+<script>
+// Color Search Filters Component
+function colorSearchFilters() {
+    return {
+        search: '',
+        colorTypeFilter: '',
+        statusFilter: 'active',
+        limit: 20,
+        
+        performSearch() {
+            window.dispatchEvent(new CustomEvent('search-colors', {
+                detail: {
+                    search: this.search,
+                    colorType: this.colorTypeFilter,
+                    status: this.statusFilter,
+                    limit: this.limit
+                }
+            }));
+        }
+    }
+}
+
+// Color Statistics Component
+function colorStats() {
+    return {
+        stats: {
+            total: 0,
+            active: 0,
+            rawMaterials: 0,
+            withProcess: 0
+        },
+        
+        async init() {
+            await this.loadStats();
+        },
+        
+        async loadStats() {
+            try {
+                const response = await fetch('/api/atp/color-codes?limit=1000');
+                if (response.ok) {
+                    const colors = await response.json();
+                    this.stats.total = colors.length;
+                    this.stats.active = colors.filter(c => c.is_active).length;
+                    this.stats.rawMaterials = colors.filter(c => c.is_raw_material).length;
+                    this.stats.withProcess = colors.filter(c => c.process_type).length;
+                }
+            } catch (error) {
+                console.error('Error loading color stats:', error);
+            }
+        }
+    }
+}
+
+// Color List Component
+function colorList() {
+    return {
+        items: [],
+        loading: false,
+        error: null,
+        currentPage: 1,
+        hasMore: false,
+        pageNumbers: [],
+        
+        async init() {
+            await this.loadData();
+            window.addEventListener('search-colors', (e) => {
+                this.loadData(e.detail);
+            });
+        },
+        
+        async loadData(filters = {}) {
+            this.loading = true;
+            this.error = null;
+            
+            try {
+                const params = new URLSearchParams({
+                    skip: ((this.currentPage - 1) * (filters.limit || 20)),
+                    limit: filters.limit || 20,
+                    active_only: filters.status !== 'all'
+                });
+                
+                if (filters.search) params.append('search', filters.search);
+                if (filters.colorType) params.append('color_type', filters.colorType);
+                
+                const response = await fetch(`/api/atp/color-codes?${params}`);
+                if (!response.ok) throw new Error('Failed to load colors');
+                
+                this.items = await response.json();
+                this.updatePagination();
+                
+            } catch (error) {
+                this.error = error.message;
+                console.error('Error loading colors:', error);
+            } finally {
+                this.loading = false;
+            }
+        },
+        
+        updatePagination() {
+            this.hasMore = this.items.length >= 20;
+            this.pageNumbers = [];
+            for (let i = Math.max(1, this.currentPage - 2); i <= Math.min(this.currentPage + 2, this.currentPage + (this.hasMore ? 2 : 0)); i++) {
+                this.pageNumbers.push(i);
+            }
+        },
+        
+        changePage(page) {
+            if (page >= 1 && (this.hasMore || page <= this.currentPage)) {
+                this.currentPage = page;
+                this.loadData();
+            }
+        },
+        
+        getColorPreview(colorName) {
+            const colorMap = {
+                'BLACK': '#000000',
+                'WHITE': '#FFFFFF',
+                'RED': '#FF0000',
+                'BLUE': '#0000FF',
+                'GREEN': '#008000',
+                'YELLOW': '#FFFF00',
+                'ORANGE': '#FFA500',
+                'CHROME': '#C0C0C0',
+                'GOLD': '#FFD700',
+                '(RAW)': '#F5F5DC',
+                'RAW': '#F5F5DC',
+                'HT': '#808080'
+            };
+            return colorMap[colorName?.toUpperCase()] || '#CCCCCC';
+        },
+        
+        formatDate(dateString) {
+            return new Date(dateString).toLocaleDateString();
+        },
+        
+        formatCurrency(value) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(value);
+        },
+        
+        viewItem(id) {
+            window.open(`/api/atp/color-codes/${id}`, '_blank');
+        },
+        
+        editItem(id) {
+            window.editColor(id);
+        },
+        
+        async deleteItem(id, name) {
+            // Show confirmation modal
+            showDeleteConfirmModal(
+                'Delete Color Code',
+                `Are you sure you want to delete color code "${name}"? This action cannot be undone.`,
+                async () => {
+                    try {
+                        const response = await fetch(`/api/atp/color-codes/${id}`, {
+                            method: 'DELETE'
+                        });
+                        
+                        if (response.ok) {
+                            showToast('Color code deleted successfully', 'success');
+                            await this.loadData();
+                        } else {
+                            throw new Error('Failed to delete color');
+                        }
+                    } catch (error) {
+                        showToast('Error deleting color: ' + error.message, 'error');
+                    }
+                }
+            );
+        }
+    }
+}
+
+// Color Modal Component
+function colorModal() {
+    return {
+        editMode: false,
+        saving: false,
+        form: {
+            color_code: '',
+            color_name: '',
+            color_name_th: '',
+            color_type: '',
+            finish_type: '',
+            hex_value: '',
+            pantone_reference: '',
+            process_type: '',
+            process_temperature: null,
+            process_time: null,
+            cost_per_sqm: null,
+            thickness: null,
+            durability_rating: '',
+            supplier: '',
+            application_notes: '',
+            is_raw_material: false,
+            requires_special_handling: false,
+            is_active: true
+        },
+        
+        resetForm() {
+            this.form = {
+                color_code: '',
+                color_name: '',
+                color_name_th: '',
+                color_type: '',
+                finish_type: '',
+                hex_value: '',
+                pantone_reference: '',
+                process_type: '',
+                process_temperature: null,
+                process_time: null,
+                cost_per_sqm: null,
+                thickness: null,
+                durability_rating: '',
+                supplier: '',
+                application_notes: '',
+                is_raw_material: false,
+                requires_special_handling: false,
+                is_active: true
+            };
+        },
+        
+        async saveEntity() {
+            this.saving = true;
+            
+            try {
+                const url = this.editMode 
+                    ? `/api/atp/color-codes/${this.form.id}` 
+                    : '/api/atp/color-codes';
+                const method = this.editMode ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(this.form)
+                });
+                
+                if (response.ok) {
+                    showToast(`Color ${this.editMode ? 'updated' : 'created'} successfully`, 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('colorModal')).hide();
+                    location.reload();
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to save color');
+                }
+            } catch (error) {
+                showToast('Error saving color: ' + error.message, 'error');
+            } finally {
+                this.saving = false;
+            }
+        }
+    }
+}
+
+// Global Functions
+function createColor() {
+    window.location.href = '/master-data/colors/create';
+}
+
+function showCreateColorModal() {
+    const modal = new bootstrap.Modal(document.getElementById('colorModal'));
+    modal.show();
+}
+
+async function editColor(id) {
+    window.location.href = `/master-data/colors/edit?id=${id}`;
+}
+
+function showDeleteConfirmModal(title, message, onConfirm) {
+    const modalHtml = `
+        <div class="modal fade" id="deleteConfirmModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title">${title}</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>${message}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="erp-btn erp-btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="erp-btn erp-btn-danger" id="confirmDeleteBtn">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    // Remove existing modal if any
+    const existingModal = document.getElementById('deleteConfirmModal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+    
+    // Add modal to body
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    
+    // Show modal
+    const modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+    modal.show();
+    
+    // Handle confirm button
+    document.getElementById('confirmDeleteBtn').addEventListener('click', async () => {
+        modal.hide();
+        await onConfirm();
+    });
+    
+    // Clean up modal after hiding
+    document.getElementById('deleteConfirmModal').addEventListener('hidden.bs.modal', () => {
+        document.getElementById('deleteConfirmModal').remove();
+    });
+}
+
+async function importColors() {
+    if (confirm('Import colors from Excel? This may take a few moments.')) {
+        try {
+            showToast('Starting color import...', 'info');
+            const response = await fetch('/api/atp/excel-import', {
+                method: 'POST'
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                showToast(`Import completed! Created: ${result.created}, Updated: ${result.updated}`, 'success');
+                location.reload();
+            } else {
+                throw new Error('Import failed');
+            }
+        } catch (error) {
+            showToast('Import error: ' + error.message, 'error');
+        }
+    }
+}
+
+async function previewColorData() {
+    showToast('Color data preview feature coming soon', 'info');
+}
+</script>
+{% endblock %}

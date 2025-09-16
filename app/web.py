@@ -262,16 +262,17 @@ async def production_dashboard_page(
 @router.get("/products", response_class=HTMLResponse)
 async def products_page(
     request: Request,
-    current_user: User = Depends(get_current_active_user)
+    current_user: Optional[User] = Depends(get_current_user_optional)
 ):
     """
-    Products list page.
+    Products list page - ATP Product Management.
     """
     return templates.TemplateResponse(
         "products/list.html",
         {
             "request": request,
-            "user": current_user
+            "user": current_user,
+            "page_title": "ATP Product Management"
         }
     )
 
@@ -279,16 +280,17 @@ async def products_page(
 @router.get("/products/create", response_class=HTMLResponse)
 async def products_create_page(
     request: Request,
-    current_user: User = Depends(get_current_active_user)
+    current_user: Optional[User] = Depends(get_current_user_optional)
 ):
     """
-    Create product page.
+    Create product page - Add new ATP Product.
     """
     return templates.TemplateResponse(
         "products/create.html",
         {
             "request": request,
-            "user": current_user
+            "user": current_user,
+            "page_title": "Create New Product"
         }
     )
 
@@ -296,16 +298,17 @@ async def products_create_page(
 @router.get("/products/lookup", response_class=HTMLResponse)
 async def products_lookup_page(
     request: Request,
-    current_user: User = Depends(get_current_active_user)
+    current_user: Optional[User] = Depends(get_current_user_optional)
 ):
     """
-    Product lookup page.
+    Product lookup page - Search and explore ATP products.
     """
     return templates.TemplateResponse(
         "products/lookup.html",
         {
             "request": request,
-            "user": current_user
+            "user": current_user,
+            "page_title": "Product Lookup"
         }
     )
 
@@ -442,5 +445,131 @@ async def help_page(
         {
             "request": request,
             "user": current_user
+        }
+    )
+
+
+@router.get("/master-data/materials", response_class=HTMLResponse)
+async def material_codes_page(
+    request: Request,
+    current_user: Optional[User] = Depends(get_current_user_optional)
+):
+    """
+    Material Code management page.
+    """
+    return templates.TemplateResponse(
+        "master_data/material_codes.html",
+        {
+            "request": request,
+            "user": current_user,
+            "page_title": "Material Code Management"
+        }
+    )
+
+
+@router.get("/master-data/colors", response_class=HTMLResponse)
+async def color_codes_page(
+    request: Request,
+    current_user: Optional[User] = Depends(get_current_user_optional)
+):
+    """
+    Color Code management page.
+    """
+    return templates.TemplateResponse(
+        "master_data/color_codes.html",
+        {
+            "request": request,
+            "user": current_user,
+            "page_title": "Color Code Management"
+        }
+    )
+
+
+@router.get("/master-data/materials/create", response_class=HTMLResponse)
+async def material_codes_create_page(
+    request: Request,
+    current_user: Optional[User] = Depends(get_current_user_optional)
+):
+    """
+    Create Material Code page.
+    """
+    return templates.TemplateResponse(
+        "master_data/material_codes_create.html",
+        {
+            "request": request,
+            "user": current_user,
+            "page_title": "Create New Material Code"
+        }
+    )
+
+
+@router.get("/master-data/materials/edit", response_class=HTMLResponse)
+async def material_codes_edit_page(
+    request: Request,
+    current_user: Optional[User] = Depends(get_current_user_optional)
+):
+    """
+    Edit Material Code page.
+    """
+    return templates.TemplateResponse(
+        "master_data/material_codes_edit.html",
+        {
+            "request": request,
+            "user": current_user,
+            "page_title": "Edit Material Code"
+        }
+    )
+
+
+@router.get("/master-data/colors/create", response_class=HTMLResponse)
+async def color_codes_create_page(
+    request: Request,
+    current_user: Optional[User] = Depends(get_current_user_optional)
+):
+    """
+    Create Color Code page.
+    """
+    return templates.TemplateResponse(
+        "master_data/color_codes_create.html",
+        {
+            "request": request,
+            "user": current_user,
+            "page_title": "Create New Color Code"
+        }
+    )
+
+
+@router.get("/master-data/colors/edit", response_class=HTMLResponse)
+async def color_codes_edit_page(
+    request: Request,
+    current_user: Optional[User] = Depends(get_current_user_optional)
+):
+    """
+    Edit Color Code page.
+    """
+    return templates.TemplateResponse(
+        "master_data/color_codes_edit.html",
+        {
+            "request": request,
+            "user": current_user,
+            "page_title": "Edit Color Code"
+        }
+    )
+
+
+@router.get("/products/edit", response_class=HTMLResponse)
+async def products_edit_page(
+    request: Request,
+    current_user: Optional[User] = Depends(get_current_user_optional)
+):
+    """
+    Edit Product page.
+    """
+    return templates.TemplateResponse(
+        "products/edit.html",
+        {
+            "request": request,
+            "user": current_user,
+            "page_title": "Edit Product"
         }
     )

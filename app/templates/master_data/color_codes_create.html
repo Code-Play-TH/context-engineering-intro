@@ -1,0 +1,220 @@
+{% extends "crud/base_form.html" %}
+{% from "crud/form_macros.html" import form_section, form_group, form_row, form_col %}
+
+{% set page_title = "Create New Color Code" %}
+{% set page_subtitle = "Add a new ATP color code with finishing specifications" %}
+{% set page_icon = "fas fa-plus-circle" %}
+{% set entity_name = "Color Code" %}
+{% set list_url = "/master-data/colors" %}
+{% set form_component_name = "createColorCode()" %}
+
+{% block extra_crud_css %}
+<script>
+// Ensure function is available before Alpine.js initialization
+function createColorCode() {
+    return {
+        saving: false,
+        form: {
+            color_code: '',
+            color_name: '',
+            color_name_th: '',
+            color_type: '',
+            finish_type: '',
+            hex_value: '',
+            pantone_reference: '',
+            process_type: '',
+            process_temperature: null,
+            process_time: null,
+            cost_per_sqm: null,
+            thickness: null,
+            durability_rating: '',
+            supplier: '',
+            supplier_code: '',
+            application_notes: '',
+            is_raw_material: false,
+            requires_special_handling: false,
+            is_active: true
+        },
+
+        async saveEntity() {
+            this.saving = true;
+
+            try {
+                // Validate required fields
+                if (!this.form.color_code.trim()) {
+                    throw new Error('Color Code is required');
+                }
+                if (!this.form.color_name.trim()) {
+                    throw new Error('Color Name is required');
+                }
+
+                // Get auth token
+                const token = localStorage.getItem('access_token');
+                const headers = {
+                    'Content-Type': 'application/json'
+                };
+                if (token) {
+                    headers['Authorization'] = `Bearer ${token}`;
+                }
+
+                const response = await fetch('/api/atp/color-codes', {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(this.form)
+                });
+
+                if (response.ok) {
+                    const colorCode = await response.json();
+                    showToast('Color code created successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/master-data/colors';
+                    }, 1500);
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to create color code');
+                }
+            } catch (error) {
+                showToast('Error creating color code: ' + error.message, 'error');
+            } finally {
+                this.saving = false;
+            }
+        }
+    }
+}
+</script>
+{% endblock %}
+
+{% block header_actions %}
+<a href="/master-data/colors" class="erp-btn erp-btn-light">
+    <i class="fas fa-arrow-left"></i>Back to Colors
+</a>
+{% endblock %}
+
+{% block form_sections %}
+{% call form_section("Basic Information", "fas fa-info-circle") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Color Code", "color_code", required=true, placeholder="0, 1, 2, A, etc.", x_model="form.color_code") }}
+            {{ form_group("Color Name", "color_name", required=true, placeholder="BLACK, WHITE, CHROME, etc.", x_model="form.color_name") }}
+            {{ form_group("Color Name (Thai)", "color_name_th", placeholder="ชื่อสีภาษาไทย", x_model="form.color_name_th") }}
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            <div class="erp-form-group">
+                <label class="erp-form-label">Hex Color Value</label>
+                <div class="input-group">
+                    <span class="input-group-text">#</span>
+                    <input type="text" class="erp-form-control" x-model="form.hex_value"
+                           placeholder="FF0000" maxlength="6">
+                    <div class="input-group-text" 
+                         :style="'background-color: #' + (form.hex_value || 'FFFFFF') + '; width: 30px;'"></div>
+                </div>
+            </div>
+            {{ form_group("Active Color", "is_active", type="checkbox", x_model="form.is_active") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Classification", "fas fa-tags") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Color Type", "color_type", type="select", options=[
+                ("", "Select Type"),
+                ("Raw Material", "Raw Material"),
+                ("Anodized", "Anodized"),
+                ("Chrome Plating", "Chrome Plating"),
+                ("Paint", "Paint"),
+                ("Powder Coat", "Powder Coat")
+            ], x_model="form.color_type") }}
+            {{ form_group("Finish Type", "finish_type", type="select", options=[
+                ("", "Select Finish"),
+                ("Gloss", "Gloss"),
+                ("Matte", "Matte"),
+                ("Satin", "Satin"),
+                ("Hard Anodized", "Hard Anodized"),
+                ("Textured", "Textured")
+            ], x_model="form.finish_type") }}
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Pantone Reference", "pantone_reference", placeholder="185 C, Process Black, etc.", x_model="form.pantone_reference") }}
+            <div class="erp-form-group">
+                <div class="row">
+                    <div class="col-6">
+                        {{ form_group("Raw Material", "is_raw_material", type="checkbox", x_model="form.is_raw_material") }}
+                    </div>
+                    <div class="col-6">
+                        {{ form_group("Special Handling", "requires_special_handling", type="checkbox", x_model="form.requires_special_handling") }}
+                    </div>
+                </div>
+            </div>
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Process Information", "fas fa-cogs") %}
+    {% call form_row() %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Process Type", "process_type", type="select", options=[
+                ("", "Select Process"),
+                ("Anodizing", "Anodizing"),
+                ("Hard Anodizing", "Hard Anodizing"),
+                ("Electroplating", "Electroplating"),
+                ("Powder Coating", "Powder Coating"),
+                ("Painting", "Painting")
+            ], x_model="form.process_type") }}
+        {% endcall %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Process Temperature (°C)", "process_temperature", type="number", placeholder="Temperature", x_model="form.process_temperature") }}
+        {% endcall %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Process Time (minutes)", "process_time", type="number", placeholder="Time", x_model="form.process_time") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Cost & Quality", "fas fa-dollar-sign") %}
+    {% call form_row() %}
+        {% call form_col("col-md-3") %}
+            <div class="erp-form-group">
+                <label class="erp-form-label">Cost per m²</label>
+                <div class="input-group">
+                    <span class="input-group-text">$</span>
+                    <input type="number" class="erp-form-control" x-model="form.cost_per_sqm" step="0.01"
+                           placeholder="0.00">
+                </div>
+            </div>
+        {% endcall %}
+        {% call form_col("col-md-3") %}
+            {{ form_group("Thickness (microns)", "thickness", type="number", placeholder="0.0", x_model="form.thickness") }}
+        {% endcall %}
+        {% call form_col("col-md-3") %}
+            {{ form_group("Durability Rating", "durability_rating", type="select", options=[
+                ("", "Select Rating"),
+                ("Excellent", "Excellent"),
+                ("Good", "Good"),
+                ("Fair", "Fair"),
+                ("Poor", "Poor")
+            ], x_model="form.durability_rating") }}
+        {% endcall %}
+        {% call form_col("col-md-3") %}
+            {{ form_group("Supplier", "supplier", placeholder="Supplier name", x_model="form.supplier") }}
+        {% endcall %}
+    {% endcall %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Supplier Code", "supplier_code", placeholder="Supplier internal code", x_model="form.supplier_code") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Notes and Documentation", "fas fa-clipboard") %}
+    {% call form_row() %}
+        {% call form_col("col-md-12") %}
+            {{ form_group("Application Notes", "application_notes", type="textarea", placeholder="Application and usage notes", x_model="form.application_notes") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+{% endblock %}
+
+{% block custom_form_js %}
+<!-- JavaScript function already defined in extra_crud_css block -->
+{% endblock %}
