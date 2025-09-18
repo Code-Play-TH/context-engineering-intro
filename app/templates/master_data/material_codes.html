@@ -19,6 +19,15 @@
 {% set import_function = "importMaterials()" %}
 {% set create_function = "createMaterial()" %}
 {% set create_url = "/master-data/materials/create" %}
+{% set table_view_url = "/master-data/materials/table" %}
+
+{% block header_actions %}
+<!-- Table View Toggle -->
+<a href="{{ table_view_url }}" class="erp-btn erp-btn-light" title="Switch to Table View">
+    <i class="fas fa-table"></i>Table View
+</a>
+{{ super() }}
+{% endblock %}
 
 {% block search_filters %}
 {{ search_filter("Search Materials", "search", "text", search_placeholder, x_model="search") }}

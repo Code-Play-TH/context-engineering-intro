@@ -19,6 +19,15 @@
 {% set import_function = "importColors()" %}
 {% set create_function = "createColor()" %}
 {% set create_url = "/master-data/colors/create" %}
+{% set table_view_url = "/master-data/colors/table" %}
+
+{% block header_actions %}
+<!-- Table View Toggle -->
+<a href="{{ table_view_url }}" class="erp-btn erp-btn-light" title="Switch to Table View">
+    <i class="fas fa-table"></i>Table View
+</a>
+{{ super() }}
+{% endblock %}
 
 {% block extra_crud_css %}
 <style>

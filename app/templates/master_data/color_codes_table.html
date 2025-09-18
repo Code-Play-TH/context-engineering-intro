@@ -19,39 +19,22 @@
 {% set import_function = "importColors()" %}
 {% set create_function = "createColor()" %}
 {% set create_url = "/master-data/colors/create" %}
+{% set card_view_url = "/master-data/colors" %}
+
+{% block header_actions %}
+<!-- Card View Toggle -->
+<a href="{{ card_view_url }}" class="erp-btn erp-btn-light" title="Switch to Card View">
+    <i class="fas fa-th-large"></i>Card View
+</a>
+{{ super() }}
+{% endblock %}
 
 {% block extra_crud_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/table-enhancements.css') }}">
 <style>
-.erp-table-color-preview {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    border: 3px solid #fff;
-    box-shadow: var(--erp-shadow);
-    flex-shrink: 0;
-    display: inline-block;
-    vertical-align: middle;
-    margin-right: 0.75rem;
-}
-
 .erp-table-color-info {
     display: flex;
     align-items: center;
-}
-
-.erp-table-cost-positive {
-    color: var(--erp-success);
-    font-weight: 600;
-}
-
-.erp-table-cost-high {
-    color: var(--erp-warning);
-    font-weight: 600;
-}
-
-.erp-table-cost-expensive {
-    color: var(--erp-danger);
-    font-weight: 600;
 }
 </style>
 {% endblock %}
@@ -107,8 +90,8 @@
 {% block table_row %}
 <td class="erp-table-primary">
     <div class="erp-table-color-info">
-        <div class="erp-table-color-preview" 
-             :style="'background: ' + getColorPreview(item.color_name)"></div>
+        <div class="enhanced-color-preview" 
+             :style="'background: ' + getColorPreview(item.color_name, item.hex_value)"></div>
         <div>
             <strong x-text="item.color_code"></strong>
         </div>
@@ -511,7 +494,14 @@ function colorList() {
             }
         },
         
-        getColorPreview(colorName) {
+        // ENHANCED: Live color preview with hex value support
+        getColorPreview(colorName, hexValue) {
+            // Prioritize hex value if available
+            if (hexValue) {
+                return hexValue.startsWith('#') ? hexValue : `#${hexValue}`;
+            }
+            
+            // Fall back to color name mapping
             const colorMap = {
                 'BLACK': '#000000',
                 'WHITE': '#FFFFFF',
@@ -529,12 +519,13 @@ function colorList() {
             return colorMap[colorName?.toUpperCase()] || '#CCCCCC';
         },
         
+        // BUSINESS LOGIC: Cost-based classification
         getCostClass(cost) {
             if (!cost) return 'erp-table-value-neutral';
             const costValue = parseFloat(cost);
-            if (costValue >= 100) return 'erp-table-cost-expensive';
-            if (costValue >= 50) return 'erp-table-cost-high';
-            return 'erp-table-cost-positive';
+            if (costValue >= 100) return 'cost-expensive';   // Red for >$100
+            if (costValue >= 50) return 'cost-moderate';     // Yellow for $50-100
+            return 'cost-budget';                             // Green for <$50
         },
         
         viewItem(id) {

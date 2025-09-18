@@ -19,6 +19,19 @@
 {% set import_function = "importMaterials()" %}
 {% set create_function = "createMaterial()" %}
 {% set create_url = "/master-data/materials/create" %}
+{% set card_view_url = "/master-data/materials" %}
+
+{% block header_actions %}
+<!-- Card View Toggle -->
+<a href="{{ card_view_url }}" class="erp-btn erp-btn-light" title="Switch to Card View">
+    <i class="fas fa-th-large"></i>Card View
+</a>
+{{ super() }}
+{% endblock %}
+
+{% block extra_crud_css %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/table-enhancements.css') }}">
+{% endblock %}
 
 {% block search_filters %}
 {{ search_filter("Search Materials", "search", "text", search_placeholder, x_model="search") }}
@@ -77,14 +90,14 @@
 </td>
 <td>
     <span x-show="item.grade" 
-          class="erp-table-value-highlight" 
+          :class="getGradeClass(item.grade)" 
           x-text="item.grade"></span>
     <span x-show="!item.grade" 
           class="erp-table-value-neutral">No Grade</span>
 </td>
 <td class="erp-table-right">
     <span x-show="item.weight_per_line" 
-          class="erp-table-value-positive" 
+          :class="getWeightClass(item.weight_per_line)" 
           x-text="parseFloat(item.weight_per_line).toFixed(2)"></span>
     <span x-show="!item.weight_per_line" 
           class="erp-table-value-neutral">N/A</span>
@@ -399,6 +412,23 @@ function materialList() {
             } catch (error) {
                 showToast('Error deleting material: ' + error.message, 'error');
             }
+        },
+        
+        // BUSINESS LOGIC: Weight-based color classification
+        getWeightClass(weight) {
+            if (!weight) return 'erp-table-value-neutral';
+            const weightValue = parseFloat(weight);
+            if (weightValue > 50) return 'weight-heavy';      // Red for >50kg
+            if (weightValue < 10) return 'weight-light';     // Green for <10kg  
+            return 'weight-medium';                           // Yellow for 10-50kg
+        },
+        
+        // BUSINESS LOGIC: Grade highlighting
+        getGradeClass(grade) {
+            if (!grade) return 'erp-table-value-neutral';
+            const premiumGrades = ['6061 T6', '7075'];
+            if (premiumGrades.includes(grade)) return 'grade-premium';  // Gold for premium
+            return 'grade-standard';                                     // Blue for standard
         }
     }
 }

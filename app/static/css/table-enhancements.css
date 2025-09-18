@@ -1,0 +1,367 @@
+/**
+ * ATP ERP Table Enhancements CSS
+ * Additional color coding and business logic styling
+ * 
+ * Features:
+ * - Weight-based color classification
+ * - Cost-based color classification  
+ * - Grade highlighting for premium/standard materials
+ * - Enhanced color previews for color codes
+ * - WCAG 2.1 AA compliant contrast ratios
+ */
+
+/* =================== WEIGHT-BASED COLOR CLASSIFICATION =================== */
+.weight-heavy {
+    color: var(--erp-danger) !important;      /* Red for >50kg */
+    font-weight: 600;
+    position: relative;
+}
+
+.weight-heavy::after {
+    content: ' ⚠';
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+.weight-light {
+    color: var(--erp-success) !important;     /* Green for <10kg */
+    font-weight: 600;
+    position: relative;
+}
+
+.weight-light::after {
+    content: ' ✓';
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+.weight-medium {
+    color: var(--erp-warning) !important;     /* Yellow for 10-50kg */
+    font-weight: 600;
+    position: relative;
+}
+
+.weight-medium::after {
+    content: ' ◐';
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+/* =================== COST-BASED COLOR CLASSIFICATION =================== */
+.cost-expensive {
+    color: var(--erp-danger) !important;      /* Red for >$100 */
+    font-weight: 600;
+    position: relative;
+}
+
+.cost-expensive::before {
+    content: '💰 ';
+    font-size: 0.75rem;
+}
+
+.cost-moderate {
+    color: var(--erp-warning) !important;     /* Yellow for $50-100 */
+    font-weight: 600;
+    position: relative;
+}
+
+.cost-moderate::before {
+    content: '💵 ';
+    font-size: 0.75rem;
+}
+
+.cost-budget {
+    color: var(--erp-success) !important;     /* Green for <$50 */
+    font-weight: 600;
+    position: relative;
+}
+
+.cost-budget::before {
+    content: '💚 ';
+    font-size: 0.75rem;
+}
+
+/* =================== GRADE HIGHLIGHTING =================== */
+.grade-premium {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);  /* Gold gradient */
+    color: #8B4513;                           /* Dark brown for contrast */
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--erp-radius-sm);
+    font-weight: 600;
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
+    border: 1px solid #DAA520;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.grade-premium::before {
+    content: '⭐';
+    font-size: 0.75rem;
+}
+
+.grade-standard {
+    background: var(--erp-info);              /* Blue background */
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--erp-radius-sm);
+    font-weight: 500;
+    border: 1px solid rgba(23, 162, 184, 0.5);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.grade-standard::before {
+    content: '🔹';
+    font-size: 0.75rem;
+}
+
+/* =================== ENHANCED COLOR PREVIEWS =================== */
+.enhanced-color-preview {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: var(--erp-shadow);
+    flex-shrink: 0;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.75rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.enhanced-color-preview::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 50%;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Hover effect for color previews */
+.enhanced-color-preview:hover {
+    transform: scale(1.1);
+    transition: var(--erp-transition);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* =================== BUSINESS LOGIC INDICATORS =================== */
+.business-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.125rem 0.375rem;
+    border-radius: var(--erp-radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.business-indicator.high-priority {
+    background: rgba(220, 53, 69, 0.1);
+    color: var(--erp-danger);
+    border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+.business-indicator.medium-priority {
+    background: rgba(255, 193, 7, 0.1);
+    color: var(--erp-warning);
+    border: 1px solid rgba(255, 193, 7, 0.2);
+}
+
+.business-indicator.low-priority {
+    background: rgba(40, 167, 69, 0.1);
+    color: var(--erp-success);
+    border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+/* =================== PROCESS TYPE INDICATORS =================== */
+.process-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--erp-radius-sm);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.process-anodizing {
+    background: linear-gradient(135deg, #E3F2FD 0%, #BBDEFB 100%);
+    color: #1565C0;
+    border: 1px solid #2196F3;
+}
+
+.process-plating {
+    background: linear-gradient(135deg, #F3E5F5 0%, #E1BEE7 100%);
+    color: #7B1FA2;
+    border: 1px solid #9C27B0;
+}
+
+.process-painting {
+    background: linear-gradient(135deg, #E8F5E8 0%, #C8E6C9 100%);
+    color: #2E7D32;
+    border: 1px solid #4CAF50;
+}
+
+.process-raw {
+    background: linear-gradient(135deg, #FFF3E0 0%, #FFCC02 100%);
+    color: #E65100;
+    border: 1px solid #FF9800;
+}
+
+/* =================== RESPONSIVE ENHANCEMENTS =================== */
+@media (max-width: 768px) {
+    .grade-premium,
+    .grade-standard {
+        padding: 0.125rem 0.375rem;
+        font-size: 0.6875rem;
+    }
+    
+    .enhanced-color-preview {
+        width: 24px;
+        height: 24px;
+        margin-right: 0.5rem;
+    }
+    
+    .business-indicator,
+    .process-indicator {
+        padding: 0.125rem 0.25rem;
+        font-size: 0.6875rem;
+    }
+    
+    /* Hide emoji indicators on very small screens */
+    .weight-heavy::after,
+    .weight-light::after,
+    .weight-medium::after,
+    .cost-expensive::before,
+    .cost-moderate::before,
+    .cost-budget::before {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .grade-premium::before,
+    .grade-standard::before {
+        display: none;
+    }
+    
+    .enhanced-color-preview {
+        width: 20px;
+        height: 20px;
+        margin-right: 0.25rem;
+    }
+}
+
+/* =================== PRINT STYLES =================== */
+@media print {
+    .weight-heavy,
+    .weight-light, 
+    .weight-medium,
+    .cost-expensive,
+    .cost-moderate,
+    .cost-budget {
+        color: #000 !important;
+        font-weight: 600;
+    }
+    
+    .grade-premium {
+        background: #f0f0f0 !important;
+        color: #000 !important;
+        border: 1px solid #000;
+    }
+    
+    .grade-standard {
+        background: #e0e0e0 !important;
+        color: #000 !important;
+        border: 1px solid #000;
+    }
+    
+    .enhanced-color-preview {
+        border: 2px solid #000;
+        width: 16px;
+        height: 16px;
+    }
+    
+    /* Hide emoji indicators in print */
+    .weight-heavy::after,
+    .weight-light::after,
+    .weight-medium::after,
+    .cost-expensive::before,
+    .cost-moderate::before,
+    .cost-budget::before,
+    .grade-premium::before,
+    .grade-standard::before {
+        display: none;
+    }
+}
+
+/* =================== ACCESSIBILITY ENHANCEMENTS =================== */
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .weight-heavy,
+    .cost-expensive {
+        color: #CC0000 !important;
+        font-weight: 700;
+    }
+    
+    .weight-light,
+    .cost-budget {
+        color: #006600 !important;
+        font-weight: 700;
+    }
+    
+    .weight-medium,
+    .cost-moderate {
+        color: #CC6600 !important;
+        font-weight: 700;
+    }
+    
+    .grade-premium {
+        background: #FFFF00 !important;
+        color: #000000 !important;
+        border: 2px solid #000000;
+    }
+    
+    .grade-standard {
+        background: #0066CC !important;
+        color: #FFFFFF !important;
+        border: 2px solid #000000;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .enhanced-color-preview:hover {
+        transform: none;
+        transition: none;
+    }
+    
+    .grade-premium,
+    .grade-standard,
+    .business-indicator,
+    .process-indicator {
+        transition: none;
+    }
+}
+
+/* Focus indicators for accessibility */
+.weight-heavy:focus,
+.weight-light:focus,
+.weight-medium:focus,
+.cost-expensive:focus,
+.cost-moderate:focus,
+.cost-budget:focus,
+.grade-premium:focus,
+.grade-standard:focus {
+    outline: 2px solid var(--erp-info);
+    outline-offset: 2px;
+}

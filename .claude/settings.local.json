@@ -17,7 +17,18 @@
       "Bash(python -m pytest:*)",
       "Bash(python3 -m pytest:*)",
       "WebFetch(domain:docs.anthropic.com)",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:docs.erpnext.com)",
+      "WebFetch(domain:alpinejs.dev)",
+      "WebFetch(domain:fastapi.tiangolo.com)",
+      "WebFetch(domain:css-tricks.com)",
+      "WebFetch(domain:www.w3.org)",
+      "Bash(./venv_linux/Scripts/pip list)",
+      "Bash(./venv_linux/Scripts/pip install jinja2)",
+      "Bash(./venv_linux/Scripts/python -m app.main --help)",
+      "Bash(./venv_linux/Scripts/pip install:*)",
+      "Bash(./venv_linux/Scripts/python -c \"import app.main; print(''FastAPI app imports successfully'')\")",
+      "Bash(node:*)"
     ],
     "deny": []
   }
