@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', path='css/crud-template.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', path='css/erp-table.css') }}">
+{% block extra_crud_css %}{% endblock %}
+{% endblock %}
+
+{% block content %}
+<div class="erp-container">
+    <!-- Page Header -->
+    <div class="erp-page-header">
+        <div class="container-fluid">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h1 class="erp-page-title">
+                        <i class="{{ page_icon | default('fas fa-list') }} me-2"></i>
+                        {{ page_title }}
+                    </h1>
+                    <p class="erp-page-subtitle">{{ page_subtitle }}</p>
+                </div>
+                <div class="d-flex gap-2 flex-wrap">
+                    {% block header_actions %}
+                    <button class="erp-btn erp-btn-info" onclick="{{ preview_function | default('previewData()') }}">
+                        <i class="fas fa-eye"></i>Preview Data
+                    </button>
+                    <button class="erp-btn erp-btn-warning" onclick="{{ import_function | default('importData()') }}">
+                        <i class="fas fa-upload"></i>Import from Excel
+                    </button>
+                    <button class="erp-btn erp-btn-success" onclick="{{ create_function | default('showCreateModal()') }}">
+                        <i class="fas fa-plus"></i>Add {{ entity_name }}
+                    </button>
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <!-- Search and Filter Section -->
+        <div class="erp-search-section" x-data="{{ search_component_name | default('searchFilters()') }}">
+            <div class="row">
+                {% block search_filters %}
+                <div class="col-md-4 mb-3">
+                    <label class="erp-form-label">Search {{ entity_name }}</label>
+                    <div class="input-group">
+                        <input type="text" class="erp-search-input form-control" 
+                               placeholder="{{ search_placeholder | default('Enter search term...') }}"
+                               x-model="search" @input="performSearch()">
+                        <button class="erp-btn erp-btn-primary" type="button" @click="performSearch()">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+                {% endblock %}
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="erp-stats-grid" x-data="{{ stats_component_name | default('entityStats()') }}">
+            {% block statistics_cards %}
+            <div class="erp-stat-card">
+                <div class="erp-stat-number" x-text="stats.total">0</div>
+                <p class="erp-stat-label">Total {{ entity_name }}s</p>
+            </div>
+            <div class="erp-stat-card">
+                <div class="erp-stat-number" x-text="stats.active">0</div>
+                <p class="erp-stat-label">Active {{ entity_name }}s</p>
+            </div>
+            {% endblock %}
+        </div>
+
+        <!-- Main Table Section -->
+        <div class="row" x-data="{{ list_component_name | default('entityList()') }}">
+            <div class="col-12">
+                <!-- Loading State -->
+                <div x-show="loading" class="erp-table-loading">
+                    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="erp-loading-text">Loading {{ entity_name | lower }}s...</p>
+                </div>
+
+                <!-- Error State -->
+                <div x-show="error && !loading" class="erp-alert erp-alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <span x-text="error"></span>
+                    <button class="erp-btn erp-btn-outline ms-3" @click="loadData()">
+                        <i class="fas fa-redo"></i>Retry
+                    </button>
+                </div>
+
+                <!-- Table Container -->
+                <div x-show="!loading && !error" class="erp-table-container">
+                    <table class="erp-table erp-table-grouped" role="table" 
+                           aria-label="{{ entity_name }} data table"
+                           aria-rowcount="items.length"
+                           aria-colcount="7">
+                        <!-- Table Header with Grouped Columns -->
+                        <thead class="erp-table-header">
+                            {% block table_group_headers %}
+                            <!-- Override this block for grouped headers -->
+                            <tr>
+                                <th class="erp-table-group-header" colspan="2">Basic Information</th>
+                                <th class="erp-table-group-header" colspan="2">Details</th>
+                                <th class="erp-table-group-header" colspan="2">Status & Actions</th>
+                            </tr>
+                            {% endblock %}
+                            
+                            <tr>
+                                {% block table_headers %}
+                                <!-- Override this block for column headers -->
+                                <th class="sortable" @click="sortBy('{{ primary_field }}')">{{ primary_field | title }}</th>
+                                <th class="sortable" @click="sortBy('{{ secondary_field }}')">{{ secondary_field | title }}</th>
+                                <th class="sortable" @click="sortBy('description')">Description</th>
+                                <th class="sortable" @click="sortBy('updated_at')">Updated</th>
+                                <th>Status</th>
+                                <th class="erp-table-center">Actions</th>
+                                {% endblock %}
+                            </tr>
+                        </thead>
+                        
+                        <!-- Table Body -->
+                        <tbody>
+                            {% block table_body %}
+                            <template x-for="item in items" :key="item.id">
+                                <template>
+                                    <!-- Main Row -->
+                                    <tr class="erp-table-row-expandable" 
+                                        :class="{ expanded: item.expanded }"
+                                        @click="toggleExpand(item)">
+                                        
+                                        {% block table_row %}
+                                        <!-- Override this block for custom row content -->
+                                        <td class="erp-table-primary">
+                                            <strong x-text="item.{{ primary_field }}"></strong>
+                                        </td>
+                                        <td x-text="item.{{ secondary_field }}"></td>
+                                        <td class="erp-table-truncate" x-text="item.description_th || item.description || 'N/A'"></td>
+                                        <td class="erp-table-nowrap" x-text="formatDate(item.updated_at)"></td>
+                                        <td>
+                                            <span class="erp-table-status-active" x-show="item.is_active">Active</span>
+                                            <span class="erp-table-status-inactive" x-show="!item.is_active">Inactive</span>
+                                        </td>
+                                        <td class="erp-table-center" @click.stop>
+                                            <div class="erp-table-actions">
+                                                <button class="erp-table-action-btn" @click="viewItem(item.id)" title="View">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                                <button class="erp-table-action-btn" @click="editItem(item.id)" title="Edit">
+                                                    <i class="fas fa-edit"></i>
+                                                </button>
+                                                <button class="erp-table-action-btn danger" @click="deleteItem(item.id, item.{{ primary_field }})" title="Delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        {% endblock %}
+                                    </tr>
+                                    
+                                    <!-- Expandable Details Row -->
+                                    <tr class="erp-table-row-details" :class="{ show: item.expanded }">
+                                        <td :colspan="7">
+                                            <div class="erp-table-row-details-content">
+                                                {% block table_row_details %}
+                                                <!-- Override this block for expandable content -->
+                                                <div class="erp-table-detail-item">
+                                                    <div class="erp-table-detail-label">ID</div>
+                                                    <div class="erp-table-detail-value" x-text="item.id"></div>
+                                                </div>
+                                                <div class="erp-table-detail-item">
+                                                    <div class="erp-table-detail-label">Created</div>
+                                                    <div class="erp-table-detail-value" x-text="formatDate(item.created_at)"></div>
+                                                </div>
+                                                <div class="erp-table-detail-item">
+                                                    <div class="erp-table-detail-label">Updated</div>
+                                                    <div class="erp-table-detail-value" x-text="formatDate(item.updated_at)"></div>
+                                                </div>
+                                                {% endblock %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </template>
+                            {% endblock %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Empty State -->
+                <div x-show="!loading && !error && items.length === 0" class="erp-table-empty">
+                    <i class="{{ empty_icon | default('fas fa-inbox') }} erp-table-empty-icon"></i>
+                    <h4 class="erp-empty-title">No {{ entity_name }}s Found</h4>
+                    <p class="erp-empty-text">{{ empty_message | default('Try adjusting your search criteria or add your first item.') }}</p>
+                    <button class="erp-btn erp-btn-primary" onclick="{{ create_function | default('showCreateModal()') }}">
+                        <i class="fas fa-plus"></i>Add First {{ entity_name }}
+                    </button>
+                </div>
+
+                <!-- Pagination -->
+                <div x-show="!loading && !error && items.length > 0" class="erp-pagination">
+                    <a class="erp-pagination-item" href="#" 
+                       :class="{ disabled: currentPage <= 1 }" 
+                       @click="changePage(currentPage - 1)">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                    <template x-for="page in pageNumbers" :key="page">
+                        <a class="erp-pagination-item" href="#" 
+                           :class="{ active: page === currentPage }" 
+                           @click="changePage(page)" x-text="page"></a>
+                    </template>
+                    <a class="erp-pagination-item" href="#" 
+                       :class="{ disabled: !hasMore }" 
+                       @click="changePage(currentPage + 1)">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create/Edit Modal -->
+<div class="modal fade" id="{{ modal_id | default('entityModal') }}" tabindex="-1">
+    <div class="modal-dialog {{ modal_size | default('modal-xl') }}" x-data="{{ modal_component_name | default('entityModal()') }}">
+        <div class="modal-content erp-modal-content">
+            <div class="modal-header erp-modal-header">
+                <h5 class="modal-title erp-modal-title">
+                    <i class="{{ page_icon | default('fas fa-box') }}"></i>
+                    <span x-text="editMode ? 'Edit {{ entity_name }}' : 'Add New {{ entity_name }}'"></span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body erp-modal-body">
+                <form @submit.prevent="saveEntity()">
+                    {% block modal_form %}
+                    <!-- Override this block for custom form content -->
+                    {% endblock %}
+                </form>
+            </div>
+            <div class="modal-footer erp-modal-footer">
+                <button type="button" class="erp-btn erp-btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="erp-btn erp-btn-primary" @click="saveEntity()" :disabled="saving">
+                    <span x-show="saving" class="spinner-border spinner-border-sm me-2"></span>
+                    <i class="fas fa-save" x-show="!saving"></i>
+                    <span x-text="editMode ? 'Update {{ entity_name }}' : 'Create {{ entity_name }}'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{% block base_table_js %}
+<script>
+// Base Table JavaScript functions
+function showToast(message, type = 'info') {
+    const toast = document.createElement('div');
+    toast.className = `erp-alert erp-alert-${type === 'error' ? 'danger' : type === 'success' ? 'success' : type === 'warning' ? 'warning' : 'info'} position-fixed`;
+    toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    toast.innerHTML = `
+        <i class="fas fa-${type === 'error' ? 'exclamation-triangle' : type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'}"></i>
+        ${message}
+        <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        if (toast.parentElement) toast.remove();
+    }, 5000);
+}
+
+// Base table functionality
+function baseTableFunctions() {
+    return {
+        sortColumn: null,
+        sortDirection: 'asc',
+        
+        sortBy(column) {
+            if (this.sortColumn === column) {
+                this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                this.sortColumn = column;
+                this.sortDirection = 'asc';
+            }
+            
+            // Update sort indicators
+            document.querySelectorAll('.erp-table th.sortable').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+            });
+            
+            const headerElement = document.querySelector(`[onclick*="sortBy('${column}')"]`);
+            if (headerElement) {
+                headerElement.classList.add(`sort-${this.sortDirection}`);
+            }
+            
+            // Trigger data reload with sorting
+            this.loadData();
+        },
+        
+        toggleExpand(item) {
+            item.expanded = !item.expanded;
+        },
+        
+        // Enhanced error handling
+        handleApiError(response, error = null) {
+            if (response?.status === 401) {
+                localStorage.removeItem('access_token');
+                showToast('Session expired. Please login again.', 'warning');
+                setTimeout(() => window.location.href = '/login', 2000);
+                return;
+            }
+            
+            const message = error?.message || 'An unexpected error occurred';
+            showToast(`Error: ${message}`, 'error');
+        },
+        
+        formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            return new Date(dateString).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        },
+        
+        formatCurrency(value) {
+            if (!value) return 'N/A';
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD'
+            }).format(value);
+        }
+    };
+}
+</script>
+{% endblock %}
+
+{% block custom_table_js %}
+<!-- Override this block for page-specific JavaScript -->
+{% endblock %}
+{% endblock %}

@@ -1,0 +1,515 @@
+{% extends "crud/base_table.html" %}
+{% from "crud/form_macros.html" import form_section, form_group, form_row, form_col, stat_card, badge, search_filter, action_dropdown %}
+
+{% set page_title = "Material Code Management" %}
+{% set page_subtitle = "Manage ATP material codes and specifications" %}
+{% set page_icon = "fas fa-cubes" %}
+{% set entity_name = "Material Code" %}
+{% set search_placeholder = "ATP Code, Material Code, or Description" %}
+{% set primary_field = "atp_code" %}
+{% set secondary_field = "material_code" %}
+
+{% set search_component_name = "materialSearchFilters()" %}
+{% set stats_component_name = "materialStats()" %}
+{% set list_component_name = "materialList()" %}
+{% set modal_component_name = "materialModal()" %}
+{% set modal_id = "materialModal" %}
+
+{% set preview_function = "previewMaterialData()" %}
+{% set import_function = "importMaterials()" %}
+{% set create_function = "createMaterial()" %}
+{% set create_url = "/master-data/materials/create" %}
+
+{% block search_filters %}
+{{ search_filter("Search Materials", "search", "text", search_placeholder, x_model="search") }}
+{{ search_filter("Grade", "grade", "select", options=[
+    ("6061 T1", "6061 T1"),
+    ("6061 T6", "6061 T6"), 
+    ("7075", "7075"),
+    ("", "No Grade")
+], x_model="gradeFilter") }}
+{{ search_filter("Status", "status", "select", options=[
+    ("active", "Active Only"),
+    ("all", "All Records"),
+    ("inactive", "Inactive Only")
+], x_model="statusFilter") }}
+{{ search_filter("Per Page", "limit", "select", options=[
+    ("20", "20"),
+    ("50", "50"),
+    ("100", "100")
+], x_model="limit") }}
+{% endblock %}
+
+{% block statistics_cards %}
+{{ stat_card("0", "Total Materials", x_number="stats.total") }}
+{{ stat_card("0", "Active Materials", x_number="stats.active") }}  
+{{ stat_card("0", "With Grade Info", x_number="stats.withGrade") }}
+{{ stat_card("0.0", "Avg Weight (kg)", x_number="stats.avgWeight") }}
+{% endblock %}
+
+{% block table_group_headers %}
+<tr>
+    <th class="erp-table-group-header" colspan="3">Basic Information</th>
+    <th class="erp-table-group-header" colspan="2">Specifications</th>
+    <th class="erp-table-group-header" colspan="2">Status & Actions</th>
+</tr>
+{% endblock %}
+
+{% block table_headers %}
+<th class="sortable" @click="sortBy('atp_code')">ATP Code</th>
+<th class="sortable" @click="sortBy('material_code')">Material Code</th>
+<th class="sortable" @click="sortBy('description_th')">Description</th>
+<th class="sortable" @click="sortBy('grade')">Grade</th>
+<th class="sortable" @click="sortBy('weight_per_line')">Weight (kg)</th>
+<th class="sortable" @click="sortBy('updated_at')">Updated</th>
+<th class="erp-table-center">Actions</th>
+{% endblock %}
+
+{% block table_row %}
+<td class="erp-table-primary">
+    <strong x-text="item.atp_code"></strong>
+</td>
+<td>
+    <span x-text="item.material_code"></span>
+</td>
+<td class="erp-table-truncate">
+    <span x-text="item.description_th || 'N/A'"></span>
+</td>
+<td>
+    <span x-show="item.grade" 
+          class="erp-table-value-highlight" 
+          x-text="item.grade"></span>
+    <span x-show="!item.grade" 
+          class="erp-table-value-neutral">No Grade</span>
+</td>
+<td class="erp-table-right">
+    <span x-show="item.weight_per_line" 
+          class="erp-table-value-positive" 
+          x-text="parseFloat(item.weight_per_line).toFixed(2)"></span>
+    <span x-show="!item.weight_per_line" 
+          class="erp-table-value-neutral">N/A</span>
+</td>
+<td class="erp-table-nowrap">
+    <span x-text="formatDate(item.updated_at)"></span>
+</td>
+<td class="erp-table-center" @click.stop>
+    <div class="erp-table-actions">
+        <button class="erp-table-action-btn" @click="viewItem(item.id)" title="View Details">
+            <i class="fas fa-eye"></i>
+        </button>
+        <button class="erp-table-action-btn" @click="editItem(item.id)" title="Edit Material">
+            <i class="fas fa-edit"></i>
+        </button>
+        <button class="erp-table-action-btn danger" @click="deleteItem(item.id, item.atp_code)" title="Delete Material">
+            <i class="fas fa-trash"></i>
+        </button>
+    </div>
+</td>
+{% endblock %}
+
+{% block table_row_details %}
+<div class="erp-table-detail-item">
+    <div class="erp-table-detail-label">ATP Code</div>
+    <div class="erp-table-detail-value" x-text="item.atp_code"></div>
+</div>
+<div class="erp-table-detail-item">
+    <div class="erp-table-detail-label">Material Code</div>
+    <div class="erp-table-detail-value" x-text="item.material_code"></div>
+</div>
+<div class="erp-table-detail-item">
+    <div class="erp-table-detail-label">Description (Thai)</div>
+    <div class="erp-table-detail-value" x-text="item.description_th || 'N/A'"></div>
+</div>
+<div class="erp-table-detail-item" x-show="item.description_en">
+    <div class="erp-table-detail-label">Description (English)</div>
+    <div class="erp-table-detail-value" x-text="item.description_en"></div>
+</div>
+<div class="erp-table-detail-item" x-show="item.grade">
+    <div class="erp-table-detail-label">Grade</div>
+    <div class="erp-table-detail-value" x-text="item.grade"></div>
+</div>
+<div class="erp-table-detail-item" x-show="item.length_per_piece">
+    <div class="erp-table-detail-label">Length per Piece</div>
+    <div class="erp-table-detail-value" x-text="item.length_per_piece + ' mm'"></div>
+</div>
+<div class="erp-table-detail-item" x-show="item.weight_per_line">
+    <div class="erp-table-detail-label">Weight per Line</div>
+    <div class="erp-table-detail-value" x-text="parseFloat(item.weight_per_line).toFixed(2) + ' kg'"></div>
+</div>
+<div class="erp-table-detail-item" x-show="item.material_type">
+    <div class="erp-table-detail-label">Material Type</div>
+    <div class="erp-table-detail-value" x-text="item.material_type"></div>
+</div>
+<div class="erp-table-detail-item" x-show="item.supplier">
+    <div class="erp-table-detail-label">Supplier</div>
+    <div class="erp-table-detail-value" x-text="item.supplier"></div>
+</div>
+<div class="erp-table-detail-item" x-show="item.usage_notes">
+    <div class="erp-table-detail-label">Usage Notes</div>
+    <div class="erp-table-detail-value" x-text="item.usage_notes"></div>
+</div>
+<div class="erp-table-detail-item">
+    <div class="erp-table-detail-label">Status</div>
+    <div class="erp-table-detail-value">
+        <span class="erp-table-status-active" x-show="item.is_active">Active</span>
+        <span class="erp-table-status-inactive" x-show="!item.is_active">Inactive</span>
+    </div>
+</div>
+<div class="erp-table-detail-item">
+    <div class="erp-table-detail-label">ID</div>
+    <div class="erp-table-detail-value" x-text="item.id"></div>
+</div>
+<div class="erp-table-detail-item">
+    <div class="erp-table-detail-label">Created</div>
+    <div class="erp-table-detail-value" x-text="formatDate(item.created_at)"></div>
+</div>
+<div class="erp-table-detail-item">
+    <div class="erp-table-detail-label">Last Updated</div>
+    <div class="erp-table-detail-value" x-text="formatDate(item.updated_at)"></div>
+</div>
+{% endblock %}
+
+{% block modal_form %}
+{% call form_section("Basic Information", "fas fa-info-circle") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("ATP Code", "atp_code", required=true, placeholder="Enter ATP code", x_model="form.atp_code") }}
+            {{ form_group("Material Code", "material_code", required=true, placeholder="Enter material code", x_model="form.material_code") }}
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Grade", "grade", type="select", options=[
+                ("", "Select Grade"),
+                ("6061 T1", "6061 T1"),
+                ("6061 T6", "6061 T6"),
+                ("7075", "7075"),
+                ("Other", "Other")
+            ], x_model="form.grade") }}
+        {% endcall %}
+    {% endcall %}
+    
+    {{ form_group("Description (Thai)", "description_th", type="textarea", required=true, placeholder="รายละเอียดวัสดุภาษาไทย", x_model="form.description_th") }}
+    {{ form_group("Description (English)", "description_en", type="textarea", placeholder="English description (optional)", x_model="form.description_en") }}
+{% endcall %}
+
+{% call form_section("Specifications", "fas fa-ruler") %}
+    {% call form_row() %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Length per Piece (mm)", "length_per_piece", type="number", placeholder="0.00", x_model="form.length_per_piece") }}
+        {% endcall %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Weight per Line (kg)", "weight_per_line", type="number", placeholder="0.00", x_model="form.weight_per_line") }}
+        {% endcall %}
+        {% call form_col("col-md-4") %}
+            {{ form_group("Material Type", "material_type", placeholder="Aluminum, Steel, etc.", x_model="form.material_type") }}
+        {% endcall %}
+    {% endcall %}
+{% endcall %}
+
+{% call form_section("Additional Information", "fas fa-plus-circle") %}
+    {% call form_row() %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Supplier", "supplier", placeholder="Primary supplier", x_model="form.supplier") }}
+        {% endcall %}
+        {% call form_col("col-md-6") %}
+            {{ form_group("Active Material", "is_active", type="checkbox", x_model="form.is_active") }}
+        {% endcall %}
+    {% endcall %}
+    
+    {{ form_group("Usage Notes", "usage_notes", type="textarea", placeholder="Usage and application notes", x_model="form.usage_notes") }}
+{% endcall %}
+{% endblock %}
+
+{% block custom_table_js %}
+<script>
+// Material Search Filters Component
+function materialSearchFilters() {
+    return {
+        search: '',
+        gradeFilter: '',
+        statusFilter: 'active',
+        limit: 20,
+        
+        performSearch() {
+            window.dispatchEvent(new CustomEvent('search-materials', {
+                detail: {
+                    search: this.search,
+                    grade: this.gradeFilter,
+                    status: this.statusFilter,
+                    limit: this.limit
+                }
+            }));
+        }
+    }
+}
+
+// Material Statistics Component
+function materialStats() {
+    return {
+        stats: {
+            total: 0,
+            active: 0,
+            withGrade: 0,
+            avgWeight: 0.0
+        },
+        
+        async init() {
+            await this.loadStats();
+        },
+        
+        async loadStats() {
+            try {
+                const token = localStorage.getItem('access_token');
+                const response = await fetch('/api/atp/material-codes?limit=1000', {
+                    headers: token ? { 'Authorization': `Bearer ${token}` } : {}
+                });
+                
+                if (response.ok) {
+                    const materials = await response.json();
+                    this.stats.total = materials.length;
+                    this.stats.active = materials.filter(m => m.is_active).length;
+                    this.stats.withGrade = materials.filter(m => m.grade).length;
+                    
+                    const weights = materials.filter(m => m.weight_per_line).map(m => parseFloat(m.weight_per_line));
+                    this.stats.avgWeight = weights.length > 0 
+                        ? (weights.reduce((a, b) => a + b, 0) / weights.length).toFixed(1)
+                        : 0.0;
+                }
+            } catch (error) {
+                console.error('Error loading material stats:', error);
+            }
+        }
+    }
+}
+
+// Material List Component (Enhanced for Table)
+function materialList() {
+    return {
+        ...baseTableFunctions(),
+        items: [],
+        loading: false,
+        error: null,
+        currentPage: 1,
+        hasMore: false,
+        pageNumbers: [],
+        
+        async init() {
+            await this.loadData();
+            window.addEventListener('search-materials', (e) => {
+                this.currentPage = 1;
+                this.loadData(e.detail);
+            });
+        },
+        
+        async loadData(filters = {}) {
+            this.loading = true;
+            this.error = null;
+            
+            try {
+                const token = localStorage.getItem('access_token');
+                if (!token) {
+                    throw new Error('Please login first');
+                }
+                
+                const params = new URLSearchParams({
+                    skip: ((this.currentPage - 1) * (filters.limit || 20)),
+                    limit: filters.limit || 20,
+                    active_only: filters.status !== 'all'
+                });
+                
+                if (filters.search) params.append('search', filters.search);
+                if (filters.grade) params.append('grade', filters.grade);
+                if (this.sortColumn) {
+                    params.append('sort_by', this.sortColumn);
+                    params.append('sort_direction', this.sortDirection);
+                }
+                
+                const response = await fetch(`/api/atp/material-codes?${params}`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        localStorage.removeItem('access_token');
+                        window.location.href = '/login';
+                        return;
+                    }
+                    throw new Error(`API Error: ${response.status}`);
+                }
+                
+                this.items = await response.json();
+                this.items.forEach(item => item.expanded = false);
+                this.updatePagination();
+                
+            } catch (error) {
+                this.error = error.message;
+                console.error('Error loading materials:', error);
+                showToast('Error loading materials: ' + error.message, 'error');
+            } finally {
+                this.loading = false;
+            }
+        },
+        
+        updatePagination() {
+            this.hasMore = this.items.length >= 20;
+            this.pageNumbers = [];
+            for (let i = Math.max(1, this.currentPage - 2); i <= Math.min(this.currentPage + 2, this.currentPage + (this.hasMore ? 2 : 0)); i++) {
+                this.pageNumbers.push(i);
+            }
+        },
+        
+        changePage(page) {
+            if (page >= 1 && (this.hasMore || page <= this.currentPage)) {
+                this.currentPage = page;
+                this.loadData();
+            }
+        },
+        
+        viewItem(id) {
+            window.open(`/api/atp/material-codes/${id}`, '_blank');
+        },
+        
+        editItem(id) {
+            window.location.href = `/master-data/materials/edit?id=${id}`;
+        },
+        
+        async deleteItem(id, name) {
+            if (!confirm(`Are you sure you want to delete material "${name}"? This action cannot be undone.`)) {
+                return;
+            }
+            
+            try {
+                const token = localStorage.getItem('access_token');
+                const response = await fetch(`/api/atp/material-codes/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                if (response.ok) {
+                    showToast('Material deleted successfully', 'success');
+                    await this.loadData();
+                } else {
+                    throw new Error('Failed to delete material');
+                }
+            } catch (error) {
+                showToast('Error deleting material: ' + error.message, 'error');
+            }
+        }
+    }
+}
+
+// Material Modal Component
+function materialModal() {
+    return {
+        editMode: false,
+        saving: false,
+        form: {
+            atp_code: '',
+            material_code: '',
+            description_th: '',
+            description_en: '',
+            grade: '',
+            length_per_piece: null,
+            weight_per_line: null,
+            material_type: '',
+            supplier: '',
+            usage_notes: '',
+            is_active: true
+        },
+        
+        resetForm() {
+            this.form = {
+                atp_code: '',
+                material_code: '',
+                description_th: '',
+                description_en: '',
+                grade: '',
+                length_per_piece: null,
+                weight_per_line: null,
+                material_type: '',
+                supplier: '',
+                usage_notes: '',
+                is_active: true
+            };
+        },
+        
+        async saveEntity() {
+            this.saving = true;
+            
+            try {
+                const token = localStorage.getItem('access_token');
+                const url = this.editMode 
+                    ? `/api/atp/material-codes/${this.form.id}` 
+                    : '/api/atp/material-codes';
+                const method = this.editMode ? 'PUT' : 'POST';
+                
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify(this.form)
+                });
+                
+                if (response.ok) {
+                    showToast(`Material ${this.editMode ? 'updated' : 'created'} successfully`, 'success');
+                    bootstrap.Modal.getInstance(document.getElementById('materialModal')).hide();
+                    location.reload();
+                } else {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to save material');
+                }
+            } catch (error) {
+                showToast('Error saving material: ' + error.message, 'error');
+            } finally {
+                this.saving = false;
+            }
+        }
+    }
+}
+
+// Global Functions
+function createMaterial() {
+    window.location.href = '/master-data/materials/create';
+}
+
+async function editMaterial(id) {
+    window.location.href = `/master-data/materials/edit?id=${id}`;
+}
+
+async function importMaterials() {
+    if (confirm('Import materials from Excel? This may take a few moments.')) {
+        try {
+            showToast('Starting import...', 'info');
+            const token = localStorage.getItem('access_token');
+            const response = await fetch('/api/atp/excel-import', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                showToast(`Import completed! Created: ${result.created}, Updated: ${result.updated}`, 'success');
+                location.reload();
+            } else {
+                throw new Error('Import failed');
+            }
+        } catch (error) {
+            showToast('Import error: ' + error.message, 'error');
+        }
+    }
+}
+
+async function previewMaterialData() {
+    showToast('Material data preview feature coming soon', 'info');
+}
+</script>
+{% endblock %}

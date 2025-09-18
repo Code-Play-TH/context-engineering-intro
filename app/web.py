@@ -455,7 +455,25 @@ async def material_codes_page(
     current_user: Optional[User] = Depends(get_current_user_optional)
 ):
     """
-    Material Code management page.
+    Material Code management page - Table view.
+    """
+    return templates.TemplateResponse(
+        "master_data/material_codes_table.html",
+        {
+            "request": request,
+            "user": current_user,
+            "page_title": "Material Code Management"
+        }
+    )
+
+
+@router.get("/master-data/materials/cards", response_class=HTMLResponse)
+async def material_codes_cards_page(
+    request: Request,
+    current_user: Optional[User] = Depends(get_current_user_optional)
+):
+    """
+    Material Code management page - Card view (legacy).
     """
     return templates.TemplateResponse(
         "master_data/material_codes.html",
@@ -473,7 +491,25 @@ async def color_codes_page(
     current_user: Optional[User] = Depends(get_current_user_optional)
 ):
     """
-    Color Code management page.
+    Color Code management page - Table view.
+    """
+    return templates.TemplateResponse(
+        "master_data/color_codes_table.html",
+        {
+            "request": request,
+            "user": current_user,
+            "page_title": "Color Code Management"
+        }
+    )
+
+
+@router.get("/master-data/colors/cards", response_class=HTMLResponse)
+async def color_codes_cards_page(
+    request: Request,
+    current_user: Optional[User] = Depends(get_current_user_optional)
+):
+    """
+    Color Code management page - Card view (legacy).
     """
     return templates.TemplateResponse(
         "master_data/color_codes.html",
