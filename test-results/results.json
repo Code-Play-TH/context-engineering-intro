@@ -1,0 +1,3479 @@
+{
+  "config": {
+    "configFile": "C:\\Works\\KOLs Project\\playwright.config.js",
+    "rootDir": "C:/Works/KOLs Project/tests/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": "C:\\Works\\KOLs Project\\tests\\e2e\\global-setup.js",
+    "globalTeardown": "C:\\Works\\KOLs Project\\tests\\e2e\\global-teardown.js",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 6
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "test-results/results.xml"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "C:/Works/KOLs Project/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "C:/Works/KOLs Project/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.e2e.{js,ts}"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Works/KOLs Project/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "C:/Works/KOLs Project/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.e2e.{js,ts}"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Works/KOLs Project/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "C:/Works/KOLs Project/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.e2e.{js,ts}"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Works/KOLs Project/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "Mobile Chrome",
+        "name": "Mobile Chrome",
+        "testDir": "C:/Works/KOLs Project/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.e2e.{js,ts}"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Works/KOLs Project/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "Mobile Safari",
+        "name": "Mobile Safari",
+        "testDir": "C:/Works/KOLs Project/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.e2e.{js,ts}"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Works/KOLs Project/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "Microsoft Edge",
+        "name": "Microsoft Edge",
+        "testDir": "C:/Works/KOLs Project/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.e2e.{js,ts}"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "C:/Works/KOLs Project/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 6
+        },
+        "id": "Google Chrome",
+        "name": "Google Chrome",
+        "testDir": "C:/Works/KOLs Project/tests/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.e2e.{js,ts}"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.1",
+    "workers": 6,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "frontend-integration.e2e.js",
+      "file": "frontend-integration.e2e.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Frontend-Backend Integration Tests",
+          "file": "frontend-integration.e2e.js",
+          "line": 3,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should connect to backend API",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 13100,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Backend health status: Healthy\n"
+                        },
+                        {
+                          "text": "✅ Frontend loaded successfully\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:25.892Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-1d7388f9729b11b60377",
+              "file": "frontend-integration.e2e.js",
+              "line": 7,
+              "column": 3
+            },
+            {
+              "title": "should handle API calls gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 14579,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ API calls detected: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:25.939Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-f371f056dd44aa9b2921",
+              "file": "frontend-integration.e2e.js",
+              "line": 24,
+              "column": 3
+            },
+            {
+              "title": "should handle authentication flow",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 10542,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Authentication UI elements - Login buttons: 1, Forms: 1\n"
+                        },
+                        {
+                          "text": "✅ Login button interaction successful\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:25.911Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-aecfebbfd0f101bc31f8",
+              "file": "frontend-integration.e2e.js",
+              "line": 49,
+              "column": 3
+            },
+            {
+              "title": "should display data from backend",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 13598,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Data display elements - Tables: 0, Cards: 1, List items: 0\n"
+                        },
+                        {
+                          "text": "✅ Loading indicators: 0\n"
+                        },
+                        {
+                          "text": "✅ Error indicators: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:25.962Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-ced8fdea4651bd84e1f0",
+              "file": "frontend-integration.e2e.js",
+              "line": 71,
+              "column": 3
+            },
+            {
+              "title": "should handle CRUD operations UI",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 11883,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ CRUD UI elements - Create: 0, Edit: 0, Delete: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:25.925Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-0c841ad03086ffa05767",
+              "file": "frontend-integration.e2e.js",
+              "line": 94,
+              "column": 3
+            },
+            {
+              "title": "should handle real-time updates",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 12076,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Real-time elements found: 0\n"
+                        },
+                        {
+                          "text": "✅ WebSocket status: WebSocket API available\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:25.940Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-d5b5a0e789697cb6cd7b",
+              "file": "frontend-integration.e2e.js",
+              "line": 117,
+              "column": 3
+            },
+            {
+              "title": "should handle form submissions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 7544,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Found 1 forms - testing form submission handling\n"
+                        },
+                        {
+                          "text": "✅ Form submission elements found\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:36.817Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-5eb2a4c368ac1f5a8f9e",
+              "file": "frontend-integration.e2e.js",
+              "line": 133,
+              "column": 3
+            },
+            {
+              "title": "should handle error states from backend",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 10519,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Failed API requests: 0\n"
+                        },
+                        {
+                          "text": "✅ Error display elements: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:38.072Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-f7ffdc6354bcbf95f2f4",
+              "file": "frontend-integration.e2e.js",
+              "line": 159,
+              "column": 3
+            },
+            {
+              "title": "should handle navigation and routing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 5,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 7274,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Navigation links found: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:38.507Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-b4abef57a80e03152837",
+              "file": "frontend-integration.e2e.js",
+              "line": 187,
+              "column": 3
+            },
+            {
+              "title": "should handle search and filtering",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 7345,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Search/Filter UI - Search inputs: 0, Filter controls: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:39.269Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-e58f41f93c3ba020b99f",
+              "file": "frontend-integration.e2e.js",
+              "line": 214,
+              "column": 3
+            },
+            {
+              "title": "should handle responsive API data display",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 11337,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Desktop - Data elements visible: 4\n"
+                        },
+                        {
+                          "text": "✅ Tablet - Data elements visible: 4\n"
+                        },
+                        {
+                          "text": "✅ Mobile - Data elements visible: 4\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:40.134Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-ad7a68aa1b9bbe28233a",
+              "file": "frontend-integration.e2e.js",
+              "line": 235,
+              "column": 3
+            },
+            {
+              "title": "should connect to backend API",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 8738,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Backend health status: Healthy\n"
+                        },
+                        {
+                          "text": "✅ Frontend loaded successfully\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:45.570Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-3abafac65061cf6bb9ab",
+              "file": "frontend-integration.e2e.js",
+              "line": 7,
+              "column": 3
+            },
+            {
+              "title": "should handle API calls gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 8,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 18210,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ API calls detected: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:49.297Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-07e001782c1846fde021",
+              "file": "frontend-integration.e2e.js",
+              "line": 24,
+              "column": 3
+            },
+            {
+              "title": "should handle authentication flow",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 13678,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Authentication UI elements - Login buttons: 1, Forms: 1\n"
+                        },
+                        {
+                          "text": "✅ Login button interaction successful\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:49.132Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-cb4bf663abe1827029e6",
+              "file": "frontend-integration.e2e.js",
+              "line": 49,
+              "column": 3
+            },
+            {
+              "title": "should display data from backend",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 16761,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Data display elements - Tables: 0, Cards: 1, List items: 0\n"
+                        },
+                        {
+                          "text": "✅ Loading indicators: 0\n"
+                        },
+                        {
+                          "text": "✅ Error indicators: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:49.902Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-8b783c8d94510afd39a8",
+              "file": "frontend-integration.e2e.js",
+              "line": 71,
+              "column": 3
+            },
+            {
+              "title": "should handle CRUD operations UI",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 14230,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ CRUD UI elements - Create: 0, Edit: 0, Delete: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:53.515Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-6f18e1f59bb2dfd27bd4",
+              "file": "frontend-integration.e2e.js",
+              "line": 94,
+              "column": 3
+            },
+            {
+              "title": "should handle real-time updates",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 11,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 10488,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Real-time elements found: 0\n"
+                        },
+                        {
+                          "text": "✅ WebSocket status: WebSocket API available\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:10.412Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-545525ebc710692f2bf7",
+              "file": "frontend-integration.e2e.js",
+              "line": 117,
+              "column": 3
+            },
+            {
+              "title": "should handle form submissions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 12409,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Found 1 forms - testing form submission handling\n"
+                        },
+                        {
+                          "text": "✅ Form submission elements found\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:07:56.449Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-daba8d9c787cd40b9c17",
+              "file": "frontend-integration.e2e.js",
+              "line": 133,
+              "column": 3
+            },
+            {
+              "title": "should handle error states from backend",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 7,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 10977,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Failed API requests: 0\n"
+                        },
+                        {
+                          "text": "✅ Error display elements: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:04.549Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-442282db0639b420f2b3",
+              "file": "frontend-integration.e2e.js",
+              "line": 159,
+              "column": 3
+            },
+            {
+              "title": "should handle navigation and routing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 6,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 9145,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Navigation links found: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:08.899Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-b25c68f86a7b697baab9",
+              "file": "frontend-integration.e2e.js",
+              "line": 187,
+              "column": 3
+            },
+            {
+              "title": "should handle search and filtering",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 9,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 11390,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Search/Filter UI - Search inputs: 0, Filter controls: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:08.953Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-a40776a38c32a9da0ed2",
+              "file": "frontend-integration.e2e.js",
+              "line": 214,
+              "column": 3
+            },
+            {
+              "title": "should handle responsive API data display",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 10,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 17048,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Desktop - Data elements visible: 4\n"
+                        },
+                        {
+                          "text": "✅ Tablet - Data elements visible: 4\n"
+                        },
+                        {
+                          "text": "✅ Mobile - Data elements visible: 4\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:10.361Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-f4aa6d47749643551e8e",
+              "file": "frontend-integration.e2e.js",
+              "line": 235,
+              "column": 3
+            },
+            {
+              "title": "should connect to backend API",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 12,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 52,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:18.550Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-d314d22376dd1ce44d1e",
+              "file": "frontend-integration.e2e.js",
+              "line": 7,
+              "column": 3
+            },
+            {
+              "title": "should handle API calls gracefully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 14,
+                      "parallelIndex": 5,
+                      "status": "failed",
+                      "duration": 16,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:23.867Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-930fe16462b2f81bf688",
+              "file": "frontend-integration.e2e.js",
+              "line": 24,
+              "column": 3
+            },
+            {
+              "title": "should handle authentication flow",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 17,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 16,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:25.390Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-caa1d01becfdd3e8d7ee",
+              "file": "frontend-integration.e2e.js",
+              "line": 49,
+              "column": 3
+            },
+            {
+              "title": "should display data from backend",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 13,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 24,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:21.820Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-6c9bc19c868b018ca57b",
+              "file": "frontend-integration.e2e.js",
+              "line": 71,
+              "column": 3
+            },
+            {
+              "title": "should handle CRUD operations UI",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 16,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 20,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:24.769Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-63a09f728aea1e07857e",
+              "file": "frontend-integration.e2e.js",
+              "line": 94,
+              "column": 3
+            },
+            {
+              "title": "should handle real-time updates",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 15,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 22,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:24.268Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-18a2f81115a47231937f",
+              "file": "frontend-integration.e2e.js",
+              "line": 117,
+              "column": 3
+            },
+            {
+              "title": "should handle form submissions",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 20,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 13,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:26.535Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-7827df2485ee7f66bd1c",
+              "file": "frontend-integration.e2e.js",
+              "line": 133,
+              "column": 3
+            },
+            {
+              "title": "should handle error states from backend",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 18,
+                      "parallelIndex": 5,
+                      "status": "failed",
+                      "duration": 14,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:26.052Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-b72149a226d299a9ec5f",
+              "file": "frontend-integration.e2e.js",
+              "line": 159,
+              "column": 3
+            },
+            {
+              "title": "should handle navigation and routing",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 19,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 18,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:26.439Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-8073b9e991062c0bc7ac",
+              "file": "frontend-integration.e2e.js",
+              "line": 187,
+              "column": 3
+            },
+            {
+              "title": "should handle search and filtering",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 21,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 14,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:26.815Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-02b11cdaa639a0f8c540",
+              "file": "frontend-integration.e2e.js",
+              "line": 214,
+              "column": 3
+            },
+            {
+              "title": "should handle responsive API data display",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 22,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 13,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:27.380Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-ebedc7c2a7c8ba2b8042",
+              "file": "frontend-integration.e2e.js",
+              "line": 235,
+              "column": 3
+            },
+            {
+              "title": "should connect to backend API",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 23,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 8266,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Backend health status: Healthy\n"
+                        },
+                        {
+                          "text": "✅ Frontend loaded successfully\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:28.051Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-e756a5fe46c306e43b6f",
+              "file": "frontend-integration.e2e.js",
+              "line": 7,
+              "column": 3
+            },
+            {
+              "title": "should handle API calls gracefully",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 24,
+                      "parallelIndex": 2,
+                      "status": "passed",
+                      "duration": 10730,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ API calls detected: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:28.354Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-1ef662f62004d93a4b30",
+              "file": "frontend-integration.e2e.js",
+              "line": 24,
+              "column": 3
+            },
+            {
+              "title": "should handle authentication flow",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 25,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 9067,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Authentication UI elements - Login buttons: 1, Forms: 1\n"
+                        },
+                        {
+                          "text": "✅ Login button interaction successful\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:28.459Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-6cf1fa379b656993204e",
+              "file": "frontend-integration.e2e.js",
+              "line": 49,
+              "column": 3
+            },
+            {
+              "title": "should display data from backend",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 26,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 9860,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Data display elements - Tables: 0, Cards: 1, List items: 0\n"
+                        },
+                        {
+                          "text": "✅ Loading indicators: 0\n"
+                        },
+                        {
+                          "text": "✅ Error indicators: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:28.781Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-eae5453a470f9c6be782",
+              "file": "frontend-integration.e2e.js",
+              "line": 71,
+              "column": 3
+            },
+            {
+              "title": "should handle CRUD operations UI",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 28,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 7416,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ CRUD UI elements - Create: 0, Edit: 0, Delete: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:30.935Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-6525d938cc3502153e2f",
+              "file": "frontend-integration.e2e.js",
+              "line": 94,
+              "column": 3
+            },
+            {
+              "title": "should handle real-time updates",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 27,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 8292,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Real-time elements found: 0\n"
+                        },
+                        {
+                          "text": "✅ WebSocket status: WebSocket API available\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:29.441Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-6a995ed5a775a3152ff7",
+              "file": "frontend-integration.e2e.js",
+              "line": 117,
+              "column": 3
+            },
+            {
+              "title": "should handle form submissions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 23,
+                      "parallelIndex": 5,
+                      "status": "passed",
+                      "duration": 6922,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Found 1 forms - testing form submission handling\n"
+                        },
+                        {
+                          "text": "✅ Form submission elements found\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:36.640Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-e74484dae7cc36159d4a",
+              "file": "frontend-integration.e2e.js",
+              "line": 133,
+              "column": 3
+            },
+            {
+              "title": "should handle error states from backend",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 25,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 11937,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Failed API requests: 0\n"
+                        },
+                        {
+                          "text": "✅ Error display elements: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:37.930Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-92a99657959ed557b67f",
+              "file": "frontend-integration.e2e.js",
+              "line": 159,
+              "column": 3
+            },
+            {
+              "title": "should handle navigation and routing",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 27,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 9010,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Navigation links found: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:38.039Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-b3efa478961a470bb24a",
+              "file": "frontend-integration.e2e.js",
+              "line": 187,
+              "column": 3
+            },
+            {
+              "title": "should handle search and filtering",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 28,
+                      "parallelIndex": 4,
+                      "status": "passed",
+                      "duration": 9780,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Search/Filter UI - Search inputs: 0, Filter controls: 0\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:38.717Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-89484f8965d13912b5e7",
+              "file": "frontend-integration.e2e.js",
+              "line": 214,
+              "column": 3
+            },
+            {
+              "title": "should handle responsive API data display",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Chrome",
+                  "projectName": "Mobile Chrome",
+                  "results": [
+                    {
+                      "workerIndex": 26,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 17936,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Desktop - Data elements visible: 4\n"
+                        },
+                        {
+                          "text": "✅ Tablet - Data elements visible: 4\n"
+                        },
+                        {
+                          "text": "✅ Mobile - Data elements visible: 4\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:39.003Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-ccae99dd63dc0e263e46",
+              "file": "frontend-integration.e2e.js",
+              "line": 235,
+              "column": 3
+            },
+            {
+              "title": "should connect to backend API",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 29,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 52,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:42.244Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-15d8d49ab69874cc1c73",
+              "file": "frontend-integration.e2e.js",
+              "line": 7,
+              "column": 3
+            },
+            {
+              "title": "should handle API calls gracefully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 30,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 36,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:46.732Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-471246f45f8807e9da35",
+              "file": "frontend-integration.e2e.js",
+              "line": 24,
+              "column": 3
+            },
+            {
+              "title": "should handle authentication flow",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 31,
+                      "parallelIndex": 5,
+                      "status": "failed",
+                      "duration": 97,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:47.658Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-c8d2b7dbc3f43258e32b",
+              "file": "frontend-integration.e2e.js",
+              "line": 49,
+              "column": 3
+            },
+            {
+              "title": "should display data from backend",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 32,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 17,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:49.753Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-695fccb80ddd08ea1363",
+              "file": "frontend-integration.e2e.js",
+              "line": 71,
+              "column": 3
+            },
+            {
+              "title": "should handle CRUD operations UI",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 33,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 14,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:49.968Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-ef032c7048e82c20d0ef",
+              "file": "frontend-integration.e2e.js",
+              "line": 94,
+              "column": 3
+            },
+            {
+              "title": "should handle real-time updates",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 34,
+                      "parallelIndex": 5,
+                      "status": "failed",
+                      "duration": 21,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:50.454Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-887d843f29f3ef74f8a4",
+              "file": "frontend-integration.e2e.js",
+              "line": 117,
+              "column": 3
+            },
+            {
+              "title": "should handle form submissions",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 35,
+                      "parallelIndex": 4,
+                      "status": "failed",
+                      "duration": 16,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:51.271Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-1c544a98a8fe7b1a1aa3",
+              "file": "frontend-integration.e2e.js",
+              "line": 133,
+              "column": 3
+            },
+            {
+              "title": "should handle error states from backend",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 36,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 13,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:52.153Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-15615af071f6551e0a42",
+              "file": "frontend-integration.e2e.js",
+              "line": 159,
+              "column": 3
+            },
+            {
+              "title": "should handle navigation and routing",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 38,
+                      "parallelIndex": 3,
+                      "status": "failed",
+                      "duration": 13,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:52.392Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-84d6de7ad22368e3a86a",
+              "file": "frontend-integration.e2e.js",
+              "line": 187,
+              "column": 3
+            },
+            {
+              "title": "should handle search and filtering",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 37,
+                      "parallelIndex": 1,
+                      "status": "failed",
+                      "duration": 13,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:52.297Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-e1dbe9b3e74ba237b5da",
+              "file": "frontend-integration.e2e.js",
+              "line": 214,
+              "column": 3
+            },
+            {
+              "title": "should handle responsive API data display",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Mobile Safari",
+                  "projectName": "Mobile Safari",
+                  "results": [
+                    {
+                      "workerIndex": 39,
+                      "parallelIndex": 5,
+                      "status": "failed",
+                      "duration": 19,
+                      "error": {
+                        "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝",
+                        "stack": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: browserType.launch: Executable doesn't exist at C:\\Users\\ADMIN02\\AppData\\Local\\ms-playwright\\webkit-2203\\Playwright.exe\n╔═════════════════════════════════════════════════════════════════════════╗\n║ Looks like Playwright Test or Playwright was just installed or updated. ║\n║ Please run the following command to download new browsers:              ║\n║                                                                         ║\n║     npx playwright install                                              ║\n║                                                                         ║\n║ <3 Playwright Team                                                      ║\n╚═════════════════════════════════════════════════════════════════════════╝"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:52.828Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-01a4efa08a599c910dcb",
+              "file": "frontend-integration.e2e.js",
+              "line": 235,
+              "column": 3
+            },
+            {
+              "title": "should connect to backend API",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [
+                    {
+                      "workerIndex": 40,
+                      "parallelIndex": 4,
+                      "status": "timedOut",
+                      "duration": 31219,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Works\\KOLs Project\\tests\\e2e\\frontend-integration.e2e.js",
+                            "column": 16,
+                            "line": 19
+                          },
+                          "message": "Error: page.waitForLoadState: Test timeout of 30000ms exceeded.\n\n  17 |     // Load frontend\n  18 |     await page.goto(frontendUrl);\n> 19 |     await page.waitForLoadState('networkidle');\n     |                ^\n  20 |\n  21 |     console.log('✅ Frontend loaded successfully');\n  22 |   });\n    at C:\\Works\\KOLs Project\\tests\\e2e\\frontend-integration.e2e.js:19:16"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "✅ Backend health status: Healthy\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:53.621Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Works\\KOLs Project\\test-results\\frontend-integration.e2e.j-3d37b-ould-connect-to-backend-API-Microsoft-Edge\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Works\\KOLs Project\\test-results\\frontend-integration.e2e.j-3d37b-ould-connect-to-backend-API-Microsoft-Edge\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Works\\KOLs Project\\test-results\\frontend-integration.e2e.j-3d37b-ould-connect-to-backend-API-Microsoft-Edge\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-bff76825d9622130864c",
+              "file": "frontend-integration.e2e.js",
+              "line": 7,
+              "column": 3
+            },
+            {
+              "title": "should handle API calls gracefully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [
+                    {
+                      "workerIndex": 41,
+                      "parallelIndex": 2,
+                      "status": "timedOut",
+                      "duration": 31087,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Works\\KOLs Project\\tests\\e2e\\frontend-integration.e2e.js",
+                            "column": 16,
+                            "line": 38
+                          },
+                          "message": "Error: page.waitForLoadState: Test timeout of 30000ms exceeded.\n\n  36 |     });\n  37 |\n> 38 |     await page.waitForLoadState('networkidle');\n     |                ^\n  39 |\n  40 |     // Wait a bit for any async API calls\n  41 |     await page.waitForTimeout(3000);\n    at C:\\Works\\KOLs Project\\tests\\e2e\\frontend-integration.e2e.js:38:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:54.925Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Works\\KOLs Project\\test-results\\frontend-integration.e2e.j-70aa7-handle-API-calls-gracefully-Microsoft-Edge\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Works\\KOLs Project\\test-results\\frontend-integration.e2e.j-70aa7-handle-API-calls-gracefully-Microsoft-Edge\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Works\\KOLs Project\\test-results\\frontend-integration.e2e.j-70aa7-handle-API-calls-gracefully-Microsoft-Edge\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-dd3cde7dd2a6cbb971e4",
+              "file": "frontend-integration.e2e.js",
+              "line": 24,
+              "column": 3
+            },
+            {
+              "title": "should handle authentication flow",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [
+                    {
+                      "workerIndex": 42,
+                      "parallelIndex": 1,
+                      "status": "timedOut",
+                      "duration": 30949,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Works\\KOLs Project\\tests\\e2e\\frontend-integration.e2e.js",
+                            "column": 16,
+                            "line": 51
+                          },
+                          "message": "Error: page.waitForLoadState: Test timeout of 30000ms exceeded.\n\n  49 |   test('should handle authentication flow', async ({ page }) => {\n  50 |     await page.goto(frontendUrl);\n> 51 |     await page.waitForLoadState('networkidle');\n     |                ^\n  52 |\n  53 |     // Look for login/auth related elements\n  54 |     const loginButtons = await page.locator('button, a').getByText(/login|sign in|log in/i).count();\n    at C:\\Works\\KOLs Project\\tests\\e2e\\frontend-integration.e2e.js:51:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:55.031Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Works\\KOLs Project\\test-results\\frontend-integration.e2e.j-fd486--handle-authentication-flow-Microsoft-Edge\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Works\\KOLs Project\\test-results\\frontend-integration.e2e.j-fd486--handle-authentication-flow-Microsoft-Edge\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Works\\KOLs Project\\test-results\\frontend-integration.e2e.j-fd486--handle-authentication-flow-Microsoft-Edge\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-9a885737fe97983e4be1",
+              "file": "frontend-integration.e2e.js",
+              "line": 49,
+              "column": 3
+            },
+            {
+              "title": "should display data from backend",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [
+                    {
+                      "workerIndex": 43,
+                      "parallelIndex": 3,
+                      "status": "timedOut",
+                      "duration": 30857,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Works\\KOLs Project\\tests\\e2e\\frontend-integration.e2e.js",
+                            "column": 16,
+                            "line": 73
+                          },
+                          "message": "Error: page.waitForLoadState: Test timeout of 30000ms exceeded.\n\n  71 |   test('should display data from backend', async ({ page }) => {\n  72 |     await page.goto(frontendUrl);\n> 73 |     await page.waitForLoadState('networkidle');\n     |                ^\n  74 |\n  75 |     // Wait for potential data loading\n  76 |     await page.waitForTimeout(2000);\n    at C:\\Works\\KOLs Project\\tests\\e2e\\frontend-integration.e2e.js:73:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:55.067Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Works\\KOLs Project\\test-results\\frontend-integration.e2e.j-2e76b-d-display-data-from-backend-Microsoft-Edge\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Works\\KOLs Project\\test-results\\frontend-integration.e2e.j-2e76b-d-display-data-from-backend-Microsoft-Edge\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Works\\KOLs Project\\test-results\\frontend-integration.e2e.j-2e76b-d-display-data-from-backend-Microsoft-Edge\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-489bf10aae2ea5e14a4c",
+              "file": "frontend-integration.e2e.js",
+              "line": 71,
+              "column": 3
+            },
+            {
+              "title": "should handle CRUD operations UI",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [
+                    {
+                      "workerIndex": 44,
+                      "parallelIndex": 5,
+                      "status": "timedOut",
+                      "duration": 30446,
+                      "error": {
+                        "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m",
+                        "stack": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                      },
+                      "errors": [
+                        {
+                          "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                        },
+                        {
+                          "location": {
+                            "file": "C:\\Works\\KOLs Project\\tests\\e2e\\frontend-integration.e2e.js",
+                            "column": 16,
+                            "line": 96
+                          },
+                          "message": "Error: page.waitForLoadState: Test timeout of 30000ms exceeded.\n\n  94 |   test('should handle CRUD operations UI', async ({ page }) => {\n  95 |     await page.goto(frontendUrl);\n> 96 |     await page.waitForLoadState('networkidle');\n     |                ^\n  97 |\n  98 |     // Look for CRUD operation buttons\n  99 |     const createButtons = await page.locator('button, a').getByText(/add|create|new|\\+/i).count();\n    at C:\\Works\\KOLs Project\\tests\\e2e\\frontend-integration.e2e.js:96:16"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:08:56.409Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "C:\\Works\\KOLs Project\\test-results\\frontend-integration.e2e.j-b9e57-d-handle-CRUD-operations-UI-Microsoft-Edge\\test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "C:\\Works\\KOLs Project\\test-results\\frontend-integration.e2e.j-b9e57-d-handle-CRUD-operations-UI-Microsoft-Edge\\video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "C:\\Works\\KOLs Project\\test-results\\frontend-integration.e2e.j-b9e57-d-handle-CRUD-operations-UI-Microsoft-Edge\\error-context.md"
+                        }
+                      ]
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-977b4fca6974aae1e90e",
+              "file": "frontend-integration.e2e.js",
+              "line": 94,
+              "column": 3
+            },
+            {
+              "title": "should handle real-time updates",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [
+                    {
+                      "workerIndex": 45,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 23595,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Real-time elements found: 0\n"
+                        },
+                        {
+                          "text": "✅ WebSocket status: WebSocket API available\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:00.082Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-c1ca072fec7db1865e41",
+              "file": "frontend-integration.e2e.js",
+              "line": 117,
+              "column": 3
+            },
+            {
+              "title": "should handle form submissions",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [
+                    {
+                      "workerIndex": 45,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 6339,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "✅ Found 1 forms - testing form submission handling\n"
+                        },
+                        {
+                          "text": "✅ Form submission elements found\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:24.466Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-e534475a487c26227a09",
+              "file": "frontend-integration.e2e.js",
+              "line": 133,
+              "column": 3
+            },
+            {
+              "title": "should handle error states from backend",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "failed",
+                      "duration": 0,
+                      "error": {
+                        "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:27.746Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-a9164f7e8ece235e0af3",
+              "file": "frontend-integration.e2e.js",
+              "line": 159,
+              "column": 3
+            },
+            {
+              "title": "should handle navigation and routing",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "failed",
+                      "duration": 0,
+                      "error": {
+                        "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:27.801Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-0ed318cba52ac403ad5b",
+              "file": "frontend-integration.e2e.js",
+              "line": 187,
+              "column": 3
+            },
+            {
+              "title": "should handle search and filtering",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "failed",
+                      "duration": 0,
+                      "error": {
+                        "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:27.826Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-3a050b8b411e93aba2c4",
+              "file": "frontend-integration.e2e.js",
+              "line": 214,
+              "column": 3
+            },
+            {
+              "title": "should handle responsive API data display",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Microsoft Edge",
+                  "projectName": "Microsoft Edge",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "failed",
+                      "duration": 0,
+                      "error": {
+                        "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:27.827Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-c1453af6cc9ca9c78ca4",
+              "file": "frontend-integration.e2e.js",
+              "line": 235,
+              "column": 3
+            },
+            {
+              "title": "should connect to backend API",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "failed",
+                      "duration": 0,
+                      "error": {
+                        "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:27.857Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-d9ffc7c02b268e26e055",
+              "file": "frontend-integration.e2e.js",
+              "line": 7,
+              "column": 3
+            },
+            {
+              "title": "should handle API calls gracefully",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "failed",
+                      "duration": 0,
+                      "error": {
+                        "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:27.859Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-2016bc346c16bea73375",
+              "file": "frontend-integration.e2e.js",
+              "line": 24,
+              "column": 3
+            },
+            {
+              "title": "should handle authentication flow",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "failed",
+                      "duration": 0,
+                      "error": {
+                        "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:27.885Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-c36a686d212836550282",
+              "file": "frontend-integration.e2e.js",
+              "line": 49,
+              "column": 3
+            },
+            {
+              "title": "should display data from backend",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "failed",
+                      "duration": 0,
+                      "error": {
+                        "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:27.887Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-9b0f2cdf5f38d55ade27",
+              "file": "frontend-integration.e2e.js",
+              "line": 71,
+              "column": 3
+            },
+            {
+              "title": "should handle CRUD operations UI",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "failed",
+                      "duration": 0,
+                      "error": {
+                        "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:27.910Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-4ae3e44fc347f0c7c18a",
+              "file": "frontend-integration.e2e.js",
+              "line": 94,
+              "column": 3
+            },
+            {
+              "title": "should handle real-time updates",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "failed",
+                      "duration": 0,
+                      "error": {
+                        "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:27.912Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-f1be591b5f5d8d930340",
+              "file": "frontend-integration.e2e.js",
+              "line": 117,
+              "column": 3
+            },
+            {
+              "title": "should handle form submissions",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "failed",
+                      "duration": 0,
+                      "error": {
+                        "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:27.943Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-e14470e54808eaee816f",
+              "file": "frontend-integration.e2e.js",
+              "line": 133,
+              "column": 3
+            },
+            {
+              "title": "should handle error states from backend",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "failed",
+                      "duration": 0,
+                      "error": {
+                        "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:28.005Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-5dd8461da8b6adce0ef1",
+              "file": "frontend-integration.e2e.js",
+              "line": 159,
+              "column": 3
+            },
+            {
+              "title": "should handle navigation and routing",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "failed",
+                      "duration": 0,
+                      "error": {
+                        "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:27.945Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-d96024d676efd733a466",
+              "file": "frontend-integration.e2e.js",
+              "line": 187,
+              "column": 3
+            },
+            {
+              "title": "should handle search and filtering",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "failed",
+                      "duration": 0,
+                      "error": {
+                        "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:27.968Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-7f0a8418e278f21a95c3",
+              "file": "frontend-integration.e2e.js",
+              "line": 214,
+              "column": 3
+            },
+            {
+              "title": "should handle responsive API data display",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "Google Chrome",
+                  "projectName": "Google Chrome",
+                  "results": [
+                    {
+                      "workerIndex": -1,
+                      "parallelIndex": -1,
+                      "status": "failed",
+                      "duration": 0,
+                      "error": {
+                        "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                      },
+                      "errors": [
+                        {
+                          "message": "Error: worker process exited unexpectedly (code=3221225794, signal=null)"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-29T05:09:27.970Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "b3eff796c6d700a42c90-ba2bda0ee8d53b13e47e",
+              "file": "frontend-integration.e2e.js",
+              "line": 235,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-29T05:07:22.999Z",
+    "duration": 128272.94,
+    "expected": 35,
+    "skipped": 0,
+    "unexpected": 42,
+    "flaky": 0
+  }
+}

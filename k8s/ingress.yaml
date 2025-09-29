@@ -1,0 +1,337 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kol-system-ingress
+  namespace: kol-system
+  labels:
+    app: kol-system
+    component: ingress
+  annotations:
+    # NGINX Ingress Controller annotations
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+
+    # SSL/TLS configuration
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-ciphers: "ECDHE-RSA-AES128-GCM-SHA256,ECDHE-RSA-AES256-GCM-SHA384,ECDHE-RSA-AES128-SHA,ECDHE-RSA-AES256-SHA,ECDHE-RSA-AES128-SHA256,ECDHE-RSA-AES256-SHA384"
+    nginx.ingress.kubernetes.io/ssl-protocols: "TLSv1.2 TLSv1.3"
+
+    # Security headers
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      add_header X-Frame-Options "SAMEORIGIN" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      add_header X-XSS-Protection "1; mode=block" always;
+      add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+      add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https:; media-src 'self' https:; object-src 'none'; child-src 'self'; frame-ancestors 'self'; form-action 'self'; base-uri 'self';" always;
+
+    # Rate limiting
+    nginx.ingress.kubernetes.io/rate-limit-rps: "100"
+    nginx.ingress.kubernetes.io/rate-limit-burst-multiplier: "2"
+
+    # Request size limits
+    nginx.ingress.kubernetes.io/proxy-body-size: "10m"
+
+    # Timeouts
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "30"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "30"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "30"
+
+    # Enable session affinity for API endpoints
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/session-cookie-name: "kol-api-session"
+    nginx.ingress.kubernetes.io/session-cookie-expires: "3600"
+    nginx.ingress.kubernetes.io/session-cookie-max-age: "3600"
+    nginx.ingress.kubernetes.io/session-cookie-path: "/api"
+
+spec:
+  tls:
+  - hosts:
+    - api.kolsystem.com
+    - app.kolsystem.com
+    - monitoring.kolsystem.com
+    secretName: kol-system-tls
+
+  rules:
+  # API Backend
+  - host: api.kolsystem.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kol-api-service
+            port:
+              number: 80
+
+  # Frontend Application (if deployed to K8s)
+  - host: app.kolsystem.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kol-frontend-service
+            port:
+              number: 80
+
+  # Monitoring and Admin Interfaces
+  - host: monitoring.kolsystem.com
+    http:
+      paths:
+      - path: /grafana
+        pathType: Prefix
+        backend:
+          service:
+            name: grafana-service
+            port:
+              number: 3000
+      - path: /prometheus
+        pathType: Prefix
+        backend:
+          service:
+            name: prometheus-service
+            port:
+              number: 9090
+      - path: /flower
+        pathType: Prefix
+        backend:
+          service:
+            name: flower-service
+            port:
+              number: 5555
+
+---
+# Staging Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kol-system-staging-ingress
+  namespace: kol-system-staging
+  labels:
+    app: kol-system
+    component: ingress
+    environment: staging
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-staging"
+
+    # Less restrictive rate limiting for staging
+    nginx.ingress.kubernetes.io/rate-limit-rps: "200"
+    nginx.ingress.kubernetes.io/rate-limit-burst-multiplier: "3"
+
+    # Allow larger uploads for testing
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+
+    # Security headers (same as production)
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      add_header X-Frame-Options "SAMEORIGIN" always;
+      add_header X-Content-Type-Options "nosniff" always;
+      add_header X-XSS-Protection "1; mode=block" always;
+      add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+      add_header X-Robots-Tag "noindex, nofollow" always;
+
+spec:
+  tls:
+  - hosts:
+    - staging-api.kolsystem.com
+    - staging.kolsystem.com
+    - staging-monitoring.kolsystem.com
+    secretName: kol-system-staging-tls
+
+  rules:
+  - host: staging-api.kolsystem.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kol-api-service
+            port:
+              number: 80
+
+  - host: staging.kolsystem.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kol-frontend-service
+            port:
+              number: 80
+
+  - host: staging-monitoring.kolsystem.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: grafana-service
+            port:
+              number: 3000
+
+---
+# Network Policies for Security
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: kol-api-netpol
+  namespace: kol-system
+  labels:
+    app: kol-api
+    component: security
+spec:
+  podSelector:
+    matchLabels:
+      app: kol-api
+  policyTypes:
+  - Ingress
+  - Egress
+
+  ingress:
+  # Allow ingress from nginx ingress controller
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 8000
+
+  # Allow monitoring from prometheus
+  - from:
+    - podSelector:
+        matchLabels:
+          app: prometheus
+    ports:
+    - protocol: TCP
+      port: 8000
+
+  egress:
+  # Allow egress to database
+  - to:
+    - podSelector:
+        matchLabels:
+          app: postgres
+    ports:
+    - protocol: TCP
+      port: 5432
+
+  # Allow egress to Redis
+  - to:
+    - podSelector:
+        matchLabels:
+          app: redis
+    ports:
+    - protocol: TCP
+      port: 6379
+
+  # Allow egress to external APIs (social media, etc.)
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 80
+    - protocol: TCP
+      port: 443
+
+  # Allow DNS resolution
+  - to: []
+    ports:
+    - protocol: UDP
+      port: 53
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: postgres-netpol
+  namespace: kol-system
+  labels:
+    app: postgres
+    component: security
+spec:
+  podSelector:
+    matchLabels:
+      app: postgres
+  policyTypes:
+  - Ingress
+
+  ingress:
+  # Allow connections from API and Celery workers
+  - from:
+    - podSelector:
+        matchLabels:
+          app: kol-api
+    - podSelector:
+        matchLabels:
+          app: celery-worker
+    - podSelector:
+        matchLabels:
+          app: postgres-exporter
+    ports:
+    - protocol: TCP
+      port: 5432
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: redis-netpol
+  namespace: kol-system
+  labels:
+    app: redis
+    component: security
+spec:
+  podSelector:
+    matchLabels:
+      app: redis
+  policyTypes:
+  - Ingress
+
+  ingress:
+  # Allow connections from API, Celery, and monitoring
+  - from:
+    - podSelector:
+        matchLabels:
+          app: kol-api
+    - podSelector:
+        matchLabels:
+          app: celery-worker
+    - podSelector:
+        matchLabels:
+          app: celery-beat
+    - podSelector:
+        matchLabels:
+          app: flower
+    - podSelector:
+        matchLabels:
+          app: redis-exporter
+    ports:
+    - protocol: TCP
+      port: 6379
+
+---
+# Service Monitor for Prometheus scraping
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: kol-api-metrics
+  namespace: kol-system
+  labels:
+    app: kol-api
+    component: monitoring
+spec:
+  selector:
+    matchLabels:
+      app: kol-api
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 30s
+    scrapeTimeout: 10s

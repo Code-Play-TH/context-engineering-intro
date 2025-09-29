@@ -1,296 +1,457 @@
-# Context Engineering Template
+# KOL Influencer Management System
 
-A comprehensive template for getting started with Context Engineering - the discipline of engineering context for AI coding assistants so they have the information necessary to get the job done end to end.
+A comprehensive platform for managing Key Opinion Leaders (KOLs), campaigns, content monitoring, and analytics with advanced AI-powered insights and multi-platform social media integration.
 
-> **Context Engineering is 10x better than prompt engineering and 100x better than vibe coding.**
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.104+-green.svg)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15+-blue.svg)
+![Redis](https://img.shields.io/badge/Redis-7+-red.svg)
+
+## 🚀 Features
+
+### 📊 **KOL Management**
+- Comprehensive KOL profiles with social media integration
+- Multi-platform follower and engagement tracking
+- Advanced search and filtering capabilities
+- Performance analytics and insights
+- Niche categorization and verification status
+
+### 🎯 **Campaign Management**
+- End-to-end campaign lifecycle management
+- KOL assignment with compensation tracking
+- Target KPI setting and monitoring
+- Campaign brief creation and distribution
+- Real-time campaign performance dashboards
+
+### 🔍 **Content Monitoring**
+- AI-powered content detection across platforms
+- Multi-layer content verification algorithm
+- Automated brand mention tracking
+- Sentiment analysis and quality scoring
+- Compliance and brand safety checking
+
+### 📈 **Analytics & Reporting**
+- Comprehensive ROI calculation with multiple attribution models
+- Advanced analytics engine with predictive insights
+- Customizable reports and dashboards
+- Performance benchmarking and trend analysis
+- Export capabilities (PDF, Excel, PowerPoint)
+
+### 💬 **Communication Hub**
+- Multi-channel messaging (Email, Discord, Line)
+- Automated follow-up scheduling
+- Message template management
+- Delivery tracking and analytics
+- Integration with campaign workflows
+
+## 🏗️ Architecture
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│   Web Client    │    │   Mobile App    │    │  Admin Panel    │
+└─────────────────┘    └─────────────────┘    └─────────────────┘
+         │                       │                       │
+         └───────────────────────┼───────────────────────┘
+                                 │
+                         ┌───────▼────────┐
+                         │  Load Balancer │
+                         │ (NGINX Ingress)│
+                         └───────┬────────┘
+                                 │
+                    ┌────────────▼────────────┐
+                    │     FastAPI Gateway     │
+                    │   (Authentication &     │
+                    │    Rate Limiting)       │
+                    └────────────┬────────────┘
+                                 │
+        ┌────────────────────────┼────────────────────────┐
+        │                       │                        │
+┌───────▼────────┐    ┌─────────▼──────────┐    ┌───────▼────────┐
+│   KOL Service  │    │  Campaign Service  │    │Analytics Service│
+└───────┬────────┘    └─────────┬──────────┘    └───────┬────────┘
+        │                       │                        │
+        └───────────────────────┼────────────────────────┘
+                                │
+                    ┌───────────▼────────────┐
+                    │    Background Tasks    │
+                    │   (Celery Workers)     │
+                    └───────────┬────────────┘
+                                │
+        ┌───────────────────────┼───────────────────────┐
+        │                       │                       │
+┌───────▼────────┐    ┌─────────▼────────┐    ┌────────▼────────┐
+│   PostgreSQL   │    │      Redis       │    │  File Storage   │
+│  (Primary DB)  │    │ (Cache & Queue)  │    │     (NFS)       │
+└────────────────┘    └──────────────────┘    └─────────────────┘
+```
+
+## 🛠️ Technology Stack
+
+| Component | Technology | Version |
+|-----------|------------|---------|
+| **Backend** | FastAPI | 0.104+ |
+| **Database** | PostgreSQL | 15+ |
+| **Cache/Queue** | Redis | 7+ |
+| **Task Queue** | Celery | 5.3+ |
+| **ORM** | SQLAlchemy | 2.0+ |
+| **Container** | Docker | 24+ |
+| **Orchestration** | Kubernetes | 1.28+ |
+| **Monitoring** | Prometheus/Grafana | Latest |
+
+## 📋 Prerequisites
+
+- Python 3.11+
+- Docker & Docker Compose
+- PostgreSQL 15+
+- Redis 7+
+- Kubernetes cluster (for production)
 
 ## 🚀 Quick Start
 
-```bash
-# 1. Clone this template
-git clone https://github.com/coleam00/Context-Engineering-Intro.git
-cd Context-Engineering-Intro
-
-# 2. Set up your project rules (optional - template provided)
-# Edit CLAUDE.md to add your project-specific guidelines
-
-# 3. Add examples (highly recommended)
-# Place relevant code examples in the examples/ folder
-
-# 4. Create your initial feature request
-# Edit INITIAL.md with your feature requirements
-
-# 5. Generate a comprehensive PRP (Product Requirements Prompt)
-# In Claude Code, run:
-/generate-prp INITIAL.md
-
-# 6. Execute the PRP to implement your feature
-# In Claude Code, run:
-/execute-prp PRPs/your-feature-name.md
-```
-
-## 📚 Table of Contents
-
-- [What is Context Engineering?](#what-is-context-engineering)
-- [Template Structure](#template-structure)
-- [Step-by-Step Guide](#step-by-step-guide)
-- [Writing Effective INITIAL.md Files](#writing-effective-initialmd-files)
-- [The PRP Workflow](#the-prp-workflow)
-- [Using Examples Effectively](#using-examples-effectively)
-- [Best Practices](#best-practices)
-
-## What is Context Engineering?
-
-Context Engineering represents a paradigm shift from traditional prompt engineering:
-
-### Prompt Engineering vs Context Engineering
-
-**Prompt Engineering:**
-- Focuses on clever wording and specific phrasing
-- Limited to how you phrase a task
-- Like giving someone a sticky note
-
-**Context Engineering:**
-- A complete system for providing comprehensive context
-- Includes documentation, examples, rules, patterns, and validation
-- Like writing a full screenplay with all the details
-
-### Why Context Engineering Matters
-
-1. **Reduces AI Failures**: Most agent failures aren't model failures - they're context failures
-2. **Ensures Consistency**: AI follows your project patterns and conventions
-3. **Enables Complex Features**: AI can handle multi-step implementations with proper context
-4. **Self-Correcting**: Validation loops allow AI to fix its own mistakes
-
-## Template Structure
-
-```
-context-engineering-intro/
-├── .claude/
-│   ├── commands/
-│   │   ├── generate-prp.md    # Generates comprehensive PRPs
-│   │   └── execute-prp.md     # Executes PRPs to implement features
-│   └── settings.local.json    # Claude Code permissions
-├── PRPs/
-│   ├── templates/
-│   │   └── prp_base.md       # Base template for PRPs
-│   └── EXAMPLE_multi_agent_prp.md  # Example of a complete PRP
-├── examples/                  # Your code examples (critical!)
-├── CLAUDE.md                 # Global rules for AI assistant
-├── INITIAL.md               # Template for feature requests
-├── INITIAL_EXAMPLE.md       # Example feature request
-└── README.md                # This file
-```
-
-This template doesn't focus on RAG and tools with context engineering because I have a LOT more in store for that soon. ;)
-
-## Step-by-Step Guide
-
-### 1. Set Up Global Rules (CLAUDE.md)
-
-The `CLAUDE.md` file contains project-wide rules that the AI assistant will follow in every conversation. The template includes:
-
-- **Project awareness**: Reading planning docs, checking tasks
-- **Code structure**: File size limits, module organization
-- **Testing requirements**: Unit test patterns, coverage expectations
-- **Style conventions**: Language preferences, formatting rules
-- **Documentation standards**: Docstring formats, commenting practices
-
-**You can use the provided template as-is or customize it for your project.**
-
-### 2. Create Your Initial Feature Request
-
-Edit `INITIAL.md` to describe what you want to build:
-
-```markdown
-## FEATURE:
-[Describe what you want to build - be specific about functionality and requirements]
-
-## EXAMPLES:
-[List any example files in the examples/ folder and explain how they should be used]
-
-## DOCUMENTATION:
-[Include links to relevant documentation, APIs, or MCP server resources]
-
-## OTHER CONSIDERATIONS:
-[Mention any gotchas, specific requirements, or things AI assistants commonly miss]
-```
-
-**See `INITIAL_EXAMPLE.md` for a complete example.**
-
-### 3. Generate the PRP
-
-PRPs (Product Requirements Prompts) are comprehensive implementation blueprints that include:
-
-- Complete context and documentation
-- Implementation steps with validation
-- Error handling patterns
-- Test requirements
-
-They are similar to PRDs (Product Requirements Documents) but are crafted more specifically to instruct an AI coding assistant.
-
-Run in Claude Code:
-```bash
-/generate-prp INITIAL.md
-```
-
-**Note:** The slash commands are custom commands defined in `.claude/commands/`. You can view their implementation:
-- `.claude/commands/generate-prp.md` - See how it researches and creates PRPs
-- `.claude/commands/execute-prp.md` - See how it implements features from PRPs
-
-The `$ARGUMENTS` variable in these commands receives whatever you pass after the command name (e.g., `INITIAL.md` or `PRPs/your-feature.md`).
-
-This command will:
-1. Read your feature request
-2. Research the codebase for patterns
-3. Search for relevant documentation
-4. Create a comprehensive PRP in `PRPs/your-feature-name.md`
-
-### 4. Execute the PRP
-
-Once generated, execute the PRP to implement your feature:
+### 1. Clone the Repository
 
 ```bash
-/execute-prp PRPs/your-feature-name.md
+git clone https://github.com/your-org/kol-management-system.git
+cd kol-management-system
 ```
 
-The AI coding assistant will:
-1. Read all context from the PRP
-2. Create a detailed implementation plan
-3. Execute each step with validation
-4. Run tests and fix any issues
-5. Ensure all success criteria are met
+### 2. Environment Setup
 
-## Writing Effective INITIAL.md Files
+```bash
+# Copy environment configuration
+cp .env.example .env
 
-### Key Sections Explained
-
-**FEATURE**: Be specific and comprehensive
-- ❌ "Build a web scraper"
-- ✅ "Build an async web scraper using BeautifulSoup that extracts product data from e-commerce sites, handles rate limiting, and stores results in PostgreSQL"
-
-**EXAMPLES**: Leverage the examples/ folder
-- Place relevant code patterns in `examples/`
-- Reference specific files and patterns to follow
-- Explain what aspects should be mimicked
-
-**DOCUMENTATION**: Include all relevant resources
-- API documentation URLs
-- Library guides
-- MCP server documentation
-- Database schemas
-
-**OTHER CONSIDERATIONS**: Capture important details
-- Authentication requirements
-- Rate limits or quotas
-- Common pitfalls
-- Performance requirements
-
-## The PRP Workflow
-
-### How /generate-prp Works
-
-The command follows this process:
-
-1. **Research Phase**
-   - Analyzes your codebase for patterns
-   - Searches for similar implementations
-   - Identifies conventions to follow
-
-2. **Documentation Gathering**
-   - Fetches relevant API docs
-   - Includes library documentation
-   - Adds gotchas and quirks
-
-3. **Blueprint Creation**
-   - Creates step-by-step implementation plan
-   - Includes validation gates
-   - Adds test requirements
-
-4. **Quality Check**
-   - Scores confidence level (1-10)
-   - Ensures all context is included
-
-### How /execute-prp Works
-
-1. **Load Context**: Reads the entire PRP
-2. **Plan**: Creates detailed task list using TodoWrite
-3. **Execute**: Implements each component
-4. **Validate**: Runs tests and linting
-5. **Iterate**: Fixes any issues found
-6. **Complete**: Ensures all requirements met
-
-See `PRPs/EXAMPLE_multi_agent_prp.md` for a complete example of what gets generated.
-
-## Using Examples Effectively
-
-The `examples/` folder is **critical** for success. AI coding assistants perform much better when they can see patterns to follow.
-
-### What to Include in Examples
-
-1. **Code Structure Patterns**
-   - How you organize modules
-   - Import conventions
-   - Class/function patterns
-
-2. **Testing Patterns**
-   - Test file structure
-   - Mocking approaches
-   - Assertion styles
-
-3. **Integration Patterns**
-   - API client implementations
-   - Database connections
-   - Authentication flows
-
-4. **CLI Patterns**
-   - Argument parsing
-   - Output formatting
-   - Error handling
-
-### Example Structure
-
-```
-examples/
-├── README.md           # Explains what each example demonstrates
-├── cli.py             # CLI implementation pattern
-├── agent/             # Agent architecture patterns
-│   ├── agent.py      # Agent creation pattern
-│   ├── tools.py      # Tool implementation pattern
-│   └── providers.py  # Multi-provider pattern
-└── tests/            # Testing patterns
-    ├── test_agent.py # Unit test patterns
-    └── conftest.py   # Pytest configuration
+# Edit configuration
+vim .env
 ```
 
-## Best Practices
+### 3. Development Setup
 
-### 1. Be Explicit in INITIAL.md
-- Don't assume the AI knows your preferences
-- Include specific requirements and constraints
-- Reference examples liberally
+```bash
+# Create virtual environment
+python -m venv venv_linux
+source venv_linux/bin/activate  # Linux/Mac
+# or
+venv_linux\Scripts\activate  # Windows
 
-### 2. Provide Comprehensive Examples
-- More examples = better implementations
-- Show both what to do AND what not to do
-- Include error handling patterns
+# Install dependencies
+pip install -r requirements.txt
 
-### 3. Use Validation Gates
-- PRPs include test commands that must pass
-- AI will iterate until all validations succeed
-- This ensures working code on first try
+# Install development dependencies
+pip install -r requirements-dev.txt
+```
 
-### 4. Leverage Documentation
-- Include official API docs
-- Add MCP server resources
-- Reference specific documentation sections
+### 4. Database Setup
 
-### 5. Customize CLAUDE.md
-- Add your conventions
-- Include project-specific rules
-- Define coding standards
+```bash
+# Start PostgreSQL and Redis with Docker
+docker-compose up -d postgres redis
 
-## Resources
+# Run database migrations
+python -m alembic upgrade head
 
-- [Claude Code Documentation](https://docs.anthropic.com/en/docs/claude-code)
-- [Context Engineering Best Practices](https://www.philschmid.de/context-engineering)
+# Seed initial data (optional)
+python scripts/seed_data.py
+```
+
+### 5. Start the Application
+
+```bash
+# Start the FastAPI application
+python -m uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+
+# In another terminal, start Celery workers
+celery -A app.tasks.celery_app worker --loglevel=info
+
+# In another terminal, start Celery beat (scheduler)
+celery -A app.tasks.celery_app beat --loglevel=info
+```
+
+### 6. Access the Application
+
+- **API Documentation**: http://localhost:8000/docs
+- **Health Check**: http://localhost:8000/health
+- **API Info**: http://localhost:8000/info
+
+## 🐳 Docker Deployment
+
+### Development
+
+```bash
+# Build and run with Docker Compose
+docker-compose -f docker-compose.dev.yml up --build
+
+# Run in background
+docker-compose -f docker-compose.dev.yml up -d
+```
+
+### Production
+
+```bash
+# Build production image
+docker build -f Dockerfile -t kolsystem/api:latest .
+
+# Run with production compose file
+docker-compose -f docker-compose.yml up -d
+```
+
+## ☸️ Kubernetes Deployment
+
+### Prerequisites
+
+```bash
+# Install required tools
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.0/cert-manager.yaml
+
+# Create namespace
+kubectl apply -f k8s/namespace.yaml
+```
+
+### Deploy to Production
+
+```bash
+# Deploy with automated script
+./deploy/deploy.sh production
+
+# Or deploy manually
+kubectl apply -f k8s/configmap.yaml
+kubectl apply -f k8s/secrets.yaml
+kubectl apply -f k8s/postgres.yaml
+kubectl apply -f k8s/redis.yaml
+kubectl apply -f k8s/api-deployment.yaml
+kubectl apply -f k8s/celery-deployment.yaml
+kubectl apply -f k8s/monitoring.yaml
+kubectl apply -f k8s/ingress.yaml
+```
+
+### Deploy to Staging
+
+```bash
+./deploy/deploy.sh staging
+```
+
+## 🧪 Testing
+
+### Run Unit Tests
+
+```bash
+# Install test dependencies
+pip install -r requirements-dev.txt
+
+# Run basic tests
+pytest tests/ -v
+
+# Run with coverage
+pytest tests/ --cov=app --cov-report=html
+
+# Run comprehensive test suite
+python run_comprehensive_tests.py
+```
+
+### Run Integration Tests
+
+```bash
+# Run integration tests
+pytest tests/test_integration/ -v -m integration
+
+# Run API tests
+pytest tests/test_api/ -v
+```
+
+### Run Performance Tests
+
+```bash
+# Run performance tests
+python run_comprehensive_tests.py --include-performance
+
+# Run load tests
+pytest tests/test_performance/ -v -m performance
+```
+
+## 📊 Monitoring
+
+### Metrics & Dashboards
+
+- **Prometheus**: http://localhost:9090 (if deployed locally)
+- **Grafana**: http://localhost:3000 (admin/admin)
+- **Flower (Celery)**: http://localhost:5555
+
+### Health Monitoring
+
+```bash
+# Check application health
+curl http://localhost:8000/health
+
+# Detailed health check
+curl http://localhost:8000/health/detailed
+
+# Check Kubernetes pod status
+kubectl get pods -n kol-system
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Key environment variables (see `.env.example` for complete list):
+
+```bash
+# Application
+APP_NAME="KOL Influencer Management System"
+ENVIRONMENT=production
+DEBUG=false
+
+# Database
+DATABASE_URL=postgresql+asyncpg://user:password@localhost:5432/koldb
+
+# Redis
+REDIS_URL=redis://localhost:6379/0
+
+# API Keys
+INSTAGRAM_ACCESS_TOKEN=your_instagram_token
+YOUTUBE_API_KEY=your_youtube_key
+TWITTER_BEARER_TOKEN=your_twitter_token
+
+# Communication
+SENDGRID_API_KEY=your_sendgrid_key
+DISCORD_BOT_TOKEN=your_discord_token
+```
+
+### Social Media API Setup
+
+1. **Instagram Graph API**:
+   - Create Facebook App
+   - Add Instagram Graph API product
+   - Generate access token
+
+2. **YouTube Data API v3**:
+   - Enable YouTube Data API in Google Cloud Console
+   - Create API key
+
+3. **Twitter API v2**:
+   - Apply for Twitter Developer account
+   - Create app and generate bearer token
+
+For detailed setup instructions, see [API_SETUP.md](docs/API_SETUP.md).
+
+## 📚 Documentation
+
+- **[API Documentation](docs/API_DOCUMENTATION.md)**: Complete API reference
+- **[Architecture Guide](docs/ARCHITECTURE.md)**: System architecture and design
+- **[Deployment Guide](docs/DEPLOYMENT.md)**: Production deployment instructions
+- **[Contributing Guidelines](CONTRIBUTING.md)**: How to contribute to the project
+- **[Security Guidelines](docs/SECURITY.md)**: Security best practices
+
+## 🔐 Security
+
+### Authentication
+
+The system uses JWT-based authentication with the following features:
+
+- Role-based access control (RBAC)
+- Token refresh mechanism
+- Multi-factor authentication support
+- Session management
+
+### Security Features
+
+- Input validation with Pydantic
+- SQL injection protection via SQLAlchemy ORM
+- Rate limiting to prevent abuse
+- HTTPS/TLS encryption
+- Security headers implementation
+- GDPR compliance features
+
+### Security Reporting
+
+Report security vulnerabilities to security@kolsystem.com
+
+## 📈 Performance
+
+### Benchmarks
+
+- **API Response Time**: < 200ms (95th percentile)
+- **Throughput**: 1000+ requests/minute per pod
+- **Database**: < 50ms average query time
+- **Background Tasks**: < 30s content detection
+- **Availability**: 99.9% uptime SLA
+
+### Optimization
+
+- Async/await for high concurrency
+- Redis caching for frequent queries
+- Database connection pooling
+- Celery for background processing
+- CDN for static assets
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+### Development Workflow
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Run the test suite
+6. Submit a pull request
+
+### Code Standards
+
+- Follow PEP 8 style guidelines
+- Use type hints for all functions
+- Write comprehensive docstrings
+- Maintain test coverage > 80%
+- Use conventional commit messages
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+### Getting Help
+
+- **Documentation**: [https://docs.kolsystem.com](https://docs.kolsystem.com)
+- **Issues**: [GitHub Issues](https://github.com/your-org/kol-management-system/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/your-org/kol-management-system/discussions)
+- **Email**: support@kolsystem.com
+
+### Enterprise Support
+
+For enterprise support, custom integrations, or consulting services, contact enterprise@kolsystem.com.
+
+## 🗺️ Roadmap
+
+### Version 1.1 (Q2 2024)
+- [ ] GraphQL API support
+- [ ] Advanced AI content analysis
+- [ ] Mobile SDK release
+- [ ] Multi-language support
+
+### Version 1.2 (Q3 2024)
+- [ ] Real-time collaboration features
+- [ ] Advanced reporting with ML insights
+- [ ] Workflow automation
+- [ ] Enterprise SSO integration
+
+### Version 2.0 (Q4 2024)
+- [ ] Microservices architecture
+- [ ] Event-driven real-time updates
+- [ ] Advanced ML-powered recommendations
+- [ ] Global multi-region deployment
+
+## 🙏 Acknowledgments
+
+- FastAPI team for the excellent web framework
+- SQLAlchemy team for the powerful ORM
+- Celery team for reliable task processing
+- All contributors and beta testers
+
+---
+
+**Built with ❤️ by the KOL System Team**
+
+For more information, visit [https://kolsystem.com](https://kolsystem.com)

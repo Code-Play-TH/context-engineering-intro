@@ -1,0 +1,35 @@
+{
+  "name": "kols-project",
+  "version": "1.0.0",
+  "description": "A comprehensive platform for managing Key Opinion Leaders (KOLs), campaigns, content monitoring, and analytics with advanced AI-powered insights and multi-platform social media integration.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "example": "examples",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "npx playwright test",
+    "test:headed": "npx playwright test --headed",
+    "test:debug": "npx playwright test --debug",
+    "test:services": "npx playwright test docker-services.e2e.js",
+    "test:health": "npx playwright test health.e2e.js",
+    "test:auth": "npx playwright test auth.e2e.js",
+    "test:frontend": "npx playwright test frontend.e2e.js",
+    "test:frontend-ui": "npx playwright test frontend-ui.e2e.js",
+    "test:frontend-integration": "npx playwright test frontend-integration.e2e.js",
+    "test:all-frontend": "npx playwright test frontend*.e2e.js",
+    "test:frontend-quick": "npx playwright test frontend-quick.e2e.js --project=chromium",
+    "test:report": "npx playwright show-report"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.55.1"
+  },
+  "dependencies": {
+    "fs-extra": "^11.3.2",
+    "xlsx": "^0.18.5"
+  }
+}

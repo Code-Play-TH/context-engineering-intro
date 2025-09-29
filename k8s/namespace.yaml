@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kol-system
+  labels:
+    name: kol-system
+    environment: production
+    app: kol-management-system
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kol-system-staging
+  labels:
+    name: kol-system-staging
+    environment: staging
+    app: kol-management-system

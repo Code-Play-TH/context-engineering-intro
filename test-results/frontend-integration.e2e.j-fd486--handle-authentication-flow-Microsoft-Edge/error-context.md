@@ -1,0 +1,43 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - generic [ref=e6]: KOL
+      - heading "Welcome Back" [level=1] [ref=e7]
+      - paragraph [ref=e8]: Sign in to your KOL Management account
+    - generic [ref=e10]:
+      - generic [ref=e11]:
+        - generic [ref=e12]: Sign In
+        - generic [ref=e13]: Enter your credentials to access your account
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - generic [ref=e17]: Email Address
+            - textbox "Email Address" [ref=e18]
+          - generic [ref=e19]:
+            - generic [ref=e20]: Password
+            - generic [ref=e21]:
+              - textbox "Password" [ref=e22]
+              - button [ref=e23]
+          - generic [ref=e26]:
+            - generic [ref=e27]:
+              - checkbox "Remember me" [ref=e28]
+              - checkbox
+              - generic [ref=e29]: Remember me
+            - link "Forgot password?" [ref=e30] [cursor=pointer]:
+              - /url: "#"
+          - button "Sign In" [ref=e31]
+        - paragraph [ref=e33]:
+          - text: Don't have an account?
+          - link "Contact your administrator" [ref=e34] [cursor=pointer]:
+            - /url: "#"
+  - generic [ref=e35]:
+    - img [ref=e37]
+    - button "Open Tanstack query devtools" [ref=e85] [cursor=pointer]:
+      - img [ref=e86] [cursor=pointer]
+  - button "Open Next.js Dev Tools" [ref=e139] [cursor=pointer]:
+    - img [ref=e140] [cursor=pointer]
+  - alert [ref=e143]
+```

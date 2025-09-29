@@ -1,0 +1,824 @@
+{
+  "reportInfo": {
+    "title": "KOL Performance Report",
+    "period": "Generated on September 29, 2025",
+    "totalKOLs": 168,
+    "reportVersion": "1.0.0",
+    "generatedAt": "2025-09-29T06:54:09.879Z"
+  },
+  "analytics": {
+    "executiveSummary": {
+      "overview": {
+        "totalKOLs": 168,
+        "totalReach": 129274946,
+        "avgEngagement": "5.11%",
+        "topTierInfluencers": 38,
+        "activeCampaigns": 134
+      },
+      "keyMetrics": {
+        "awareness": {
+          "metric": "Total Reach",
+          "value": "129.3M",
+          "change": "+12.5%",
+          "status": "positive"
+        },
+        "consideration": {
+          "metric": "Avg Engagement",
+          "value": "5.11%",
+          "change": "+3.2%",
+          "status": "positive"
+        },
+        "conversion": {
+          "metric": "Active KOLs",
+          "value": "134",
+          "change": "+8.7%",
+          "status": "positive"
+        }
+      },
+      "insights": [
+        "Strong performance across 24 categories",
+        "92 TikTok influencers showing highest engagement",
+        "Macro tier represents 33% of portfolio",
+        "IT and Lifestyle categories have premium cost-per-engagement ratios"
+      ]
+    },
+    "platformBreakdown": {
+      "TikTok": {
+        "count": 92,
+        "totalFollowers": 83378071,
+        "avgEngagement": "4.9",
+        "tiers": {
+          "MEGA": 23,
+          "MACRO": 34,
+          "MICRO": 29,
+          "NANO": 6
+        },
+        "avgFollowers": 906283
+      },
+      "Line": {
+        "count": 47,
+        "totalFollowers": 32409371,
+        "avgEngagement": "5.3",
+        "tiers": {
+          "MEGA": 11,
+          "MACRO": 10,
+          "MICRO": 10,
+          "NANO": 16
+        },
+        "avgFollowers": 689561
+      },
+      "Instagram": {
+        "count": 25,
+        "totalFollowers": 12282835,
+        "avgEngagement": "5.3",
+        "tiers": {
+          "MEGA": 4,
+          "MACRO": 9,
+          "MICRO": 11,
+          "NANO": 1
+        },
+        "avgFollowers": 491313
+      },
+      "YouTube": {
+        "count": 2,
+        "totalFollowers": 692400,
+        "avgEngagement": "6.3",
+        "tiers": {
+          "MEGA": 0,
+          "MACRO": 1,
+          "MICRO": 1,
+          "NANO": 0
+        },
+        "avgFollowers": 346200
+      },
+      "Facebook": {
+        "count": 2,
+        "totalFollowers": 512269,
+        "avgEngagement": "6.5",
+        "tiers": {
+          "MEGA": 0,
+          "MACRO": 1,
+          "MICRO": 0,
+          "NANO": 1
+        },
+        "avgFollowers": 256135
+      }
+    },
+    "tierAnalysis": {
+      "MEGA": {
+        "count": 38,
+        "percentage": 23,
+        "avgFollowers": 2760526,
+        "avgEngagement": "3.2",
+        "platforms": {
+          "TikTok": 23,
+          "Line": 11,
+          "Instagram": 4
+        }
+      },
+      "MACRO": {
+        "count": 55,
+        "percentage": 33,
+        "avgFollowers": 400165,
+        "avgEngagement": "4.5",
+        "platforms": {
+          "TikTok": 34,
+          "Line": 10,
+          "Instagram": 9,
+          "YouTube": 1,
+          "Facebook": 1
+        }
+      },
+      "MICRO": {
+        "count": 51,
+        "percentage": 30,
+        "avgFollowers": 44290,
+        "avgEngagement": "6.0",
+        "platforms": {
+          "TikTok": 29,
+          "Line": 10,
+          "Instagram": 11,
+          "YouTube": 1
+        }
+      },
+      "NANO": {
+        "count": 24,
+        "percentage": 14,
+        "avgFollowers": 4460,
+        "avgEngagement": "7.4",
+        "platforms": {
+          "Instagram": 1,
+          "Line": 16,
+          "Facebook": 1,
+          "TikTok": 6
+        }
+      }
+    },
+    "categoryPerformance": {
+      "Lifestyle": {
+        "count": 39,
+        "totalFollowers": 37822510,
+        "avgEngagement": "4.8",
+        "topTiers": 20,
+        "platforms": {
+          "TikTok": 27,
+          "Line": 6,
+          "Instagram": 6
+        },
+        "avgFollowers": 969808,
+        "performanceScore": 25
+      },
+      "Lifestyle, Beauty": {
+        "count": 11,
+        "totalFollowers": 8634900,
+        "avgEngagement": "4.4",
+        "topTiers": 10,
+        "platforms": {
+          "TikTok": 5,
+          "Line": 1,
+          "Instagram": 5
+        },
+        "avgFollowers": 784991,
+        "performanceScore": 40
+      },
+      "Lifestyle, Music": {
+        "count": 1,
+        "totalFollowers": 1700000,
+        "avgEngagement": "3.9",
+        "topTiers": 1,
+        "platforms": {
+          "TikTok": 1
+        },
+        "avgFollowers": 1700000,
+        "performanceScore": 39
+      },
+      "Lifestyle, Family": {
+        "count": 1,
+        "totalFollowers": 16800000,
+        "avgEngagement": "3.3",
+        "topTiers": 1,
+        "platforms": {
+          "TikTok": 1
+        },
+        "avgFollowers": 16800000,
+        "performanceScore": 33
+      },
+      "Lifestyle, Review Food": {
+        "count": 1,
+        "totalFollowers": 2200000,
+        "avgEngagement": "2.6",
+        "topTiers": 1,
+        "platforms": {
+          "Line": 1
+        },
+        "avgFollowers": 2200000,
+        "performanceScore": 26
+      },
+      "Lifestyle, Healthy": {
+        "count": 1,
+        "totalFollowers": 637500,
+        "avgEngagement": "4.1",
+        "topTiers": 1,
+        "platforms": {
+          "Line": 1
+        },
+        "avgFollowers": 637500,
+        "performanceScore": 41
+      },
+      "Lifestyle, mon": {
+        "count": 5,
+        "totalFollowers": 952500,
+        "avgEngagement": "4.9",
+        "topTiers": 3,
+        "platforms": {
+          "TikTok": 4,
+          "Instagram": 1
+        },
+        "avgFollowers": 190500,
+        "performanceScore": 29
+      },
+      "Lifestyle, Travel": {
+        "count": 1,
+        "totalFollowers": 42300,
+        "avgEngagement": "7.9",
+        "topTiers": 0,
+        "platforms": {
+          "Line": 1
+        },
+        "avgFollowers": 42300,
+        "performanceScore": 0
+      },
+      "Lifestyle, POV": {
+        "count": 3,
+        "totalFollowers": 297500,
+        "avgEngagement": "4.6",
+        "topTiers": 1,
+        "platforms": {
+          "TikTok": 1,
+          "Line": 1,
+          "Instagram": 1
+        },
+        "avgFollowers": 99167,
+        "performanceScore": 15
+      },
+      "Healthy": {
+        "count": 7,
+        "totalFollowers": 1734800,
+        "avgEngagement": "4.7",
+        "topTiers": 6,
+        "platforms": {
+          "TikTok": 5,
+          "Instagram": 1,
+          "Line": 1
+        },
+        "avgFollowers": 247829,
+        "performanceScore": 40
+      },
+      "Food Cooking": {
+        "count": 9,
+        "totalFollowers": 23238600,
+        "avgEngagement": "4.2",
+        "topTiers": 6,
+        "platforms": {
+          "Line": 4,
+          "TikTok": 4,
+          "Instagram": 1
+        },
+        "avgFollowers": 2582067,
+        "performanceScore": 28
+      },
+      "Review Food": {
+        "count": 15,
+        "totalFollowers": 11343600,
+        "avgEngagement": "4.2",
+        "topTiers": 14,
+        "platforms": {
+          "TikTok": 13,
+          "YouTube": 1,
+          "Instagram": 1
+        },
+        "avgFollowers": 756240,
+        "performanceScore": 39
+      },
+      "Food Cooking, Review Food": {
+        "count": 6,
+        "totalFollowers": 5499600,
+        "avgEngagement": "4.3",
+        "topTiers": 5,
+        "platforms": {
+          "Line": 4,
+          "TikTok": 2
+        },
+        "avgFollowers": 916600,
+        "performanceScore": 36
+      },
+      "Food Cooking, Lifestyle": {
+        "count": 1,
+        "totalFollowers": 1900000,
+        "avgEngagement": "2.4",
+        "topTiers": 1,
+        "platforms": {
+          "TikTok": 1
+        },
+        "avgFollowers": 1900000,
+        "performanceScore": 24
+      },
+      "Travel": {
+        "count": 6,
+        "totalFollowers": 4676400,
+        "avgEngagement": "4.2",
+        "topTiers": 6,
+        "platforms": {
+          "Instagram": 1,
+          "TikTok": 5
+        },
+        "avgFollowers": 779400,
+        "performanceScore": 42
+      },
+      "Travel, Lifestyle": {
+        "count": 1,
+        "totalFollowers": 42300,
+        "avgEngagement": "4.2",
+        "topTiers": 0,
+        "platforms": {
+          "Line": 1
+        },
+        "avgFollowers": 42300,
+        "performanceScore": 0
+      },
+      "Travel, Food Cooking": {
+        "count": 1,
+        "totalFollowers": 73000,
+        "avgEngagement": "7.6",
+        "topTiers": 0,
+        "platforms": {
+          "TikTok": 1
+        },
+        "avgFollowers": 73000,
+        "performanceScore": 0
+      },
+      "Cat": {
+        "count": 42,
+        "totalFollowers": 2337736,
+        "avgEngagement": "6.6",
+        "topTiers": 8,
+        "platforms": {
+          "Facebook": 2,
+          "TikTok": 11,
+          "Line": 24,
+          "Instagram": 4,
+          "YouTube": 1
+        },
+        "avgFollowers": 55660,
+        "performanceScore": 13
+      },
+      "Veterinarian": {
+        "count": 3,
+        "totalFollowers": 76100,
+        "avgEngagement": "6.3",
+        "topTiers": 0,
+        "platforms": {
+          "TikTok": 1,
+          "Instagram": 2
+        },
+        "avgFollowers": 25367,
+        "performanceScore": 0
+      },
+      "Lifestyle, POV, Family": {
+        "count": 1,
+        "totalFollowers": 1600000,
+        "avgEngagement": "2.9",
+        "topTiers": 1,
+        "platforms": {
+          "Line": 1
+        },
+        "avgFollowers": 1600000,
+        "performanceScore": 29
+      },
+      "POV": {
+        "count": 3,
+        "totalFollowers": 5157300,
+        "avgEngagement": "4.6",
+        "topTiers": 2,
+        "platforms": {
+          "Instagram": 2,
+          "TikTok": 1
+        },
+        "avgFollowers": 1719100,
+        "performanceScore": 31
+      },
+      "POV, Lifestyle": {
+        "count": 3,
+        "totalFollowers": 1006500,
+        "avgEngagement": "4.5",
+        "topTiers": 2,
+        "platforms": {
+          "TikTok": 3
+        },
+        "avgFollowers": 335500,
+        "performanceScore": 30
+      },
+      "IT": {
+        "count": 6,
+        "totalFollowers": 1470400,
+        "avgEngagement": "5.2",
+        "topTiers": 4,
+        "platforms": {
+          "TikTok": 5,
+          "Line": 1
+        },
+        "avgFollowers": 245067,
+        "performanceScore": 35
+      },
+      "IT, Lifestyle": {
+        "count": 1,
+        "totalFollowers": 31400,
+        "avgEngagement": "6.3",
+        "topTiers": 0,
+        "platforms": {
+          "TikTok": 1
+        },
+        "avgFollowers": 31400,
+        "performanceScore": 0
+      }
+    },
+    "engagementAnalysis": {
+      "distribution": {
+        "High (>6%)": 42,
+        "Medium (3-6%)": 111,
+        "Low (<3%)": 15
+      },
+      "topPerformers": [
+        {
+          "name": "jumpook__",
+          "platform": "Instagram",
+          "tier": "NANO",
+          "engagement": "10.8",
+          "followers": 2135
+        },
+        {
+          "name": "chingelbello",
+          "platform": "Line",
+          "tier": "NANO",
+          "engagement": "10.6",
+          "followers": 1848
+        },
+        {
+          "name": "mmilkklimm",
+          "platform": "TikTok",
+          "tier": "NANO",
+          "engagement": "10.5",
+          "followers": 1797
+        },
+        {
+          "name": "candy1619",
+          "platform": "Line",
+          "tier": "NANO",
+          "engagement": "9.4",
+          "followers": 8054
+        },
+        {
+          "name": "yoongi_dacat",
+          "platform": "Facebook",
+          "tier": "NANO",
+          "engagement": "9.1",
+          "followers": 3569
+        },
+        {
+          "name": "pixieploy",
+          "platform": "Line",
+          "tier": "NANO",
+          "engagement": "8.7",
+          "followers": 1297
+        },
+        {
+          "name": "ngabngab_thecat",
+          "platform": "Line",
+          "tier": "NANO",
+          "engagement": "8.7",
+          "followers": 2147
+        },
+        {
+          "name": "miltonkubpom",
+          "platform": "Line",
+          "tier": "NANO",
+          "engagement": "8.5",
+          "followers": 2439
+        },
+        {
+          "name": "happy.jerry",
+          "platform": "TikTok",
+          "tier": "NANO",
+          "engagement": "8.4",
+          "followers": 8022
+        },
+        {
+          "name": "tid.ang_family",
+          "platform": "Line",
+          "tier": "NANO",
+          "engagement": "8.2",
+          "followers": 2200
+        }
+      ]
+    },
+    "costAnalysis": {
+      "totalWithPricing": 92,
+      "averageCostRange": "5,000 - 25,000 THB",
+      "costByTier": {
+        "MEGA": "50,000 - 120,000 THB",
+        "MACRO": "4,500 - 25,000 THB",
+        "MICRO": "2,500 - 6,000 THB"
+      },
+      "costEfficiency": {
+        "bestValue": "Micro tier - highest engagement per cost",
+        "premium": "Mega tier - maximum reach potential"
+      }
+    },
+    "recommendations": [
+      {
+        "category": "Portfolio Optimization",
+        "recommendation": "Increase Micro tier allocation",
+        "reasoning": "Higher engagement rates with lower costs",
+        "impact": "Medium",
+        "timeline": "1-2 months"
+      },
+      {
+        "category": "Platform Strategy",
+        "recommendation": "Focus on TikTok expansion",
+        "reasoning": "Highest growth potential and engagement",
+        "impact": "High",
+        "timeline": "2-3 months"
+      },
+      {
+        "category": "Category Development",
+        "recommendation": "Expand IT and Lifestyle categories",
+        "reasoning": "Strong performance metrics and market demand",
+        "impact": "Medium",
+        "timeline": "1-3 months"
+      },
+      {
+        "category": "Budget Allocation",
+        "recommendation": "Diversify tier investment",
+        "reasoning": "70% Micro, 25% Macro, 5% Mega for optimal ROI",
+        "impact": "High",
+        "timeline": "Immediate"
+      }
+    ],
+    "competitorInsights": {
+      "marketPosition": "Strong mid-tier presence",
+      "competitiveAdvantages": [
+        "Diverse category coverage",
+        "Strong TikTok network",
+        "Cost-effective Micro tier portfolio"
+      ],
+      "gapAnalysis": [
+        "Limited YouTube presence",
+        "Need more Mega tier influencers",
+        "Underdeveloped international reach"
+      ],
+      "opportunities": [
+        "Expand into gaming/tech categories",
+        "Develop cross-platform campaigns",
+        "Build long-term partnerships"
+      ]
+    },
+    "campaignSuggestions": [
+      {
+        "campaignType": "Lifestyle x Tech",
+        "targetAudience": "18-35 urban professionals",
+        "recommendedKOLs": 5,
+        "estimatedReach": "500K-1M",
+        "budget": "50,000-100,000 THB",
+        "expectedROI": "250-400%"
+      },
+      {
+        "campaignType": "Food & Travel",
+        "targetAudience": "25-45 middle income",
+        "recommendedKOLs": 8,
+        "estimatedReach": "800K-1.5M",
+        "budget": "80,000-150,000 THB",
+        "expectedROI": "200-350%"
+      },
+      {
+        "campaignType": "Health & Wellness",
+        "targetAudience": "20-50 health conscious",
+        "recommendedKOLs": 6,
+        "estimatedReach": "400K-800K",
+        "budget": "40,000-80,000 THB",
+        "expectedROI": "300-500%"
+      }
+    ]
+  },
+  "rawData": {
+    "totalStats": {
+      "totalKOLs": 168,
+      "byTier": {
+        "MEGA": 38,
+        "MACRO": 55,
+        "MICRO": 51,
+        "NANO": 24
+      },
+      "byCategory": {
+        "Lifestyle": 39,
+        "Lifestyle, Beauty": 11,
+        "Lifestyle, Music": 1,
+        "Lifestyle, Family": 1,
+        "Lifestyle, Review Food": 1,
+        "Lifestyle, Healthy": 1,
+        "Lifestyle, mon": 5,
+        "Lifestyle, Travel": 1,
+        "Lifestyle, POV": 3,
+        "Healthy": 7,
+        "Food Cooking": 9,
+        "Review Food": 15,
+        "Food Cooking, Review Food": 6,
+        "Food Cooking, Lifestyle": 1,
+        "Travel": 6,
+        "Travel, Lifestyle": 1,
+        "Travel, Food Cooking": 1,
+        "Cat": 42,
+        "Veterinarian": 3,
+        "Lifestyle, POV, Family": 1,
+        "POV": 3,
+        "POV, Lifestyle": 3,
+        "IT": 6,
+        "IT, Lifestyle": 1
+      },
+      "byPlatform": {
+        "TikTok": 92,
+        "Line": 47,
+        "Instagram": 25,
+        "YouTube": 2,
+        "Facebook": 2
+      },
+      "byStatus": {
+        "Active": 149,
+        "Pending": 19
+      },
+      "totalFollowers": 129274946,
+      "avgEngagement": "5.11"
+    },
+    "sampleKOLs": [
+      {
+        "id": "Cat_22",
+        "name": "jumpook__",
+        "tier": "NANO",
+        "category": "Cat",
+        "platform": "Instagram",
+        "followers": 2135,
+        "contact": "TT : jumpook__\n062-218-6773",
+        "cost": "N/A",
+        "engagement": "10.8",
+        "status": "Active",
+        "lastActive": "2025-09-07",
+        "avatar": "😻",
+        "createdAt": "2025-09-29T06:39:55.900Z",
+        "updatedAt": "2025-09-29T06:39:55.900Z"
+      },
+      {
+        "id": "Cat_42",
+        "name": "chingelbello",
+        "tier": "NANO",
+        "category": "Cat",
+        "platform": "Line",
+        "followers": 1848,
+        "contact": "Line : chingelbello\n080-296-6293",
+        "cost": "N/A",
+        "engagement": "10.6",
+        "status": "Active",
+        "lastActive": "2025-09-10",
+        "avatar": "😹",
+        "createdAt": "2025-09-29T06:39:55.900Z",
+        "updatedAt": "2025-09-29T06:39:55.900Z"
+      },
+      {
+        "id": "Cat_28",
+        "name": "mmilkklimm",
+        "tier": "NANO",
+        "category": "Cat",
+        "platform": "TikTok",
+        "followers": 1797,
+        "contact": "TT : mmilkklimm\n061-7178-501",
+        "cost": "N/A",
+        "engagement": "10.5",
+        "status": "Active",
+        "lastActive": "2025-09-14",
+        "avatar": "😺",
+        "createdAt": "2025-09-29T06:39:55.900Z",
+        "updatedAt": "2025-09-29T06:39:55.900Z"
+      },
+      {
+        "id": "Cat_25",
+        "name": "candy1619",
+        "tier": "NANO",
+        "category": "Cat",
+        "platform": "Line",
+        "followers": 8054,
+        "contact": "Line : brownie.k55\n065-294-4599",
+        "cost": "N/A",
+        "engagement": "9.4",
+        "status": "Active",
+        "lastActive": "2025-09-23",
+        "avatar": "😻",
+        "createdAt": "2025-09-29T06:39:55.900Z",
+        "updatedAt": "2025-09-29T06:39:55.900Z"
+      },
+      {
+        "id": "Cat_26",
+        "name": "yoongi_dacat",
+        "tier": "NANO",
+        "category": "Cat",
+        "platform": "Facebook",
+        "followers": 3569,
+        "contact": "FB : yoongi_thecat\n083-873-4823",
+        "cost": "N/A",
+        "engagement": "9.1",
+        "status": "Active",
+        "lastActive": "2025-09-19",
+        "avatar": "🐱",
+        "createdAt": "2025-09-29T06:39:55.900Z",
+        "updatedAt": "2025-09-29T06:39:55.900Z"
+      },
+      {
+        "id": "Cat_23",
+        "name": "pixieploy",
+        "tier": "NANO",
+        "category": "Cat",
+        "platform": "Line",
+        "followers": 1297,
+        "contact": "Line : pixieployz\n086-403-6546",
+        "cost": "N/A",
+        "engagement": "8.7",
+        "status": "Active",
+        "lastActive": "2025-09-03",
+        "avatar": "😺",
+        "createdAt": "2025-09-29T06:39:55.900Z",
+        "updatedAt": "2025-09-29T06:39:55.900Z"
+      },
+      {
+        "id": "Cat_24",
+        "name": "ngabngab_thecat",
+        "tier": "NANO",
+        "category": "Cat",
+        "platform": "Line",
+        "followers": 2147,
+        "contact": "Line : porntipz\n095-626-4651",
+        "cost": "N/A",
+        "engagement": "8.7",
+        "status": "Active",
+        "lastActive": "2025-09-28",
+        "avatar": "😺",
+        "createdAt": "2025-09-29T06:39:55.900Z",
+        "updatedAt": "2025-09-29T06:39:55.900Z"
+      },
+      {
+        "id": "Cat_37",
+        "name": "miltonkubpom",
+        "tier": "NANO",
+        "category": "Cat",
+        "platform": "Line",
+        "followers": 2439,
+        "contact": "Line : miltonnnn.n\n085-168-5598",
+        "cost": "N/A",
+        "engagement": "8.5",
+        "status": "Active",
+        "lastActive": "2025-09-20",
+        "avatar": "🐱",
+        "createdAt": "2025-09-29T06:39:55.900Z",
+        "updatedAt": "2025-09-29T06:39:55.900Z"
+      },
+      {
+        "id": "Cat_27",
+        "name": "happy.jerry",
+        "tier": "NANO",
+        "category": "Cat",
+        "platform": "TikTok",
+        "followers": 8022,
+        "contact": "TT : happy.jerry\n091-049-4015",
+        "cost": "N/A",
+        "engagement": "8.4",
+        "status": "Active",
+        "lastActive": "2025-09-02",
+        "avatar": "😺",
+        "createdAt": "2025-09-29T06:39:55.900Z",
+        "updatedAt": "2025-09-29T06:39:55.900Z"
+      },
+      {
+        "id": "Cat_43",
+        "name": "tid.ang_family",
+        "tier": "NANO",
+        "category": "Cat",
+        "platform": "Line",
+        "followers": 2200,
+        "contact": "Line : tid.ang_family\n092-703-7733",
+        "cost": "N/A",
+        "engagement": "8.2",
+        "status": "Active",
+        "lastActive": "2025-09-03",
+        "avatar": "😸",
+        "createdAt": "2025-09-29T06:39:55.900Z",
+        "updatedAt": "2025-09-29T06:39:55.900Z"
+      }
+    ]
+  }
+}

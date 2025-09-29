@@ -1,0 +1,918 @@
+<testsuites id="" name="" tests="77" failures="42" skipped="0" errors="0" time="128.27294">
+<testsuite name="frontend-integration.e2e.js" timestamp="2025-09-29T05:07:24.502Z" hostname="chromium" tests="11" failures="0" skipped="0" time="119.797" errors="0">
+<testcase name="Frontend-Backend Integration Tests › should connect to backend API" classname="frontend-integration.e2e.js" time="13.1">
+<system-out>
+<![CDATA[✅ Backend health status: Healthy
+✅ Frontend loaded successfully
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle API calls gracefully" classname="frontend-integration.e2e.js" time="14.579">
+<system-out>
+<![CDATA[✅ API calls detected: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle authentication flow" classname="frontend-integration.e2e.js" time="10.542">
+<system-out>
+<![CDATA[✅ Authentication UI elements - Login buttons: 1, Forms: 1
+✅ Login button interaction successful
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should display data from backend" classname="frontend-integration.e2e.js" time="13.598">
+<system-out>
+<![CDATA[✅ Data display elements - Tables: 0, Cards: 1, List items: 0
+✅ Loading indicators: 0
+✅ Error indicators: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle CRUD operations UI" classname="frontend-integration.e2e.js" time="11.883">
+<system-out>
+<![CDATA[✅ CRUD UI elements - Create: 0, Edit: 0, Delete: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle real-time updates" classname="frontend-integration.e2e.js" time="12.076">
+<system-out>
+<![CDATA[✅ Real-time elements found: 0
+✅ WebSocket status: WebSocket API available
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle form submissions" classname="frontend-integration.e2e.js" time="7.544">
+<system-out>
+<![CDATA[✅ Found 1 forms - testing form submission handling
+✅ Form submission elements found
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle error states from backend" classname="frontend-integration.e2e.js" time="10.519">
+<system-out>
+<![CDATA[✅ Failed API requests: 0
+✅ Error display elements: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle navigation and routing" classname="frontend-integration.e2e.js" time="7.274">
+<system-out>
+<![CDATA[✅ Navigation links found: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle search and filtering" classname="frontend-integration.e2e.js" time="7.345">
+<system-out>
+<![CDATA[✅ Search/Filter UI - Search inputs: 0, Filter controls: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle responsive API data display" classname="frontend-integration.e2e.js" time="11.337">
+<system-out>
+<![CDATA[✅ Desktop - Data elements visible: 4
+✅ Tablet - Data elements visible: 4
+✅ Mobile - Data elements visible: 4
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="frontend-integration.e2e.js" timestamp="2025-09-29T05:07:24.502Z" hostname="firefox" tests="11" failures="0" skipped="0" time="143.074" errors="0">
+<testcase name="Frontend-Backend Integration Tests › should connect to backend API" classname="frontend-integration.e2e.js" time="8.738">
+<system-out>
+<![CDATA[✅ Backend health status: Healthy
+✅ Frontend loaded successfully
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle API calls gracefully" classname="frontend-integration.e2e.js" time="18.21">
+<system-out>
+<![CDATA[✅ API calls detected: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle authentication flow" classname="frontend-integration.e2e.js" time="13.678">
+<system-out>
+<![CDATA[✅ Authentication UI elements - Login buttons: 1, Forms: 1
+✅ Login button interaction successful
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should display data from backend" classname="frontend-integration.e2e.js" time="16.761">
+<system-out>
+<![CDATA[✅ Data display elements - Tables: 0, Cards: 1, List items: 0
+✅ Loading indicators: 0
+✅ Error indicators: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle CRUD operations UI" classname="frontend-integration.e2e.js" time="14.23">
+<system-out>
+<![CDATA[✅ CRUD UI elements - Create: 0, Edit: 0, Delete: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle real-time updates" classname="frontend-integration.e2e.js" time="10.488">
+<system-out>
+<![CDATA[✅ Real-time elements found: 0
+✅ WebSocket status: WebSocket API available
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle form submissions" classname="frontend-integration.e2e.js" time="12.409">
+<system-out>
+<![CDATA[✅ Found 1 forms - testing form submission handling
+✅ Form submission elements found
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle error states from backend" classname="frontend-integration.e2e.js" time="10.977">
+<system-out>
+<![CDATA[✅ Failed API requests: 0
+✅ Error display elements: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle navigation and routing" classname="frontend-integration.e2e.js" time="9.145">
+<system-out>
+<![CDATA[✅ Navigation links found: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle search and filtering" classname="frontend-integration.e2e.js" time="11.39">
+<system-out>
+<![CDATA[✅ Search/Filter UI - Search inputs: 0, Filter controls: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle responsive API data display" classname="frontend-integration.e2e.js" time="17.048">
+<system-out>
+<![CDATA[✅ Desktop - Data elements visible: 4
+✅ Tablet - Data elements visible: 4
+✅ Mobile - Data elements visible: 4
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="frontend-integration.e2e.js" timestamp="2025-09-29T05:07:24.502Z" hostname="webkit" tests="11" failures="11" skipped="0" time="0.222" errors="0">
+<testcase name="Frontend-Backend Integration Tests › should connect to backend API" classname="frontend-integration.e2e.js" time="0.052">
+<failure message="frontend-integration.e2e.js:7:3 should connect to backend API" type="FAILURE">
+<![CDATA[  [webkit] › frontend-integration.e2e.js:7:3 › Frontend-Backend Integration Tests › should connect to backend API 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle API calls gracefully" classname="frontend-integration.e2e.js" time="0.016">
+<failure message="frontend-integration.e2e.js:24:3 should handle API calls gracefully" type="FAILURE">
+<![CDATA[  [webkit] › frontend-integration.e2e.js:24:3 › Frontend-Backend Integration Tests › should handle API calls gracefully 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle authentication flow" classname="frontend-integration.e2e.js" time="0.016">
+<failure message="frontend-integration.e2e.js:49:3 should handle authentication flow" type="FAILURE">
+<![CDATA[  [webkit] › frontend-integration.e2e.js:49:3 › Frontend-Backend Integration Tests › should handle authentication flow 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should display data from backend" classname="frontend-integration.e2e.js" time="0.024">
+<failure message="frontend-integration.e2e.js:71:3 should display data from backend" type="FAILURE">
+<![CDATA[  [webkit] › frontend-integration.e2e.js:71:3 › Frontend-Backend Integration Tests › should display data from backend 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle CRUD operations UI" classname="frontend-integration.e2e.js" time="0.02">
+<failure message="frontend-integration.e2e.js:94:3 should handle CRUD operations UI" type="FAILURE">
+<![CDATA[  [webkit] › frontend-integration.e2e.js:94:3 › Frontend-Backend Integration Tests › should handle CRUD operations UI 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle real-time updates" classname="frontend-integration.e2e.js" time="0.022">
+<failure message="frontend-integration.e2e.js:117:3 should handle real-time updates" type="FAILURE">
+<![CDATA[  [webkit] › frontend-integration.e2e.js:117:3 › Frontend-Backend Integration Tests › should handle real-time updates 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle form submissions" classname="frontend-integration.e2e.js" time="0.013">
+<failure message="frontend-integration.e2e.js:133:3 should handle form submissions" type="FAILURE">
+<![CDATA[  [webkit] › frontend-integration.e2e.js:133:3 › Frontend-Backend Integration Tests › should handle form submissions 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle error states from backend" classname="frontend-integration.e2e.js" time="0.014">
+<failure message="frontend-integration.e2e.js:159:3 should handle error states from backend" type="FAILURE">
+<![CDATA[  [webkit] › frontend-integration.e2e.js:159:3 › Frontend-Backend Integration Tests › should handle error states from backend 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle navigation and routing" classname="frontend-integration.e2e.js" time="0.018">
+<failure message="frontend-integration.e2e.js:187:3 should handle navigation and routing" type="FAILURE">
+<![CDATA[  [webkit] › frontend-integration.e2e.js:187:3 › Frontend-Backend Integration Tests › should handle navigation and routing 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle search and filtering" classname="frontend-integration.e2e.js" time="0.014">
+<failure message="frontend-integration.e2e.js:214:3 should handle search and filtering" type="FAILURE">
+<![CDATA[  [webkit] › frontend-integration.e2e.js:214:3 › Frontend-Backend Integration Tests › should handle search and filtering 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle responsive API data display" classname="frontend-integration.e2e.js" time="0.013">
+<failure message="frontend-integration.e2e.js:235:3 should handle responsive API data display" type="FAILURE">
+<![CDATA[  [webkit] › frontend-integration.e2e.js:235:3 › Frontend-Backend Integration Tests › should handle responsive API data display 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="frontend-integration.e2e.js" timestamp="2025-09-29T05:07:24.502Z" hostname="Mobile Chrome" tests="11" failures="0" skipped="0" time="109.216" errors="0">
+<testcase name="Frontend-Backend Integration Tests › should connect to backend API" classname="frontend-integration.e2e.js" time="8.266">
+<system-out>
+<![CDATA[✅ Backend health status: Healthy
+✅ Frontend loaded successfully
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle API calls gracefully" classname="frontend-integration.e2e.js" time="10.73">
+<system-out>
+<![CDATA[✅ API calls detected: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle authentication flow" classname="frontend-integration.e2e.js" time="9.067">
+<system-out>
+<![CDATA[✅ Authentication UI elements - Login buttons: 1, Forms: 1
+✅ Login button interaction successful
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should display data from backend" classname="frontend-integration.e2e.js" time="9.86">
+<system-out>
+<![CDATA[✅ Data display elements - Tables: 0, Cards: 1, List items: 0
+✅ Loading indicators: 0
+✅ Error indicators: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle CRUD operations UI" classname="frontend-integration.e2e.js" time="7.416">
+<system-out>
+<![CDATA[✅ CRUD UI elements - Create: 0, Edit: 0, Delete: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle real-time updates" classname="frontend-integration.e2e.js" time="8.292">
+<system-out>
+<![CDATA[✅ Real-time elements found: 0
+✅ WebSocket status: WebSocket API available
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle form submissions" classname="frontend-integration.e2e.js" time="6.922">
+<system-out>
+<![CDATA[✅ Found 1 forms - testing form submission handling
+✅ Form submission elements found
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle error states from backend" classname="frontend-integration.e2e.js" time="11.937">
+<system-out>
+<![CDATA[✅ Failed API requests: 0
+✅ Error display elements: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle navigation and routing" classname="frontend-integration.e2e.js" time="9.01">
+<system-out>
+<![CDATA[✅ Navigation links found: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle search and filtering" classname="frontend-integration.e2e.js" time="9.78">
+<system-out>
+<![CDATA[✅ Search/Filter UI - Search inputs: 0, Filter controls: 0
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle responsive API data display" classname="frontend-integration.e2e.js" time="17.936">
+<system-out>
+<![CDATA[✅ Desktop - Data elements visible: 4
+✅ Tablet - Data elements visible: 4
+✅ Mobile - Data elements visible: 4
+]]>
+</system-out>
+</testcase>
+</testsuite>
+<testsuite name="frontend-integration.e2e.js" timestamp="2025-09-29T05:07:24.502Z" hostname="Mobile Safari" tests="11" failures="11" skipped="0" time="0.311" errors="0">
+<testcase name="Frontend-Backend Integration Tests › should connect to backend API" classname="frontend-integration.e2e.js" time="0.052">
+<failure message="frontend-integration.e2e.js:7:3 should connect to backend API" type="FAILURE">
+<![CDATA[  [Mobile Safari] › frontend-integration.e2e.js:7:3 › Frontend-Backend Integration Tests › should connect to backend API 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle API calls gracefully" classname="frontend-integration.e2e.js" time="0.036">
+<failure message="frontend-integration.e2e.js:24:3 should handle API calls gracefully" type="FAILURE">
+<![CDATA[  [Mobile Safari] › frontend-integration.e2e.js:24:3 › Frontend-Backend Integration Tests › should handle API calls gracefully 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle authentication flow" classname="frontend-integration.e2e.js" time="0.097">
+<failure message="frontend-integration.e2e.js:49:3 should handle authentication flow" type="FAILURE">
+<![CDATA[  [Mobile Safari] › frontend-integration.e2e.js:49:3 › Frontend-Backend Integration Tests › should handle authentication flow 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should display data from backend" classname="frontend-integration.e2e.js" time="0.017">
+<failure message="frontend-integration.e2e.js:71:3 should display data from backend" type="FAILURE">
+<![CDATA[  [Mobile Safari] › frontend-integration.e2e.js:71:3 › Frontend-Backend Integration Tests › should display data from backend 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle CRUD operations UI" classname="frontend-integration.e2e.js" time="0.014">
+<failure message="frontend-integration.e2e.js:94:3 should handle CRUD operations UI" type="FAILURE">
+<![CDATA[  [Mobile Safari] › frontend-integration.e2e.js:94:3 › Frontend-Backend Integration Tests › should handle CRUD operations UI 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle real-time updates" classname="frontend-integration.e2e.js" time="0.021">
+<failure message="frontend-integration.e2e.js:117:3 should handle real-time updates" type="FAILURE">
+<![CDATA[  [Mobile Safari] › frontend-integration.e2e.js:117:3 › Frontend-Backend Integration Tests › should handle real-time updates 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle form submissions" classname="frontend-integration.e2e.js" time="0.016">
+<failure message="frontend-integration.e2e.js:133:3 should handle form submissions" type="FAILURE">
+<![CDATA[  [Mobile Safari] › frontend-integration.e2e.js:133:3 › Frontend-Backend Integration Tests › should handle form submissions 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle error states from backend" classname="frontend-integration.e2e.js" time="0.013">
+<failure message="frontend-integration.e2e.js:159:3 should handle error states from backend" type="FAILURE">
+<![CDATA[  [Mobile Safari] › frontend-integration.e2e.js:159:3 › Frontend-Backend Integration Tests › should handle error states from backend 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle navigation and routing" classname="frontend-integration.e2e.js" time="0.013">
+<failure message="frontend-integration.e2e.js:187:3 should handle navigation and routing" type="FAILURE">
+<![CDATA[  [Mobile Safari] › frontend-integration.e2e.js:187:3 › Frontend-Backend Integration Tests › should handle navigation and routing 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle search and filtering" classname="frontend-integration.e2e.js" time="0.013">
+<failure message="frontend-integration.e2e.js:214:3 should handle search and filtering" type="FAILURE">
+<![CDATA[  [Mobile Safari] › frontend-integration.e2e.js:214:3 › Frontend-Backend Integration Tests › should handle search and filtering 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle responsive API data display" classname="frontend-integration.e2e.js" time="0.019">
+<failure message="frontend-integration.e2e.js:235:3 should handle responsive API data display" type="FAILURE">
+<![CDATA[  [Mobile Safari] › frontend-integration.e2e.js:235:3 › Frontend-Backend Integration Tests › should handle responsive API data display 
+
+    Error: browserType.launch: Executable doesn't exist at C:\Users\ADMIN02\AppData\Local\ms-playwright\webkit-2203\Playwright.exe
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="frontend-integration.e2e.js" timestamp="2025-09-29T05:07:24.502Z" hostname="Microsoft Edge" tests="11" failures="9" skipped="0" time="184.492" errors="0">
+<testcase name="Frontend-Backend Integration Tests › should connect to backend API" classname="frontend-integration.e2e.js" time="31.219">
+<failure message="frontend-integration.e2e.js:7:3 should connect to backend API" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › frontend-integration.e2e.js:7:3 › Frontend-Backend Integration Tests › should connect to backend API 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 30000ms exceeded.
+
+      17 |     // Load frontend
+      18 |     await page.goto(frontendUrl);
+    > 19 |     await page.waitForLoadState('networkidle');
+         |                ^
+      20 |
+      21 |     console.log('✅ Frontend loaded successfully');
+      22 |   });
+        at C:\Works\KOLs Project\tests\e2e\frontend-integration.e2e.js:19:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\frontend-integration.e2e.j-3d37b-ould-connect-to-backend-API-Microsoft-Edge\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\frontend-integration.e2e.j-3d37b-ould-connect-to-backend-API-Microsoft-Edge\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\frontend-integration.e2e.j-3d37b-ould-connect-to-backend-API-Microsoft-Edge\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[✅ Backend health status: Healthy
+
+[[ATTACHMENT|frontend-integration.e2e.j-3d37b-ould-connect-to-backend-API-Microsoft-Edge\test-failed-1.png]]
+
+[[ATTACHMENT|frontend-integration.e2e.j-3d37b-ould-connect-to-backend-API-Microsoft-Edge\video.webm]]
+
+[[ATTACHMENT|frontend-integration.e2e.j-3d37b-ould-connect-to-backend-API-Microsoft-Edge\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle API calls gracefully" classname="frontend-integration.e2e.js" time="31.087">
+<failure message="frontend-integration.e2e.js:24:3 should handle API calls gracefully" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › frontend-integration.e2e.js:24:3 › Frontend-Backend Integration Tests › should handle API calls gracefully 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 30000ms exceeded.
+
+      36 |     });
+      37 |
+    > 38 |     await page.waitForLoadState('networkidle');
+         |                ^
+      39 |
+      40 |     // Wait a bit for any async API calls
+      41 |     await page.waitForTimeout(3000);
+        at C:\Works\KOLs Project\tests\e2e\frontend-integration.e2e.js:38:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\frontend-integration.e2e.j-70aa7-handle-API-calls-gracefully-Microsoft-Edge\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\frontend-integration.e2e.j-70aa7-handle-API-calls-gracefully-Microsoft-Edge\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\frontend-integration.e2e.j-70aa7-handle-API-calls-gracefully-Microsoft-Edge\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|frontend-integration.e2e.j-70aa7-handle-API-calls-gracefully-Microsoft-Edge\test-failed-1.png]]
+
+[[ATTACHMENT|frontend-integration.e2e.j-70aa7-handle-API-calls-gracefully-Microsoft-Edge\video.webm]]
+
+[[ATTACHMENT|frontend-integration.e2e.j-70aa7-handle-API-calls-gracefully-Microsoft-Edge\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle authentication flow" classname="frontend-integration.e2e.js" time="30.949">
+<failure message="frontend-integration.e2e.js:49:3 should handle authentication flow" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › frontend-integration.e2e.js:49:3 › Frontend-Backend Integration Tests › should handle authentication flow 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 30000ms exceeded.
+
+      49 |   test('should handle authentication flow', async ({ page }) => {
+      50 |     await page.goto(frontendUrl);
+    > 51 |     await page.waitForLoadState('networkidle');
+         |                ^
+      52 |
+      53 |     // Look for login/auth related elements
+      54 |     const loginButtons = await page.locator('button, a').getByText(/login|sign in|log in/i).count();
+        at C:\Works\KOLs Project\tests\e2e\frontend-integration.e2e.js:51:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\frontend-integration.e2e.j-fd486--handle-authentication-flow-Microsoft-Edge\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\frontend-integration.e2e.j-fd486--handle-authentication-flow-Microsoft-Edge\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\frontend-integration.e2e.j-fd486--handle-authentication-flow-Microsoft-Edge\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|frontend-integration.e2e.j-fd486--handle-authentication-flow-Microsoft-Edge\test-failed-1.png]]
+
+[[ATTACHMENT|frontend-integration.e2e.j-fd486--handle-authentication-flow-Microsoft-Edge\video.webm]]
+
+[[ATTACHMENT|frontend-integration.e2e.j-fd486--handle-authentication-flow-Microsoft-Edge\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should display data from backend" classname="frontend-integration.e2e.js" time="30.857">
+<failure message="frontend-integration.e2e.js:71:3 should display data from backend" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › frontend-integration.e2e.js:71:3 › Frontend-Backend Integration Tests › should display data from backend 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 30000ms exceeded.
+
+      71 |   test('should display data from backend', async ({ page }) => {
+      72 |     await page.goto(frontendUrl);
+    > 73 |     await page.waitForLoadState('networkidle');
+         |                ^
+      74 |
+      75 |     // Wait for potential data loading
+      76 |     await page.waitForTimeout(2000);
+        at C:\Works\KOLs Project\tests\e2e\frontend-integration.e2e.js:73:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\frontend-integration.e2e.j-2e76b-d-display-data-from-backend-Microsoft-Edge\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\frontend-integration.e2e.j-2e76b-d-display-data-from-backend-Microsoft-Edge\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\frontend-integration.e2e.j-2e76b-d-display-data-from-backend-Microsoft-Edge\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|frontend-integration.e2e.j-2e76b-d-display-data-from-backend-Microsoft-Edge\test-failed-1.png]]
+
+[[ATTACHMENT|frontend-integration.e2e.j-2e76b-d-display-data-from-backend-Microsoft-Edge\video.webm]]
+
+[[ATTACHMENT|frontend-integration.e2e.j-2e76b-d-display-data-from-backend-Microsoft-Edge\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle CRUD operations UI" classname="frontend-integration.e2e.js" time="30.446">
+<failure message="frontend-integration.e2e.js:94:3 should handle CRUD operations UI" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › frontend-integration.e2e.js:94:3 › Frontend-Backend Integration Tests › should handle CRUD operations UI 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: page.waitForLoadState: Test timeout of 30000ms exceeded.
+
+      94 |   test('should handle CRUD operations UI', async ({ page }) => {
+      95 |     await page.goto(frontendUrl);
+    > 96 |     await page.waitForLoadState('networkidle');
+         |                ^
+      97 |
+      98 |     // Look for CRUD operation buttons
+      99 |     const createButtons = await page.locator('button, a').getByText(/add|create|new|\+/i).count();
+        at C:\Works\KOLs Project\tests\e2e\frontend-integration.e2e.js:96:16
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ..\..\test-results\frontend-integration.e2e.j-b9e57-d-handle-CRUD-operations-UI-Microsoft-Edge\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    ..\..\test-results\frontend-integration.e2e.j-b9e57-d-handle-CRUD-operations-UI-Microsoft-Edge\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ..\..\test-results\frontend-integration.e2e.j-b9e57-d-handle-CRUD-operations-UI-Microsoft-Edge\error-context.md
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|frontend-integration.e2e.j-b9e57-d-handle-CRUD-operations-UI-Microsoft-Edge\test-failed-1.png]]
+
+[[ATTACHMENT|frontend-integration.e2e.j-b9e57-d-handle-CRUD-operations-UI-Microsoft-Edge\video.webm]]
+
+[[ATTACHMENT|frontend-integration.e2e.j-b9e57-d-handle-CRUD-operations-UI-Microsoft-Edge\error-context.md]]
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle real-time updates" classname="frontend-integration.e2e.js" time="23.595">
+<system-out>
+<![CDATA[✅ Real-time elements found: 0
+✅ WebSocket status: WebSocket API available
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle form submissions" classname="frontend-integration.e2e.js" time="6.339">
+<system-out>
+<![CDATA[✅ Found 1 forms - testing form submission handling
+✅ Form submission elements found
+]]>
+</system-out>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle error states from backend" classname="frontend-integration.e2e.js" time="0">
+<failure message="frontend-integration.e2e.js:159:3 should handle error states from backend" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › frontend-integration.e2e.js:159:3 › Frontend-Backend Integration Tests › should handle error states from backend 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle navigation and routing" classname="frontend-integration.e2e.js" time="0">
+<failure message="frontend-integration.e2e.js:187:3 should handle navigation and routing" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › frontend-integration.e2e.js:187:3 › Frontend-Backend Integration Tests › should handle navigation and routing 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle search and filtering" classname="frontend-integration.e2e.js" time="0">
+<failure message="frontend-integration.e2e.js:214:3 should handle search and filtering" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › frontend-integration.e2e.js:214:3 › Frontend-Backend Integration Tests › should handle search and filtering 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle responsive API data display" classname="frontend-integration.e2e.js" time="0">
+<failure message="frontend-integration.e2e.js:235:3 should handle responsive API data display" type="FAILURE">
+<![CDATA[  [Microsoft Edge] › frontend-integration.e2e.js:235:3 › Frontend-Backend Integration Tests › should handle responsive API data display 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="frontend-integration.e2e.js" timestamp="2025-09-29T05:07:24.502Z" hostname="Google Chrome" tests="11" failures="11" skipped="0" time="0" errors="0">
+<testcase name="Frontend-Backend Integration Tests › should connect to backend API" classname="frontend-integration.e2e.js" time="0">
+<failure message="frontend-integration.e2e.js:7:3 should connect to backend API" type="FAILURE">
+<![CDATA[  [Google Chrome] › frontend-integration.e2e.js:7:3 › Frontend-Backend Integration Tests › should connect to backend API 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle API calls gracefully" classname="frontend-integration.e2e.js" time="0">
+<failure message="frontend-integration.e2e.js:24:3 should handle API calls gracefully" type="FAILURE">
+<![CDATA[  [Google Chrome] › frontend-integration.e2e.js:24:3 › Frontend-Backend Integration Tests › should handle API calls gracefully 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle authentication flow" classname="frontend-integration.e2e.js" time="0">
+<failure message="frontend-integration.e2e.js:49:3 should handle authentication flow" type="FAILURE">
+<![CDATA[  [Google Chrome] › frontend-integration.e2e.js:49:3 › Frontend-Backend Integration Tests › should handle authentication flow 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should display data from backend" classname="frontend-integration.e2e.js" time="0">
+<failure message="frontend-integration.e2e.js:71:3 should display data from backend" type="FAILURE">
+<![CDATA[  [Google Chrome] › frontend-integration.e2e.js:71:3 › Frontend-Backend Integration Tests › should display data from backend 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle CRUD operations UI" classname="frontend-integration.e2e.js" time="0">
+<failure message="frontend-integration.e2e.js:94:3 should handle CRUD operations UI" type="FAILURE">
+<![CDATA[  [Google Chrome] › frontend-integration.e2e.js:94:3 › Frontend-Backend Integration Tests › should handle CRUD operations UI 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle real-time updates" classname="frontend-integration.e2e.js" time="0">
+<failure message="frontend-integration.e2e.js:117:3 should handle real-time updates" type="FAILURE">
+<![CDATA[  [Google Chrome] › frontend-integration.e2e.js:117:3 › Frontend-Backend Integration Tests › should handle real-time updates 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle form submissions" classname="frontend-integration.e2e.js" time="0">
+<failure message="frontend-integration.e2e.js:133:3 should handle form submissions" type="FAILURE">
+<![CDATA[  [Google Chrome] › frontend-integration.e2e.js:133:3 › Frontend-Backend Integration Tests › should handle form submissions 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle error states from backend" classname="frontend-integration.e2e.js" time="0">
+<failure message="frontend-integration.e2e.js:159:3 should handle error states from backend" type="FAILURE">
+<![CDATA[  [Google Chrome] › frontend-integration.e2e.js:159:3 › Frontend-Backend Integration Tests › should handle error states from backend 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle navigation and routing" classname="frontend-integration.e2e.js" time="0">
+<failure message="frontend-integration.e2e.js:187:3 should handle navigation and routing" type="FAILURE">
+<![CDATA[  [Google Chrome] › frontend-integration.e2e.js:187:3 › Frontend-Backend Integration Tests › should handle navigation and routing 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle search and filtering" classname="frontend-integration.e2e.js" time="0">
+<failure message="frontend-integration.e2e.js:214:3 should handle search and filtering" type="FAILURE">
+<![CDATA[  [Google Chrome] › frontend-integration.e2e.js:214:3 › Frontend-Backend Integration Tests › should handle search and filtering 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+<testcase name="Frontend-Backend Integration Tests › should handle responsive API data display" classname="frontend-integration.e2e.js" time="0">
+<failure message="frontend-integration.e2e.js:235:3 should handle responsive API data display" type="FAILURE">
+<![CDATA[  [Google Chrome] › frontend-integration.e2e.js:235:3 › Frontend-Backend Integration Tests › should handle responsive API data display 
+
+    Error: worker process exited unexpectedly (code=3221225794, signal=null)
+]]>
+</failure>
+</testcase>
+</testsuite>
+</testsuites>

@@ -1,0 +1,221 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-config
+  namespace: kol-system
+  labels:
+    app: redis
+    component: cache
+data:
+  redis.conf: |
+    # Redis Configuration for KOL System
+
+    # Memory and Persistence
+    maxmemory 1gb
+    maxmemory-policy allkeys-lru
+    save 900 1
+    save 300 10
+    save 60 10000
+
+    # Security
+    requirepass CHANGE_ME_TO_SECURE_REDIS_PASSWORD
+
+    # Network
+    bind 0.0.0.0
+    port 6379
+    tcp-backlog 511
+    timeout 0
+    tcp-keepalive 300
+
+    # Logging
+    loglevel notice
+
+    # Keyspace notifications for Celery
+    notify-keyspace-events Ex
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: redis-pvc
+  namespace: kol-system
+  labels:
+    app: redis
+    component: cache
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: fast-ssd
+  resources:
+    requests:
+      storage: 10Gi
+
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  namespace: kol-system
+  labels:
+    app: redis
+    component: cache
+spec:
+  serviceName: redis-service
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+        component: cache
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        ports:
+        - containerPort: 6379
+          name: redis
+        command:
+        - redis-server
+        - /etc/redis/redis.conf
+        volumeMounts:
+        - name: redis-config
+          mountPath: /etc/redis
+        - name: redis-storage
+          mountPath: /data
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "1Gi"
+            cpu: "500m"
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+      volumes:
+      - name: redis-config
+        configMap:
+          name: redis-config
+      - name: redis-storage
+        persistentVolumeClaim:
+          claimName: redis-pvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: kol-system
+  labels:
+    app: redis
+    component: cache
+spec:
+  type: ClusterIP
+  ports:
+  - port: 6379
+    targetPort: 6379
+    protocol: TCP
+    name: redis
+  selector:
+    app: redis
+
+---
+# Redis Sentinel for High Availability (Optional)
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-sentinel
+  namespace: kol-system
+  labels:
+    app: redis-sentinel
+    component: sentinel
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: redis-sentinel
+  template:
+    metadata:
+      labels:
+        app: redis-sentinel
+        component: sentinel
+    spec:
+      containers:
+      - name: redis-sentinel
+        image: redis:7-alpine
+        ports:
+        - containerPort: 26379
+          name: sentinel
+        command:
+        - redis-sentinel
+        - /etc/redis-sentinel/sentinel.conf
+        volumeMounts:
+        - name: sentinel-config
+          mountPath: /etc/redis-sentinel
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+      volumes:
+      - name: sentinel-config
+        configMap:
+          name: redis-sentinel-config
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-sentinel-config
+  namespace: kol-system
+  labels:
+    app: redis-sentinel
+    component: sentinel
+data:
+  sentinel.conf: |
+    # Redis Sentinel Configuration
+    port 26379
+    sentinel monitor kolsystem-redis redis-service 6379 2
+    sentinel auth-pass kolsystem-redis CHANGE_ME_TO_SECURE_REDIS_PASSWORD
+    sentinel down-after-milliseconds kolsystem-redis 30000
+    sentinel parallel-syncs kolsystem-redis 1
+    sentinel failover-timeout kolsystem-redis 180000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-sentinel-service
+  namespace: kol-system
+  labels:
+    app: redis-sentinel
+    component: sentinel
+spec:
+  type: ClusterIP
+  ports:
+  - port: 26379
+    targetPort: 26379
+    protocol: TCP
+    name: sentinel
+  selector:
+    app: redis-sentinel

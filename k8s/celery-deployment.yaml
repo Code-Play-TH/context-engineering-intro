@@ -1,0 +1,362 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-worker
+  namespace: kol-system
+  labels:
+    app: celery-worker
+    component: worker
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: celery-worker
+      component: worker
+  template:
+    metadata:
+      labels:
+        app: celery-worker
+        component: worker
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+      - name: celery-worker
+        image: kolsystem/api:latest
+        command: ["celery", "-A", "app.tasks.celery_app", "worker", "--loglevel=info", "--concurrency=4"]
+        env:
+        # Environment variables (same as API deployment)
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: kol-system-secrets
+              key: DATABASE_URL
+        - name: REDIS_CELERY_BROKER_URL
+          valueFrom:
+            configMapKeyRef:
+              name: kol-system-config
+              key: REDIS_CELERY_BROKER_URL
+        - name: REDIS_CELERY_BACKEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: kol-system-config
+              key: REDIS_CELERY_BACKEND_URL
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: kol-system-secrets
+              key: SECRET_KEY
+
+        # Social Media API Keys
+        - name: INSTAGRAM_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: kol-system-secrets
+              key: INSTAGRAM_ACCESS_TOKEN
+        - name: YOUTUBE_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: kol-system-secrets
+              key: YOUTUBE_API_KEY
+        - name: TWITTER_BEARER_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: kol-system-secrets
+              key: TWITTER_BEARER_TOKEN
+        - name: TIKTOK_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: kol-system-secrets
+              key: TIKTOK_ACCESS_TOKEN
+        - name: FACEBOOK_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: kol-system-secrets
+              key: FACEBOOK_ACCESS_TOKEN
+
+        # Communication API Keys
+        - name: SENDGRID_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: kol-system-secrets
+              key: SENDGRID_API_KEY
+        - name: DISCORD_BOT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: kol-system-secrets
+              key: DISCORD_BOT_TOKEN
+        - name: LINE_CHANNEL_ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: kol-system-secrets
+              key: LINE_CHANNEL_ACCESS_TOKEN
+        - name: LINE_CHANNEL_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: kol-system-secrets
+              key: LINE_CHANNEL_SECRET
+
+        # AI and Analytics
+        - name: AI_CONTENT_ANALYSIS_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: kol-system-secrets
+              key: AI_CONTENT_ANALYSIS_API_KEY
+
+        # Configuration
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: kol-system-config
+              key: LOG_LEVEL
+        - name: CONTENT_DETECTION_CONFIDENCE_THRESHOLD
+          valueFrom:
+            configMapKeyRef:
+              name: kol-system-config
+              key: CONTENT_DETECTION_CONFIDENCE_THRESHOLD
+
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+
+        volumeMounts:
+        - name: logs
+          mountPath: /app/logs
+
+        livenessProbe:
+          exec:
+            command:
+            - celery
+            - -A
+            - app.tasks.celery_app
+            - status
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+
+      volumes:
+      - name: logs
+        emptyDir: {}
+
+      nodeSelector:
+        workload-type: production
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: celery-beat
+  namespace: kol-system
+  labels:
+    app: celery-beat
+    component: scheduler
+spec:
+  replicas: 1  # Only one beat scheduler needed
+  selector:
+    matchLabels:
+      app: celery-beat
+      component: scheduler
+  template:
+    metadata:
+      labels:
+        app: celery-beat
+        component: scheduler
+    spec:
+      containers:
+      - name: celery-beat
+        image: kolsystem/api:latest
+        command: ["celery", "-A", "app.tasks.celery_app", "beat", "--loglevel=info"]
+        env:
+        # Same environment variables as worker
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: kol-system-secrets
+              key: DATABASE_URL
+        - name: REDIS_CELERY_BROKER_URL
+          valueFrom:
+            configMapKeyRef:
+              name: kol-system-config
+              key: REDIS_CELERY_BROKER_URL
+        - name: REDIS_CELERY_BACKEND_URL
+          valueFrom:
+            configMapKeyRef:
+              name: kol-system-config
+              key: REDIS_CELERY_BACKEND_URL
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: kol-system-secrets
+              key: SECRET_KEY
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: kol-system-config
+              key: LOG_LEVEL
+
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+
+        volumeMounts:
+        - name: beat-schedule
+          mountPath: /app/celerybeat-schedule
+        - name: logs
+          mountPath: /app/logs
+
+      volumes:
+      - name: beat-schedule
+        emptyDir: {}
+      - name: logs
+        emptyDir: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flower
+  namespace: kol-system
+  labels:
+    app: flower
+    component: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flower
+      component: monitoring
+  template:
+    metadata:
+      labels:
+        app: flower
+        component: monitoring
+    spec:
+      containers:
+      - name: flower
+        image: kolsystem/api:latest
+        command: ["celery", "-A", "app.tasks.celery_app", "flower", "--port=5555"]
+        ports:
+        - containerPort: 5555
+          name: flower
+        env:
+        - name: REDIS_CELERY_BROKER_URL
+          valueFrom:
+            configMapKeyRef:
+              name: kol-system-config
+              key: REDIS_CELERY_BROKER_URL
+        - name: FLOWER_BASIC_AUTH
+          value: "admin:CHANGE_ME_TO_SECURE_PASSWORD"
+
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5555
+          initialDelaySeconds: 30
+          periodSeconds: 10
+
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5555
+          initialDelaySeconds: 5
+          periodSeconds: 5
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flower-service
+  namespace: kol-system
+  labels:
+    app: flower
+    component: monitoring
+spec:
+  type: ClusterIP
+  ports:
+  - port: 5555
+    targetPort: 5555
+    protocol: TCP
+    name: flower
+  selector:
+    app: flower
+    component: monitoring
+
+---
+# Horizontal Pod Autoscaler for Celery Workers
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: celery-worker-hpa
+  namespace: kol-system
+  labels:
+    app: celery-worker
+    component: autoscaling
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: celery-worker
+  minReplicas: 5
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 60
+
+---
+# Pod Disruption Budget for Workers
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: celery-worker-pdb
+  namespace: kol-system
+  labels:
+    app: celery-worker
+    component: worker
+spec:
+  minAvailable: 3
+  selector:
+    matchLabels:
+      app: celery-worker
+      component: worker

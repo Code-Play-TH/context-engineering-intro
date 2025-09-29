@@ -1,7 +1,6 @@
 # Docker Compose configuration for KOL Management System
 # Production-ready multi-service deployment
 
-version: '3.8'
 
 services:
   # PostgreSQL Database
@@ -35,7 +34,7 @@ services:
     volumes:
       - redis_data:/data
     ports:
-      - "${REDIS_PORT:-6379}:6379"
+      - "${REDIS_PORT:-6380}:6379"
     networks:
       - kol_network
     restart: unless-stopped
@@ -117,8 +116,6 @@ services:
     networks:
       - kol_network
     restart: unless-stopped
-    deploy:
-      replicas: 2
     healthcheck:
       test: ["CMD", "celery", "-A", "app.tasks.celery", "inspect", "ping"]
       interval: 30s
