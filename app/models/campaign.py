@@ -52,6 +52,28 @@ class Campaign(Base):
     currency: Mapped[str] = mapped_column(String(3), nullable=False, default="USD")
     spent_amount: Mapped[Decimal] = mapped_column(DECIMAL(12, 2), nullable=False, default=0)
 
+    # Campaign objectives and settings
+    objectives: Mapped[List[str]] = mapped_column(
+        ARRAY(String),
+        nullable=False,
+        default=list,
+        comment="Campaign objectives"
+    )
+
+    target_audience: Mapped[Dict[str, Any]] = mapped_column(
+        JSONB,
+        nullable=False,
+        default=dict,
+        comment="Target audience specification"
+    )
+
+    platforms: Mapped[List[str]] = mapped_column(
+        ARRAY(String),
+        nullable=False,
+        default=list,
+        comment="Target social media platforms"
+    )
+
     # Campaign objectives and KPIs
     # Format: {"total_reach": 100000, "total_engagement": 5000, "posts_delivered": 10}
     target_kpis: Mapped[Dict[str, float]] = mapped_column(
@@ -60,6 +82,13 @@ class Campaign(Base):
         default=dict,
         comment="Target KPIs for the campaign"
     )
+
+    target_reach: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    target_engagement_rate: Mapped[Optional[float]] = mapped_column(DECIMAL(5, 2), nullable=True)
+    total_reach: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    avg_engagement_rate: Mapped[Optional[float]] = mapped_column(DECIMAL(5, 2), nullable=True)
+
+    compensation_model: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
 
     # Campaign requirements and guidelines
     # Format: ["#brand", "#summer2024"], ["summer collection", "new arrivals"]
@@ -131,6 +160,10 @@ class Campaign(Base):
     follow_up_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     content_monitoring_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
 
+    # Actual dates for tracking
+    actual_start_date: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+    actual_end_date: Mapped[Optional[datetime]] = mapped_column(DateTime, nullable=True)
+
     # Audit fields
     created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=datetime.utcnow, index=True)
     updated_at: Mapped[datetime] = mapped_column(
@@ -141,6 +174,7 @@ class Campaign(Base):
     )
 
     created_by: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id"), nullable=True)
+    updated_by: Mapped[Optional[int]] = mapped_column(ForeignKey("users.id"), nullable=True)
 
     # Relationships
     kols = relationship(
@@ -179,6 +213,26 @@ class Campaign(Base):
     )
 
     creator = relationship("User", foreign_keys=[created_by])
+
+    collaborations = relationship(
+        "Collaboration",
+        back_populates="campaign",
+        cascade="all, delete-orphan"
+    )
+
+    # Campaign briefs
+    briefs = relationship(
+        "CampaignBrief",
+        back_populates="campaign",
+        cascade="all, delete-orphan"
+    )
+
+    # Campaign content
+    content_posts = relationship(
+        "CampaignContent",
+        back_populates="campaign",
+        cascade="all, delete-orphan"
+    )
 
     def calculate_budget_utilization(self) -> float:
         """Calculate budget utilization percentage."""

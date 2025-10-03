@@ -3,8 +3,10 @@ Database models package.
 Imports all models for SQLAlchemy to register them properly.
 """
 
-from app.models.kol import KOL, CampaignKOL, KOLStatus
+from app.models.kol import KOL, CampaignKOL, KOLStatus, KOLSocialAccounts, KOLPerformanceMetrics
 from app.models.campaign import Campaign, Brief, BriefTemplate, CampaignStatus, ApprovalStatus
+from app.models.collaboration import Collaboration
+from app.models.campaign_content import CampaignBrief, CampaignContent
 from app.models.communication import (
     Message,
     FollowUpSchedule,
@@ -28,6 +30,8 @@ __all__ = [
     "KOL",
     "CampaignKOL",
     "KOLStatus",
+    "KOLSocialAccounts",
+    "KOLPerformanceMetrics",
 
     # Campaign models
     "Campaign",
@@ -35,6 +39,9 @@ __all__ = [
     "BriefTemplate",
     "CampaignStatus",
     "ApprovalStatus",
+    "Collaboration",
+    "CampaignBrief",
+    "CampaignContent",
 
     # Communication models
     "Message",

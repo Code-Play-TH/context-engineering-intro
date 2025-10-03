@@ -15,7 +15,7 @@ from fastapi.openapi.utils import get_openapi
 
 from app.core.config import get_settings
 from app.core.database import init_db
-from app.api.endpoints import auth, kols, campaigns, calendar, content_monitoring, analytics
+from app.api.endpoints import auth, kols, campaigns, calendar, content_monitoring, analytics, users
 
 # Configure logging
 logging.basicConfig(
@@ -226,6 +226,7 @@ async def api_info():
 
 # Register API routers
 app.include_router(auth.router, prefix="/api/v1")
+app.include_router(users.router, prefix="/api/v1")
 app.include_router(kols.router, prefix="/api/v1")
 app.include_router(campaigns.router, prefix="/api/v1")
 app.include_router(calendar.router, prefix="/api/v1")

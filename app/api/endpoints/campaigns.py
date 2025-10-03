@@ -19,9 +19,10 @@ from sqlalchemy import select, func, and_, or_
 
 from app.core.database import get_session
 from app.core.auth import get_current_user
-from app.models.campaigns import Campaign, CampaignBrief, CampaignContent
+from app.models.campaign import Campaign
+from app.models.campaign_content import CampaignBrief, CampaignContent
 from app.models.collaboration import Collaboration
-from app.models.kols import KOL
+from app.models.kol import KOL
 from app.schemas.campaigns import (
     CampaignCreate, CampaignUpdate, CampaignResponse, CampaignListResponse,
     CampaignSearchFilters, CampaignBriefCreate, CampaignBriefUpdate,
@@ -30,7 +31,7 @@ from app.schemas.campaigns import (
     CampaignAnalytics, CampaignWorkflowAction
 )
 from app.tasks.campaigns import generate_campaign_brief, monitor_campaign_performance
-from app.tasks.communication import send_campaign_notifications
+from app.tasks.communication import send_campaign_messages
 from app.utils.pagination import PaginationParams, paginate_query
 
 logger = logging.getLogger(__name__)
@@ -503,12 +504,11 @@ async def create_collaboration(
         await db.refresh(collaboration)
 
         # Send notification to KOL
-        send_campaign_notifications.delay([{
-            "type": "collaboration_invitation",
-            "kol_id": collab_data.kol_id,
-            "campaign_id": campaign_id,
-            "collaboration_id": collaboration.id
-        }])
+        send_campaign_messages.delay(
+            campaign_id,
+            1,  # Default template ID
+            [collab_data.kol_id]
+        )
 
         logger.info(f"Collaboration created: campaign {campaign_id}, KOL {collab_data.kol_id}")
         return CollaborationResponse.model_validate(collaboration)

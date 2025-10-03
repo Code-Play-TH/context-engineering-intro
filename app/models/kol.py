@@ -152,6 +152,34 @@ class KOL(Base):
         lazy="dynamic"
     )
 
+    # Social accounts
+    social_accounts = relationship(
+        "KOLSocialAccounts",
+        back_populates="kol",
+        cascade="all, delete-orphan"
+    )
+
+    # Performance metrics
+    performance_metrics = relationship(
+        "KOLPerformanceMetrics",
+        back_populates="kol",
+        uselist=False
+    )
+
+    # Collaborations
+    collaborations = relationship(
+        "Collaboration",
+        back_populates="kol",
+        cascade="all, delete-orphan"
+    )
+
+    # Content posts
+    content_posts = relationship(
+        "CampaignContent",
+        back_populates="kol",
+        cascade="all, delete-orphan"
+    )
+
     @hybrid_property
     def total_followers(self) -> int:
         """Calculate total followers across all platforms."""
@@ -246,6 +274,57 @@ Index("idx_kol_social_media_gin", KOL.social_media_accounts, postgresql_using="g
 Index("idx_kol_demographics_gin", KOL.demographics, postgresql_using="gin")
 Index("idx_kol_location_status", KOL.location, KOL.status)
 Index("idx_kol_created_status", KOL.created_at, KOL.status)
+
+
+class KOLSocialAccounts(Base):
+    """KOL social media accounts model."""
+    __tablename__ = "kol_social_accounts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    kol_id: Mapped[int] = mapped_column(ForeignKey("kols.id"), nullable=False, index=True)
+    platform: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
+    username: Mapped[str] = mapped_column(String(100), nullable=False)
+    profile_url: Mapped[Optional[str]] = mapped_column(String(500), nullable=True)
+    follower_count: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    is_verified: Mapped[bool] = mapped_column(Boolean, default=False)
+    is_primary: Mapped[bool] = mapped_column(Boolean, default=False)
+
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime,
+        nullable=False,
+        default=datetime.utcnow,
+        onupdate=datetime.utcnow
+    )
+
+    # Relationships
+    kol = relationship("KOL", back_populates="social_accounts")
+
+    def __repr__(self) -> str:
+        return f"<KOLSocialAccounts(id={self.id}, kol_id={self.kol_id}, platform='{self.platform}')>"
+
+
+class KOLPerformanceMetrics(Base):
+    """KOL performance metrics model."""
+    __tablename__ = "kol_performance_metrics"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    kol_id: Mapped[int] = mapped_column(ForeignKey("kols.id"), nullable=False, index=True)
+
+    avg_engagement_rate: Mapped[float] = mapped_column(DECIMAL(5, 2), nullable=False, default=0)
+    avg_reach: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    total_campaigns: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    successful_campaigns: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    reliability_score: Mapped[float] = mapped_column(DECIMAL(5, 2), nullable=False, default=0)
+
+    last_updated: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, nullable=False, default=datetime.utcnow)
+
+    # Relationships
+    kol = relationship("KOL", back_populates="performance_metrics")
+
+    def __repr__(self) -> str:
+        return f"<KOLPerformanceMetrics(id={self.id}, kol_id={self.kol_id})>"
 
 
 # Association table for many-to-many relationship between KOLs and Campaigns

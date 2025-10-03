@@ -1,0 +1,93 @@
+# Docker Compose configuration for KOL Management System - Lite Version
+# Uses lightweight dependencies for faster development and testing
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: kol_postgres_lite
+    environment:
+      POSTGRES_DB: kolsystem_dev
+      POSTGRES_USER: koluser
+      POSTGRES_PASSWORD: kolpassword
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    volumes:
+      - postgres_lite_data:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    ports:
+      - "5433:5432"  # Use different port to avoid conflicts
+    networks:
+      - kol_lite_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U koluser -d kolsystem_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: kol_redis_lite
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_lite_data:/data
+    ports:
+      - "6381:6379"  # Use different port to avoid conflicts
+    networks:
+      - kol_lite_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # Main Web Application (Lite)
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.lite
+    container_name: kol_web_lite
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - DATABASE_URL=postgresql+asyncpg://koluser:kolpassword@postgres:5432/kolsystem_dev
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      - DATABASE_HOST=postgres
+      - DATABASE_PORT=5432
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET_KEY=dev-secret-key-not-for-production
+      - API_BASE_URL=http://localhost:8002
+      - FRONTEND_URL=http://localhost:3000
+      - CORS_ORIGINS=http://localhost:3000,http://localhost:8080,http://127.0.0.1:3000
+      - ALLOWED_HOSTS=localhost,127.0.0.1,kol_web_lite
+    ports:
+      - "8002:8000"  # Use different port to avoid conflicts
+    volumes:
+      - .:/app
+      - ./uploads:/app/uploads
+      - ./logs:/app/logs
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - kol_lite_network
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+networks:
+  kol_lite_network:
+    driver: bridge
+
+volumes:
+  postgres_lite_data:
+    driver: local
+  redis_lite_data:
+    driver: local

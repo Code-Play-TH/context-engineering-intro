@@ -140,9 +140,10 @@ docker/prometheus/
 # Scripts
 scripts/
 *.sh
+!docker/entrypoint*.sh
 
 # Development requirements
-requirements-dev.txt
+# requirements-dev.txt  # Commented out - needed for dev builds
 
 # Testing files
 .pytest_cache/

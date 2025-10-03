@@ -29,7 +29,7 @@ flower==2.0.1
 
 # HTTP client and requests
 httpx==0.25.2
-aiohttp==3.9.1
+aiohttp==3.8.5
 requests==2.31.0
 
 # Data processing and utilities

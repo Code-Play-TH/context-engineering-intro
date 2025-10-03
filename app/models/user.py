@@ -6,7 +6,7 @@ Handles user management, roles, and audit logging.
 from sqlalchemy import Column, Integer, String, DateTime, Text, Boolean, JSON, ForeignKey, Index
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import JSONB, ARRAY
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any
 from enum import Enum as PyEnum
 from passlib.context import CryptContext
@@ -201,6 +201,18 @@ class User(Base):
     def can_verify_content(self) -> bool:
         """Check if user can verify content."""
         return self.role in [UserRole.ADMIN, UserRole.MANAGER, UserRole.COORDINATOR] or self.has_permission("verify_content")
+
+    def can_manage_users(self) -> bool:
+        """Check if user can manage other users."""
+        return self.role in [UserRole.ADMIN, UserRole.MANAGER] or self.has_permission("manage_users")
+
+    def is_admin(self) -> bool:
+        """Check if user is an admin."""
+        return self.role == UserRole.ADMIN or self.is_superuser
+
+    def set_password(self, password: str) -> None:
+        """Set user password (hashed)."""
+        self.hashed_password = pwd_context.hash(password)
 
     def get_full_name(self) -> str:
         """Get user's full name."""
