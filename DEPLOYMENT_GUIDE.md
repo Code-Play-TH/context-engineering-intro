@@ -15,7 +15,7 @@ All ports are configured in `.env.production` to avoid conflicts:
 | **API Server** | 8000 | **8765** | Main FastAPI application |
 | **Nginx Proxy** | 80 | **8766** | Reverse proxy |
 | **PostgreSQL** | 5432 | **5433** | Database |
-| **Redis** | 6379 | **6380** | Cache & message broker |
+| **Redis** | 6379 | **6382** | Cache & message broker |
 | **Celery Flower** | 5555 | **5556** | Task monitoring |
 | **Prometheus** | 9090 | **9091** | Metrics collection |
 | **Grafana** | 3000 | **3001** | Dashboards |

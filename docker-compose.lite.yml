@@ -33,7 +33,7 @@ services:
     volumes:
       - redis_lite_data:/data
     ports:
-      - "6381:6379"  # Use different port to avoid conflicts
+      - "6382:6379"  # Use different port to avoid conflicts (changed from 6381)
     networks:
       - kol_lite_network
     restart: unless-stopped

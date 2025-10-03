@@ -60,7 +60,7 @@ python -c "import secrets; print(secrets.token_urlsafe(32))"
 API Server:        8765
 Nginx Proxy:       8766
 PostgreSQL:        5433
-Redis:             6380
+Redis:             6382
 Celery Flower:     5556
 Prometheus:        9091
 Grafana:           3001
@@ -194,7 +194,7 @@ Prometheus:         http://YOUR_SERVER_IP:9091
 docker ps --format "table {{.Names}}\t{{.Ports}}"
 
 # หรือใช้ netstat
-netstat -tuln | grep -E '8765|8766|5433|6380|5556|9091|3001'
+netstat -tuln | grep -E '8765|8766|5433|6382|5556|9091|3001'
 ```
 
 ---

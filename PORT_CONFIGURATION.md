@@ -16,7 +16,7 @@ This document explains the custom port configuration to avoid conflicts with oth
 | **Nginx Reverse Proxy** | 80 | **8766** | `.env.production` → `NGINX_PORT` | HTTP access |
 | **Nginx SSL/TLS** | 443 | **8767** | `docker-compose.production.yml` | HTTPS access |
 | **PostgreSQL** | 5432 | **5433** | `.env.production` → `POSTGRES_PORT` | Database |
-| **Redis** | 6379 | **6380** | `.env.production` → `REDIS_PORT` | Cache & Queue |
+| **Redis** | 6379 | **6382** | `.env.production` → `REDIS_PORT` | Cache & Queue |
 | **Celery Flower** | 5555 | **5556** | `.env.production` → `CELERY_FLOWER_PORT` | Task monitoring |
 | **Prometheus** | 9090 | **9091** | `.env.production` → `PROMETHEUS_PORT` | Metrics |
 | **Grafana** | 3000 | **3001** | `.env.production` → `GRAFANA_PORT` | Dashboards |
@@ -35,7 +35,7 @@ nano .env.production
 APP_PORT=8765            # Change to your preferred port
 NGINX_PORT=8766          # Change to your preferred port
 POSTGRES_PORT=5433       # Change to your preferred port
-REDIS_PORT=6380          # Change to your preferred port
+REDIS_PORT=6382          # Change to your preferred port
 CELERY_FLOWER_PORT=5556  # Change to your preferred port
 PROMETHEUS_PORT=9091     # Change to your preferred port
 GRAFANA_PORT=3001        # Change to your preferred port
@@ -65,7 +65,7 @@ export NGINX_PORT=9001
    - Example: 5433 (PostgreSQL custom)
 
 3. **Cache/Message Queue**: 6000-6999
-   - Example: 6380 (Redis custom)
+   - Example: 6382 (Redis custom)
 
 4. **Monitoring Tools**: 9000-9999
    - Example: 9091 (Prometheus), 3001 (Grafana)
@@ -128,7 +128,7 @@ If default custom ports are taken, try these:
 5433, 5434, 5435, 5436, 5437
 
 # Redis alternatives
-6380, 6381, 6382, 6383, 6384
+6382, 6383, 6384, 6385, 6386
 
 # Monitoring alternatives
 9091, 9092, 9093, 9094, 9095
@@ -149,7 +149,7 @@ nano .env.production
 APP_PORT=8765
 NGINX_PORT=8766
 POSTGRES_PORT=5433
-REDIS_PORT=6380
+REDIS_PORT=6382
 CELERY_FLOWER_PORT=5556
 PROMETHEUS_PORT=9091
 GRAFANA_PORT=3001
@@ -298,7 +298,7 @@ sudo ufw allow 8767/tcp  # HTTPS
 sudo ufw deny 5433/tcp
 
 # Deny direct cache access
-sudo ufw deny 6380/tcp
+sudo ufw deny 6382/tcp
 
 # Allow monitoring only from specific IP
 sudo ufw allow from 192.168.1.0/24 to any port 3001
