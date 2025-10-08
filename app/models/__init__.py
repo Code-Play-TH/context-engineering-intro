@@ -1,5 +1,6 @@
-"""Database models"""
+"""Models package."""
 from app.models.user import User
-from app.models.enums import Role
+from app.models.refresh_token import RefreshToken
+from app.models.audit_log import AuditLog
 
-__all__ = ["User", "Role"]
+__all__ = ["User", "RefreshToken", "AuditLog"]

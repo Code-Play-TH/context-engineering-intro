@@ -1,1 +1,1 @@
-"""Utility scripts"""
+"""Scripts package."""

@@ -46,7 +46,7 @@ This task list covers the MVP implementation of user authentication with JWT, ba
     -   Create database migration
     -   _Requirements: 1.1, 1.2_
 
--   [ ] 5. Create RefreshToken model
+-   [x] 5. Create RefreshToken model
 
     -   Define `app/models/refresh_token.py`
     -   Fields: id, user_id, token_hash, expires_at, created_at, revoked
@@ -54,7 +54,7 @@ This task list covers the MVP implementation of user authentication with JWT, ba
     -   Create database migration
     -   _Requirements: 1.4_
 
--   [ ] 6. Implement password hashing utilities
+-   [x] 6. Implement password hashing utilities
 
     -   Create `app/core/security.py`
     -   Implement `hash_password()` using bcrypt (cost factor 12)
@@ -62,7 +62,7 @@ This task list covers the MVP implementation of user authentication with JWT, ba
     -   Add password strength validation function
     -   _Requirements: 1.1, 1.5_
 
--   [ ] 7. Implement JWT token generation and validation
+-   [x] 7. Implement JWT token generation and validation
     -   Add JWT functions to `app/core/security.py`
     -   Implement `create_access_token()` (30 min expiry)
     -   Implement `create_refresh_token()` (7 days expiry)
@@ -74,16 +74,16 @@ This task list covers the MVP implementation of user authentication with JWT, ba
 
 ## Phase 3: Authentication Service & API
 
--   [ ] 8. Create AuthService
+-   [x] 8. Create AuthService
 
     -   Create `app/services/auth_service.py`
     -   Implement `login(email, password)` method
     -   Implement `refresh_token(refresh_token)` method with token rotation
     -   Implement `logout(refresh_token)` method
-    -   Add rate limiting check (5 attempts per 15 min)
+    -   Add rate limiting check (5 attempts per 15 min) - Skipped for MVP
     -   _Requirements: 1.2, 1.4_
 
--   [ ] 9. Create authentication endpoints
+-   [x] 9. Create authentication endpoints
 
     -   Create `app/api/v1/auth.py`
     -   POST `/api/v1/auth/login` - Login with email/password
@@ -93,7 +93,7 @@ This task list covers the MVP implementation of user authentication with JWT, ba
     -   Add request/response schemas
     -   _Requirements: 1.2_
 
--   [ ] 10. Implement authentication middleware
+-   [x] 10. Implement authentication middleware
     -   Create `app/core/auth.py` with `get_current_user` dependency
     -   Extract and validate JWT from Authorization header
     -   Return user object or raise 401 Unauthorized
@@ -104,7 +104,7 @@ This task list covers the MVP implementation of user authentication with JWT, ba
 
 ## Phase 4: User Management
 
--   [ ] 11. Create UserService
+-   [x] 11. Create UserService
 
     -   Create `app/services/user_service.py`
     -   Implement `create_user(user_data)` method
@@ -114,7 +114,7 @@ This task list covers the MVP implementation of user authentication with JWT, ba
     -   Implement `deactivate_user(user_id)` method (soft delete)
     -   _Requirements: 1.1, 1.6_
 
--   [ ] 12. Create user management endpoints
+-   [x] 12. Create user management endpoints
     -   Create `app/api/v1/users.py`
     -   POST `/api/v1/users` - Create user (Admin only)
     -   GET `/api/v1/users` - List users with pagination (Admin only)
@@ -127,7 +127,7 @@ This task list covers the MVP implementation of user authentication with JWT, ba
 
 ## Phase 5: Role-Based Access Control (RBAC)
 
--   [ ] 13. Implement permission checking
+-   [x] 13. Implement permission checking
 
     -   Create `app/services/permission_service.py`
     -   Define permission matrix for 4 roles
@@ -135,7 +135,7 @@ This task list covers the MVP implementation of user authentication with JWT, ba
     -   Create permission decorators for endpoints
     -   _Requirements: 1.3_
 
--   [ ] 14. Add role-based endpoint protection
+-   [x] 14. Add role-based endpoint protection
     -   Apply permission checks to user management endpoints
     -   Add `require_role` dependency for protected routes
     -   Test access control for all 4 roles
@@ -165,7 +165,7 @@ This task list covers the MVP implementation of user authentication with JWT, ba
 
 ## Phase 7: Basic Audit Logging
 
--   [ ] 17. Create AuditLog model
+-   [x] 17. Create AuditLog model
 
     -   Define `app/models/audit_log.py`
     -   Fields: id, user_id, action, resource, resource_id, details (JSON), ip_address, success, created_at
@@ -173,7 +173,7 @@ This task list covers the MVP implementation of user authentication with JWT, ba
     -   Add index on created_at
     -   _Requirements: 1.7_
 
--   [ ] 18. Implement audit logging service
+-   [x] 18. Implement audit logging service
     -   Create `app/services/audit_service.py`
     -   Implement `log_login(user_id, ip, success)` method
     -   Implement `log_user_action(user_id, action, details)` method
@@ -203,7 +203,7 @@ This task list covers the MVP implementation of user authentication with JWT, ba
 
 ## Phase 9: Database Seeding & Documentation
 
--   [ ] 21. Create database seed script
+-   [x] 21. Create database seed script
 
     -   Create `scripts/seed_admin.py`
     -   Generate default admin user

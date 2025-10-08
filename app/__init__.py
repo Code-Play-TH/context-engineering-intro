@@ -1,6 +1,1 @@
-"""
-KOL Influencer Management System
-Backend API
-"""
-
-__version__ = "0.1.0"
+"""KOL Management System application package."""
