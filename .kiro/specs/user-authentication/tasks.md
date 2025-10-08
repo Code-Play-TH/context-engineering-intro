@@ -26,7 +26,8 @@ This task list covers the MVP implementation of user authentication with JWT, ba
     -   Add database URL to environment variables
     -   _Requirements: All_
 
--   [ ] 3. Initialize Alembic for migrations
+-   [x] 3. Initialize Alembic for migrations
+
     -   Run `alembic init alembic`
     -   Configure `alembic.ini` with database URL
     -   Update `alembic/env.py` to use SQLModel metadata
@@ -37,7 +38,7 @@ This task list covers the MVP implementation of user authentication with JWT, ba
 
 ## Phase 2: Core Models & Authentication
 
--   [ ] 4. Create User model
+-   [x] 4. Create User model
 
     -   Define `app/models/user.py` with User table
     -   Fields: id, email, hashed_password, full_name, role, is_active, created_at, updated_at, last_login_at
