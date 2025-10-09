@@ -1,10 +1,14 @@
 """
 Database connection and session management
 """
-from sqlmodel import Session, create_engine
+from sqlmodel import Session, create_engine, SQLModel
 from sqlalchemy.pool import QueuePool
+from sqlalchemy.ext.declarative import declarative_base
 from typing import Generator
 from app.core.config import settings
+
+# Create Base for SQLAlchemy models (for compatibility)
+Base = declarative_base()
 
 
 # Create SQLModel engine with connection pooling

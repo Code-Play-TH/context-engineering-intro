@@ -12,6 +12,7 @@ from app.schemas.kol import (
     KOLResponse,
     KOLListResponse,
     SocialHandleCreate,
+    SocialHandleUpdate,
     SocialHandleResponse
 )
 from app.models.user import User
@@ -56,11 +57,13 @@ def list_kols(
     tier: Optional[str] = None,
     status: Optional[str] = None,
     tags: Optional[List[str]] = Query(None),
+    sort_by: str = Query("created_at", regex="^(name|created_at|updated_at)$"),
+    sort_order: str = Query("desc", regex="^(asc|desc)$"),
     db: Session = Depends(get_session),
     current_user: User = Depends(get_current_user)
 ):
     """
-    List KOLs with pagination and filters.
+    List KOLs with pagination, filters, and sorting.
     """
     PermissionService.require_permission(current_user.role, "kols", "read")
     
@@ -75,7 +78,9 @@ def list_kols(
         location=location,
         tier=tier,
         status=status,
-        tags=tags
+        tags=tags,
+        sort_by=sort_by,
+        sort_order=sort_order
     )
     
     return KOLListResponse(
@@ -213,3 +218,47 @@ def remove_tag(
     kol = kol_service.remove_tag(kol_id, tag)
     
     return kol
+
+@router.put("/{kol_id}/social-handles/{handle_id}", response_model=SocialHandleResponse)
+def update_social_handle(
+    kol_id: int,
+    handle_id: int,
+    handle_data: SocialHandleUpdate,
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Update social media handle.
+    """
+    PermissionService.require_permission(current_user.role, "kols", "update")
+    
+    kol_service = KOLService(db)
+    handle = kol_service.update_social_handle(
+        handle_id=handle_id,
+        platform=handle_data.platform,
+        handle=handle_data.handle,
+        url=handle_data.url,
+        follower_count=handle_data.follower_count,
+        is_verified=handle_data.is_verified,
+        is_active=handle_data.is_active
+    )
+    
+    return handle
+
+
+@router.delete("/{kol_id}/social-handles/{handle_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_social_handle(
+    kol_id: int,
+    handle_id: int,
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Delete social media handle.
+    """
+    PermissionService.require_permission(current_user.role, "kols", "delete")
+    
+    kol_service = KOLService(db)
+    kol_service.delete_social_handle(handle_id)
+    
+    return None

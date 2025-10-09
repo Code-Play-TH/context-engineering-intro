@@ -9,7 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plus, Trash2, ArrowLeft } from "lucide-react";
-import api from "@/lib/api";
+import { useCreateKOL } from "@/hooks/useKOLs";
+import { CreateKOLData } from "@/lib/api/kols";
 
 interface KOLFormData {
     name: string;
@@ -20,22 +21,22 @@ interface KOLFormData {
     tags: string;
     notes: string;
     social_handles: Array<{
-        platform: string;
+        platform: 'instagram' | 'tiktok' | 'youtube' | 'twitter' | 'facebook';
         handle: string;
         url: string;
         follower_count: number;
         is_verified: boolean;
+        is_active: boolean;
     }>;
 }
 
 export default function NewKOLPage() {
     const router = useRouter();
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [error, setError] = useState("");
+    const createKOL = useCreateKOL();
 
     const { register, control, handleSubmit, formState: { errors } } = useForm<KOLFormData>({
         defaultValues: {
-            social_handles: [{ platform: "instagram", handle: "", url: "", follower_count: 0, is_verified: false }],
+            social_handles: [{ platform: "instagram", handle: "", url: "", follower_count: 0, is_verified: false, is_active: true }],
         },
     });
 
@@ -45,22 +46,18 @@ export default function NewKOLPage() {
     });
 
     const onSubmit = async (data: KOLFormData) => {
-        setIsSubmitting(true);
-        setError("");
-
         try {
-            const payload = {
+            const payload: CreateKOLData = {
                 ...data,
-                niche: data.niche ? data.niche.split(",").map((n) => n.trim()) : [],
-                tags: data.tags ? data.tags.split(",").map((t) => t.trim()) : [],
+                niche: data.niche ? data.niche.split(",").map((n) => n.trim()).filter(n => n) : [],
+                tags: data.tags ? data.tags.split(",").map((t) => t.trim()).filter(t => t) : [],
+                social_handles: data.social_handles.filter(handle => handle.handle.trim()),
             };
 
-            await api.post("/kols", payload);
+            await createKOL.mutateAsync(payload);
             router.push("/kols");
-        } catch (err: any) {
-            setError(err.response?.data?.detail || "Failed to create KOL");
-        } finally {
-            setIsSubmitting(false);
+        } catch (error) {
+            console.error("Failed to create KOL:", error);
         }
     };
 
@@ -164,7 +161,7 @@ export default function NewKOLPage() {
                                     variant="outline"
                                     size="sm"
                                     onClick={() =>
-                                        append({ platform: "instagram", handle: "", url: "", follower_count: 0, is_verified: false })
+                                        append({ platform: "instagram", handle: "", url: "", follower_count: 0, is_verified: false, is_active: true })
                                     }
                                 >
                                     <Plus className="h-4 w-4 mr-2" />
@@ -236,23 +233,35 @@ export default function NewKOLPage() {
                                         </div>
                                     </div>
 
-                                    <div className="flex items-center gap-2">
-                                        <input
-                                            type="checkbox"
-                                            id={`verified-${index}`}
-                                            {...register(`social_handles.${index}.is_verified`)}
-                                            className="h-4 w-4 rounded border-gray-300"
-                                        />
-                                        <Label htmlFor={`verified-${index}`}>Verified Account</Label>
+                                    <div className="flex items-center gap-4">
+                                        <div className="flex items-center gap-2">
+                                            <input
+                                                type="checkbox"
+                                                id={`verified-${index}`}
+                                                {...register(`social_handles.${index}.is_verified`)}
+                                                className="h-4 w-4 rounded border-gray-300"
+                                            />
+                                            <Label htmlFor={`verified-${index}`}>Verified Account</Label>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <input
+                                                type="checkbox"
+                                                id={`active-${index}`}
+                                                {...register(`social_handles.${index}.is_active`)}
+                                                className="h-4 w-4 rounded border-gray-300"
+                                                defaultChecked
+                                            />
+                                            <Label htmlFor={`active-${index}`}>Active Account</Label>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
                         </CardContent>
                     </Card>
 
-                    {error && (
+                    {createKOL.error && (
                         <div className="p-4 bg-destructive/10 text-destructive rounded-md">
-                            {error}
+                            {createKOL.error instanceof Error ? createKOL.error.message : 'Failed to create KOL'}
                         </div>
                     )}
 
@@ -265,8 +274,8 @@ export default function NewKOLPage() {
                         >
                             Cancel
                         </Button>
-                        <Button type="submit" disabled={isSubmitting} className="flex-1">
-                            {isSubmitting ? "Creating..." : "Create KOL"}
+                        <Button type="submit" disabled={createKOL.isPending} className="flex-1">
+                            {createKOL.isPending ? "Creating..." : "Create KOL"}
                         </Button>
                     </div>
                 </form>

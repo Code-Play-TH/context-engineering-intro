@@ -102,7 +102,9 @@ class KOLService:
         location: Optional[str] = None,
         tier: Optional[str] = None,
         status: Optional[str] = None,
-        tags: Optional[List[str]] = None
+        tags: Optional[List[str]] = None,
+        sort_by: str = "created_at",
+        sort_order: str = "desc"
     ) -> tuple[List[KOL], int]:
         """
         List KOLs with pagination and filters.
@@ -116,18 +118,26 @@ class KOLService:
             tier: Filter by tier
             status: Filter by status
             tags: Filter by tags
+            sort_by: Field to sort by (name, created_at, updated_at)
+            sort_order: Sort order (asc, desc)
             
         Returns:
             Tuple of (KOLs list, total count)
         """
-        statement = select(KOL)
+        from sqlmodel import distinct
         
-        # Apply search
+        # Base query - use distinct to avoid duplicates when joining social handles
+        statement = select(KOL).distinct()
+        
+        # Apply search including social handles
         if search:
+            # Join with social handles for search
+            statement = statement.join(SocialHandle, KOL.id == SocialHandle.kol_id, isouter=True)
             statement = statement.where(
                 or_(
                     KOL.name.ilike(f"%{search}%"),
-                    KOL.email.ilike(f"%{search}%")
+                    KOL.email.ilike(f"%{search}%"),
+                    SocialHandle.handle.ilike(f"%{search}%")
                 )
             )
         
@@ -144,15 +154,22 @@ class KOLService:
             for tag in tags:
                 statement = statement.where(KOL.tags.contains([tag]))
         
-        # Get total count
-        count_statement = select(func.count()).select_from(KOL)
+        # Get total count with same filters
+        count_statement = select(func.count(distinct(KOL.id)))
         if search:
+            count_statement = count_statement.select_from(
+                KOL.join(SocialHandle, KOL.id == SocialHandle.kol_id, isouter=True)
+            )
             count_statement = count_statement.where(
                 or_(
                     KOL.name.ilike(f"%{search}%"),
-                    KOL.email.ilike(f"%{search}%")
+                    KOL.email.ilike(f"%{search}%"),
+                    SocialHandle.handle.ilike(f"%{search}%")
                 )
             )
+        else:
+            count_statement = count_statement.select_from(KOL)
+            
         if niche:
             count_statement = count_statement.where(KOL.niche.contains([niche]))
         if location:
@@ -166,6 +183,13 @@ class KOLService:
                 count_statement = count_statement.where(KOL.tags.contains([tag]))
         
         total = self.db.exec(count_statement).one()
+        
+        # Apply sorting
+        sort_column = getattr(KOL, sort_by, KOL.created_at)
+        if sort_order.lower() == "asc":
+            statement = statement.order_by(sort_column.asc())
+        else:
+            statement = statement.order_by(sort_column.desc())
         
         # Apply pagination
         statement = statement.offset(skip).limit(limit)
@@ -418,3 +442,100 @@ class KOLService:
             self.db.refresh(kol)
         
         return kol
+    def update_social_handle(
+        self,
+        handle_id: int,
+        platform: Optional[str] = None,
+        handle: Optional[str] = None,
+        url: Optional[str] = None,
+        follower_count: Optional[int] = None,
+        is_verified: Optional[bool] = None,
+        is_active: Optional[bool] = None
+    ) -> SocialHandle:
+        """
+        Update social media handle.
+        
+        Args:
+            handle_id: Social handle ID
+            platform: New platform
+            handle: New handle/username
+            url: New profile URL
+            follower_count: New follower count
+            is_verified: New verification status
+            is_active: New active status
+            
+        Returns:
+            Updated social handle object
+            
+        Raises:
+            HTTPException: If handle not found
+        """
+        social_handle = self.db.get(SocialHandle, handle_id)
+        if not social_handle:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Social handle not found"
+            )
+        
+        # Update fields
+        if platform is not None:
+            social_handle.platform = platform
+        if handle is not None:
+            social_handle.handle = handle
+        if url is not None:
+            social_handle.url = url
+        if follower_count is not None:
+            social_handle.follower_count = follower_count
+        if is_verified is not None:
+            social_handle.is_verified = is_verified
+        if is_active is not None:
+            social_handle.is_active = is_active
+        
+        social_handle.last_enriched_at = datetime.utcnow()
+        
+        self.db.add(social_handle)
+        self.db.commit()
+        self.db.refresh(social_handle)
+        
+        # Recalculate tier if follower count changed
+        if follower_count is not None:
+            self.calculate_tier(social_handle.kol_id)
+        
+        return social_handle
+    
+    def delete_social_handle(self, handle_id: int) -> None:
+        """
+        Delete social media handle.
+        
+        Args:
+            handle_id: Social handle ID
+            
+        Raises:
+            HTTPException: If handle not found or KOL would have no handles
+        """
+        social_handle = self.db.get(SocialHandle, handle_id)
+        if not social_handle:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Social handle not found"
+            )
+        
+        # Check if this is the last handle for the KOL
+        remaining_handles = self.db.exec(
+            select(func.count(SocialHandle.id)).where(
+                SocialHandle.kol_id == social_handle.kol_id,
+                SocialHandle.id != handle_id
+            )
+        ).one()
+        
+        if remaining_handles == 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Cannot delete the last social handle. KOL must have at least one social media handle."
+            )
+        
+        self.db.delete(social_handle)
+        self.db.commit()
+        
+        # Recalculate tier
+        self.calculate_tier(social_handle.kol_id)

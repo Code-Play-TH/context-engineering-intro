@@ -29,3 +29,5 @@ class Campaign(SQLModel, table=True):
     # Relationships
     kpis: List["CampaignKPI"] = Relationship(back_populates="campaign")
     deliverables: List["Deliverable"] = Relationship(back_populates="campaign")
+    # briefs: List["Brief"] = Relationship(back_populates="campaign")  # Will be added when brief model is imported
+    # messages: List["Message"] = Relationship(back_populates="campaign")  # Will be added when message model is imported

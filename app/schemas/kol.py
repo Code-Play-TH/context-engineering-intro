@@ -18,6 +18,16 @@ class SocialHandleCreate(SocialHandleBase):
     pass
 
 
+class SocialHandleUpdate(BaseModel):
+    """Social handle update schema."""
+    platform: Optional[str] = None
+    handle: Optional[str] = None
+    url: Optional[str] = None
+    follower_count: Optional[int] = None
+    is_verified: Optional[bool] = None
+    is_active: Optional[bool] = None
+
+
 class SocialHandleResponse(SocialHandleBase):
     """Social handle response schema."""
     id: int

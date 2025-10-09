@@ -1,7 +1,7 @@
 """Main FastAPI application."""
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.v1 import auth, users, kols, campaigns
+from app.api.v1 import auth, users, kols, campaigns, briefs, messages
 from app.core.config import settings
 
 
@@ -25,6 +25,8 @@ app.include_router(auth.router, prefix="/api/v1")
 app.include_router(users.router, prefix="/api/v1")
 app.include_router(kols.router, prefix="/api/v1")
 app.include_router(campaigns.router, prefix="/api/v1")
+app.include_router(briefs.router, prefix="/api/v1")
+app.include_router(messages.router, prefix="/api/v1")
 
 
 @app.get("/")
