@@ -8,6 +8,8 @@ if TYPE_CHECKING:
     from app.models.deliverable import Deliverable
     from app.models.brief import Brief
     from app.models.message import Message
+    from app.models.post import Post
+    from app.models.performance_alert import PerformanceAlert
 
 
 class Campaign(SQLModel, table=True):
@@ -28,8 +30,14 @@ class Campaign(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     
+    # Performance tracking fields
+    hashtags: List[str] = Field(default_factory=list, sa_column=Column(JSON))
+    keywords: List[str] = Field(default_factory=list, sa_column=Column(JSON))
+    
     # Relationships
     kpis: List["CampaignKPI"] = Relationship(back_populates="campaign")
     deliverables: List["Deliverable"] = Relationship(back_populates="campaign")
     briefs: List["Brief"] = Relationship(back_populates="campaign")
     messages: List["Message"] = Relationship(back_populates="campaign")
+    posts: List["Post"] = Relationship(back_populates="campaign")
+    performance_alerts: List["PerformanceAlert"] = Relationship(back_populates="campaign")

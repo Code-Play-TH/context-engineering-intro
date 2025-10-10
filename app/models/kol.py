@@ -7,6 +7,10 @@ if TYPE_CHECKING:
     from app.models.social_handle import SocialHandle
     from app.models.brief import Brief
     from app.models.message import Message
+    from app.models.scraping_schedule import ScrapingSchedule
+    from app.models.kol_metrics import KOLMetrics
+    from app.models.post import Post
+    from app.models.performance_alert import PerformanceAlert
 
 
 class KOL(SQLModel, table=True):
@@ -27,7 +31,16 @@ class KOL(SQLModel, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     
+    # Performance tracking fields
+    last_scraped_at: Optional[datetime] = Field(default=None)
+    last_post_check_at: Optional[datetime] = Field(default=None)
+    average_engagement_rate: Optional[float] = Field(default=None)
+    
     # Relationships
     social_handles: List["SocialHandle"] = Relationship(back_populates="kol")
     briefs: List["Brief"] = Relationship(back_populates="kol")
     messages: List["Message"] = Relationship(back_populates="kol")
+    scraping_schedule: Optional["ScrapingSchedule"] = Relationship(back_populates="kol")
+    metrics: List["KOLMetrics"] = Relationship(back_populates="kol")
+    posts: List["Post"] = Relationship(back_populates="kol")
+    performance_alerts: List["PerformanceAlert"] = Relationship(back_populates="kol")
