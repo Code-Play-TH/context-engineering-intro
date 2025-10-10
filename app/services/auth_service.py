@@ -181,3 +181,128 @@ class AuthService:
             self.db.add(token)
         
         self.db.commit()
+    
+    def request_password_reset(self, email: str) -> str:
+        """
+        Generate password reset token for user.
+        
+        Args:
+            email: User email
+            
+        Returns:
+            Password reset token
+            
+        Raises:
+            HTTPException: If user not found
+        """
+        # Get user by email
+        statement = select(User).where(User.email == email)
+        user = self.db.exec(statement).first()
+        
+        if not user:
+            # Don't reveal if email exists or not for security
+            # But still return a token format to prevent email enumeration
+            raise HTTPException(
+                status_code=status.HTTP_200_OK,
+                detail="If the email exists, a password reset link has been sent"
+            )
+        
+        if not user.is_active:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Account is deactivated"
+            )
+        
+        # Create reset token (1 hour expiry)
+        reset_token = create_access_token(
+            data={
+                "user_id": user.id,
+                "email": user.email,
+                "type": "password_reset"
+            },
+            expires_delta=timedelta(hours=1)
+        )
+        
+        # TODO: Send email with reset link
+        # For now, we'll just return the token
+        # In production, you would:
+        # 1. Generate reset link: f"https://yourapp.com/reset-password?token={reset_token}"
+        # 2. Send email with the link
+        # 3. Return success message without the token
+        
+        return reset_token
+    
+    def confirm_password_reset(self, token: str, new_password: str) -> User:
+        """
+        Reset user password using reset token.
+        
+        Args:
+            token: Password reset token
+            new_password: New password
+            
+        Returns:
+            Updated user object
+            
+        Raises:
+            HTTPException: If token is invalid or expired
+        """
+        try:
+            # Verify reset token
+            payload = verify_token(token)
+            
+            # Check if it's a password reset token
+            if payload.get("type") != "password_reset":
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Invalid token type"
+                )
+            
+            user_id = payload.get("user_id")
+            if not user_id:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Invalid token payload"
+                )
+            
+            # Get user
+            user = self.db.get(User, user_id)
+            if not user:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="User not found"
+                )
+            
+            if not user.is_active:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Account is deactivated"
+                )
+            
+            # Update password
+            user.hashed_password = hash_password(new_password)
+            user.updated_at = datetime.utcnow()
+            
+            # Invalidate all refresh tokens for security
+            statement = select(RefreshToken).where(
+                RefreshToken.user_id == user_id,
+                RefreshToken.revoked == False
+            )
+            active_tokens = self.db.exec(statement).all()
+            
+            for token_obj in active_tokens:
+                token_obj.revoked = True
+                self.db.add(token_obj)
+            
+            self.db.add(user)
+            self.db.commit()
+            self.db.refresh(user)
+            
+            return user
+            
+        except HTTPException:
+            raise
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Invalid or expired token"
+            )

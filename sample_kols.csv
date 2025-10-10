@@ -1,0 +1,4 @@
+name,email,phone,location,niche,tags,instagram,tiktok,youtube,twitter,notes
+"John Doe",john@example.com,+1234567890,"Bangkok, Thailand","lifestyle,travel","influencer,travel","johndoe","@johndoe","johndoe","johndoe","Popular lifestyle influencer"
+"Jane Smith",jane@example.com,+0987654321,"Chiang Mai, Thailand","food,cooking","chef,foodie","janesmith","@janesmith","janesmith","janesmith","Professional chef and food blogger"
+"Mike Johnson",,,"Phuket, Thailand","fitness,health","fitness,gym","mikejohnson","@mikejohnson","mikejohnson",,"Fitness trainer and health coach"

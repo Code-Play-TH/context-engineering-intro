@@ -1,8 +1,7 @@
 """Brief API endpoints."""
 from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, status, Query
-from sqlalchemy.orm import Session
-
+from sqlmodel import Session
 from app.core.database import get_session
 from app.core.auth import get_current_user
 from app.models.user import User
@@ -25,7 +24,17 @@ def create_brief(
     current_user: User = Depends(get_current_user)
 ):
     """Create a new brief."""
-    brief = BriefService.create_brief(db, brief_data, current_user.id)
+    brief_service = BriefService(db)
+    brief = brief_service.create_brief(
+        title=brief_data.title,
+        content=brief_data.content,
+        campaign_id=brief_data.campaign_id,
+        kol_id=brief_data.kol_id,
+        created_by=current_user.id,
+        template_id=brief_data.template_id,
+        brief_data=brief_data.brief_data,
+        internal_notes=brief_data.internal_notes
+    )
     return brief
 
 
@@ -58,7 +67,17 @@ def list_briefs(
         date_to=date_to
     )
     
-    briefs, total = BriefService.list_briefs(db, filters, page, page_size)
+    brief_service = BriefService(db)
+    skip = (page - 1) * page_size
+    briefs, total = brief_service.list_briefs(
+        skip=skip,
+        limit=page_size,
+        campaign_id=campaign_id,
+        kol_id=kol_id,
+        status=status,
+        created_by=created_by,
+        search=search
+    )
     
     # Convert to response format with related data
     brief_responses = []
@@ -91,7 +110,8 @@ def get_brief(
     current_user: User = Depends(get_current_user)
 ):
     """Get a specific brief by ID."""
-    brief = BriefService.get_brief(db, brief_id)
+    brief_service = BriefService(db)
+    brief = brief_service.get_brief(brief_id)
     if not brief:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -119,7 +139,15 @@ def update_brief(
     current_user: User = Depends(get_current_user)
 ):
     """Update a brief."""
-    brief = BriefService.update_brief(db, brief_id, brief_data, current_user.id)
+    brief_service = BriefService(db)
+    brief = brief_service.update_brief(
+        brief_id=brief_id,
+        title=brief_data.title,
+        content=brief_data.content,
+        brief_data=brief_data.brief_data,
+        internal_notes=brief_data.internal_notes,
+        status=brief_data.status
+    )
     return brief
 
 
@@ -131,7 +159,13 @@ def update_brief_status(
     current_user: User = Depends(get_current_user)
 ):
     """Update brief status."""
-    brief = BriefService.update_brief_status(db, brief_id, status_data, current_user.id)
+    brief_service = BriefService(db)
+    brief = brief_service.update_brief_status(
+        brief_id=brief_id,
+        status=status_data.status,
+        user_id=current_user.id,
+        kol_feedback=status_data.kol_feedback
+    )
     return brief
 
 
@@ -142,7 +176,8 @@ def delete_brief(
     current_user: User = Depends(get_current_user)
 ):
     """Delete a brief (only if in draft status)."""
-    BriefService.delete_brief(db, brief_id, current_user.id)
+    brief_service = BriefService(db)
+    brief_service.delete_brief(brief_id)
 
 
 @router.post("/generate-from-template", response_model=BriefResponse, status_code=status.HTTP_201_CREATED)
@@ -152,7 +187,14 @@ def generate_brief_from_template(
     current_user: User = Depends(get_current_user)
 ):
     """Generate a brief from a template."""
-    brief = BriefService.generate_brief_from_template(db, generation_data, current_user.id)
+    brief_service = BriefService(db)
+    brief = brief_service.generate_brief_from_template(
+        template_id=generation_data.template_id,
+        campaign_id=generation_data.campaign_id,
+        kol_id=generation_data.kol_id,
+        created_by=current_user.id,
+        variables=generation_data.variables
+    )
     return brief
 
 
@@ -163,7 +205,14 @@ def create_bulk_briefs(
     current_user: User = Depends(get_current_user)
 ):
     """Create briefs for multiple KOLs."""
-    briefs = BriefService.create_bulk_briefs(db, bulk_data, current_user.id)
+    brief_service = BriefService(db)
+    briefs = brief_service.create_bulk_briefs(
+        campaign_id=bulk_data.campaign_id,
+        kol_ids=bulk_data.kol_ids,
+        template_id=bulk_data.template_id,
+        created_by=current_user.id,
+        variables=bulk_data.variables
+    )
     return briefs
 
 
@@ -174,7 +223,8 @@ def get_brief_stats(
     current_user: User = Depends(get_current_user)
 ):
     """Get brief statistics."""
-    stats = BriefService.get_brief_stats(db, campaign_id)
+    brief_service = BriefService(db)
+    stats = brief_service.get_brief_stats(campaign_id)
     return BriefStats(**stats)
 
 
@@ -186,7 +236,16 @@ def create_brief_template(
     current_user: User = Depends(get_current_user)
 ):
     """Create a new brief template."""
-    template = BriefService.create_brief_template(db, template_data, current_user.id)
+    brief_service = BriefService(db)
+    template = brief_service.create_brief_template(
+        name=template_data.name,
+        content=template_data.content,
+        created_by=current_user.id,
+        description=template_data.description,
+        category=template_data.category,
+        variables=template_data.variables,
+        is_default=template_data.is_default
+    )
     return template
 
 
@@ -200,7 +259,14 @@ def list_brief_templates(
     current_user: User = Depends(get_current_user)
 ):
     """List brief templates with filtering and pagination."""
-    templates, total = BriefService.list_brief_templates(db, category, is_active, page, page_size)
+    brief_service = BriefService(db)
+    skip = (page - 1) * page_size
+    templates, total = brief_service.list_brief_templates(
+        skip=skip,
+        limit=page_size,
+        category=category,
+        is_active=is_active
+    )
     
     total_pages = (total + page_size - 1) // page_size
     
@@ -220,7 +286,8 @@ def get_brief_template(
     current_user: User = Depends(get_current_user)
 ):
     """Get a specific brief template by ID."""
-    template = BriefService.get_brief_template(db, template_id)
+    brief_service = BriefService(db)
+    template = brief_service.get_brief_template(template_id)
     if not template:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -237,7 +304,17 @@ def update_brief_template(
     current_user: User = Depends(get_current_user)
 ):
     """Update a brief template."""
-    template = BriefService.update_brief_template(db, template_id, template_data)
+    brief_service = BriefService(db)
+    template = brief_service.update_brief_template(
+        template_id=template_id,
+        name=template_data.name,
+        description=template_data.description,
+        content=template_data.content,
+        category=template_data.category,
+        variables=template_data.variables,
+        is_active=template_data.is_active,
+        is_default=template_data.is_default
+    )
     return template
 
 
@@ -248,4 +325,5 @@ def delete_brief_template(
     current_user: User = Depends(get_current_user)
 ):
     """Delete a brief template."""
-    BriefService.delete_brief_template(db, template_id)
+    brief_service = BriefService(db)
+    brief_service.delete_brief_template(template_id)

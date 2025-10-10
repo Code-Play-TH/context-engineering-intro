@@ -58,7 +58,8 @@ This task list covers the MVP implementation of KOL database with manual entry, 
     -   DELETE `/api/v1/kols/{id}` - Soft delete KOL
     -   _Requirements: 1.1_
 
--   [ ] 6. Add social handle management
+-   [x] 6. Add social handle management
+
     -   Implement `update_social_handle(handle_id, handle_data)` method in KOLService
     -   Implement `delete_social_handle(handle_id)` method in KOLService
     -   PUT `/api/v1/kols/{kol_id}/social-handles/{handle_id}` endpoint
@@ -69,7 +70,7 @@ This task list covers the MVP implementation of KOL database with manual entry, 
 
 ## Phase 3: Search & Filtering ✅ COMPLETED
 
--   [ ] 7. Enhance search functionality
+-   [x] 7. Enhance search functionality
 
     -   Add search by social handle to `list_kols()` method (currently only searches name and email)
     -   Use JOIN with social_handles table to search by handle
@@ -86,7 +87,8 @@ This task list covers the MVP implementation of KOL database with manual entry, 
     -   Support multiple filters with AND logic
     -   _Requirements: 1.2_
 
--   [ ] 9. Add sorting functionality
+-   [x] 9. Add sorting functionality
+
     -   Add `sort_by` and `sort_order` parameters to `list_kols()` method
     -   Support sort by name, created_at, updated_at
     -   Add sorting to API endpoint query parameters
@@ -96,7 +98,7 @@ This task list covers the MVP implementation of KOL database with manual entry, 
 
 ## Phase 4: CSV Import
 
--   [ ] 10. Create ImportService
+-   [x] 10. Create ImportService
 
     -   Create `app/services/import_service.py`
     -   Implement `upload_import_file(file)` method
@@ -105,7 +107,7 @@ This task list covers the MVP implementation of KOL database with manual entry, 
     -   Return job_id for tracking
     -   _Requirements: 1.3_
 
--   [ ] 11. Implement import validation
+-   [x] 11. Implement import validation
 
     -   Implement `validate_import_data(job_id)` method
     -   Check required fields (name, at least one social handle)
@@ -115,7 +117,7 @@ This task list covers the MVP implementation of KOL database with manual entry, 
     -   Store validation errors in ImportJob
     -   _Requirements: 1.3_
 
--   [ ] 12. Implement import processing
+-   [x] 12. Implement import processing
 
     -   Implement `process_import(job_id)` method
     -   Process rows in batches of 100
@@ -125,7 +127,8 @@ This task list covers the MVP implementation of KOL database with manual entry, 
     -   Move file to processed/ or failed/ folder
     -   _Requirements: 1.3_
 
--   [ ] 13. Create import endpoints
+-   [x] 13. Create import endpoints
+
     -   POST `/api/v1/kols/import` - Upload CSV file
     -   GET `/api/v1/kols/import/{job_id}` - Get import status
     -   POST `/api/v1/kols/import/{job_id}/validate` - Validate import

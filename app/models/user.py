@@ -9,6 +9,8 @@ from app.models.enums import Role
 
 if TYPE_CHECKING:
     from app.models.refresh_token import RefreshToken
+    from app.models.brief import Brief
+    from app.models.message import Message
 
 
 class User(SQLModel, table=True):
@@ -59,11 +61,9 @@ class User(SQLModel, table=True):
     # Relationships
     refresh_tokens: List["RefreshToken"] = Relationship(back_populates="user")
     
-    # Brief relationships (will be added when brief models are imported)
-    # brief_templates: List["BriefTemplate"] = Relationship(back_populates="creator")
-    # created_briefs: List["Brief"] = Relationship(back_populates="creator", foreign_keys="Brief.created_by")
-    # approved_briefs: List["Brief"] = Relationship(back_populates="approver", foreign_keys="Brief.approved_by")
+    # Brief relationships (commented out to avoid circular import issues)
+    # created_briefs: List["Brief"] = Relationship(back_populates="creator")
+    # approved_briefs: List["Brief"] = Relationship(back_populates="approver")
     
-    # Message relationships (will be added when message models are imported)
-    # message_templates: List["MessageTemplate"] = Relationship(back_populates="creator")
+    # Message relationships (commented out to avoid circular import issues)
     # sent_messages: List["Message"] = Relationship(back_populates="sender")

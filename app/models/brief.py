@@ -1,7 +1,6 @@
-from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, ForeignKey, JSON, Enum
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql import func
-from app.core.database import Base
+from datetime import datetime
+from typing import Optional, Dict, Any, List
+from sqlmodel import SQLModel, Field, Relationship, Column, JSON
 import enum
 
 
@@ -17,21 +16,21 @@ class BriefStatus(str, enum.Enum):
     REJECTED = "rejected"
 
 
-class Brief(Base):
+class Brief(SQLModel, table=True):
     """
     Brief model for KOL campaign briefs.
     Contains detailed instructions and requirements for KOLs.
     """
     __tablename__ = "briefs"
 
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String(255), nullable=False)
+    id: Optional[int] = Field(default=None, primary_key=True)
+    title: str = Field(max_length=255)
     
     # Brief content
-    content = Column(Text, nullable=False)
+    content: str
     
     # Brief metadata
-    status = Column(Enum(BriefStatus), default=BriefStatus.DRAFT, index=True)
+    status: BriefStatus = Field(default=BriefStatus.DRAFT, index=True)
     
     # JSON field for structured brief data
     # Example: {
@@ -41,37 +40,38 @@ class Brief(Base):
     #   "compensation": {"amount": 5000, "currency": "THB", "type": "fixed"},
     #   "guidelines": ["Brand voice guidelines", "Visual style requirements"]
     # }
-    brief_data = Column(JSON, default=dict)
+    brief_data: Optional[Dict[str, Any]] = Field(default=None, sa_column=Column(JSON))
     
     # Relationships
-    campaign_id = Column(Integer, ForeignKey("campaigns.id"), nullable=False)
-    kol_id = Column(Integer, ForeignKey("kols.id"), nullable=False)
-    template_id = Column(Integer, ForeignKey("brief_templates.id"), nullable=True)
+    campaign_id: int = Field(foreign_key="campaigns.id")
+    kol_id: int = Field(foreign_key="kols.id")
+    template_id: Optional[int] = Field(default=None, foreign_key="brief_templates.id")
     
     # Approval workflow
-    created_by = Column(Integer, ForeignKey("users.id"), nullable=False)
-    approved_by = Column(Integer, ForeignKey("users.id"), nullable=True)
-    approved_at = Column(DateTime(timezone=True), nullable=True)
+    created_by: int = Field(foreign_key="users.id")
+    approved_by: Optional[int] = Field(default=None, foreign_key="users.id")
+    approved_at: Optional[datetime] = None
     
     # Communication tracking
-    sent_at = Column(DateTime(timezone=True), nullable=True)
-    acknowledged_at = Column(DateTime(timezone=True), nullable=True)
+    sent_at: Optional[datetime] = None
+    acknowledged_at: Optional[datetime] = None
     
     # Notes and feedback
-    internal_notes = Column(Text)  # Internal team notes
-    kol_feedback = Column(Text)    # KOL feedback/questions
+    internal_notes: Optional[str] = None  # Internal team notes
+    kol_feedback: Optional[str] = None    # KOL feedback/questions
     
     # Audit fields
-    created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: Optional[datetime] = Field(default_factory=datetime.utcnow)
     
     # Relationships
-    campaign = relationship("Campaign", back_populates="briefs")
-    kol = relationship("KOL", back_populates="briefs")
-    template = relationship("BriefTemplate", back_populates="briefs")
-    creator = relationship("User", foreign_keys=[created_by], back_populates="created_briefs")
-    approver = relationship("User", foreign_keys=[approved_by], back_populates="approved_briefs")
-    messages = relationship("Message", back_populates="brief")
+    campaign: Optional["Campaign"] = Relationship(back_populates="briefs")
+    kol: Optional["KOL"] = Relationship(back_populates="briefs")
+    template: Optional["BriefTemplate"] = Relationship(back_populates="briefs")
+    # User relationships (commented out to avoid circular import issues)
+    # creator: Optional["User"] = Relationship(back_populates="created_briefs")
+    # approver: Optional["User"] = Relationship(back_populates="approved_briefs")
+    messages: List["Message"] = Relationship(back_populates="brief")
 
     def __repr__(self):
         return f"<Brief(id={self.id}, title='{self.title}', status='{self.status}')>"

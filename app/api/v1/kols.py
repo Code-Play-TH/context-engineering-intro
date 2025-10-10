@@ -1,6 +1,6 @@
 """KOL management endpoints."""
 from typing import Optional, List
-from fastapi import APIRouter, Depends, HTTPException, status, Query
+from fastapi import APIRouter, Depends, HTTPException, status, Query, UploadFile, File
 from sqlmodel import Session
 from app.core.database import get_session
 from app.core.auth import get_current_user
@@ -262,3 +262,142 @@ def delete_social_handle(
     kol_service.delete_social_handle(handle_id)
     
     return None
+
+
+# Import endpoints
+@router.post("/import", status_code=status.HTTP_201_CREATED)
+async def upload_import_file(
+    file: UploadFile = File(...),
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Upload CSV/Excel file for KOL import.
+    """
+    PermissionService.require_permission(current_user.role, "kols", "create")
+    
+    from app.services.import_service import ImportService
+    import_service = ImportService(db)
+    
+    job = await import_service.upload_import_file(file, current_user.id)
+    return {
+        "job_id": job.id,
+        "filename": job.filename,
+        "total_rows": job.total_rows,
+        "status": job.status,
+        "message": "File uploaded successfully. Use job_id to check status and validate."
+    }
+
+
+@router.get("/import/{job_id}")
+def get_import_status(
+    job_id: int,
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Get import job status and details.
+    """
+    PermissionService.require_permission(current_user.role, "kols", "read")
+    
+    from app.services.import_service import ImportService
+    import_service = ImportService(db)
+    
+    job = import_service.get_import_job(job_id)
+    if not job:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Import job not found"
+        )
+    
+    return {
+        "job_id": job.id,
+        "filename": job.filename,
+        "status": job.status,
+        "total_rows": job.total_rows,
+        "processed_rows": job.processed_rows,
+        "success_count": job.success_count,
+        "error_count": job.error_count,
+        "errors": job.errors,
+        "created_at": job.created_at,
+        "completed_at": job.completed_at
+    }
+
+
+@router.post("/import/{job_id}/validate")
+def validate_import(
+    job_id: int,
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Validate import data before processing.
+    """
+    PermissionService.require_permission(current_user.role, "kols", "create")
+    
+    from app.services.import_service import ImportService
+    import_service = ImportService(db)
+    
+    job = import_service.validate_import_data(job_id)
+    
+    return {
+        "job_id": job.id,
+        "status": job.status,
+        "error_count": job.error_count,
+        "errors": job.errors,
+        "message": "Validation completed" if job.error_count == 0 else f"Validation failed with {job.error_count} errors"
+    }
+
+
+@router.post("/import/{job_id}/process")
+def process_import(
+    job_id: int,
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Process validated import data and create KOL records.
+    """
+    PermissionService.require_permission(current_user.role, "kols", "create")
+    
+    from app.services.import_service import ImportService
+    import_service = ImportService(db)
+    
+    job = import_service.process_import(job_id)
+    
+    return {
+        "job_id": job.id,
+        "status": job.status,
+        "success_count": job.success_count,
+        "error_count": job.error_count,
+        "message": f"Import completed. {job.success_count} KOLs created successfully" if job.status == "completed" else f"Import failed with {job.error_count} errors"
+    }
+
+
+@router.get("/{kol_id}/duplicates")
+def find_duplicates(
+    kol_id: int,
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Find potential duplicate KOLs.
+    """
+    PermissionService.require_permission(current_user.role, "kols", "read")
+    
+    kol_service = KOLService(db)
+    duplicates = kol_service.find_duplicates(kol_id)
+    
+    return {
+        "kol_id": kol_id,
+        "duplicate_count": len(duplicates),
+        "duplicates": [
+            {
+                "id": dup.id,
+                "name": dup.name,
+                "email": dup.email,
+                "created_at": dup.created_at
+            }
+            for dup in duplicates
+        ]
+    }

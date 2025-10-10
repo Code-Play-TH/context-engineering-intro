@@ -82,3 +82,70 @@ def get_current_user_info(
     Get current authenticated user information.
     """
     return current_user
+@router.post("/password-reset")
+def request_password_reset(
+    email_data: dict,
+    db: Session = Depends(get_session)
+):
+    """
+    Request password reset token.
+    """
+    email = email_data.get("email")
+    if not email:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Email is required"
+        )
+    
+    auth_service = AuthService(db)
+    
+    try:
+        reset_token = auth_service.request_password_reset(email)
+        
+        # In production, don't return the token
+        # Just return success message after sending email
+        return {
+            "message": "If the email exists, a password reset link has been sent",
+            "reset_token": reset_token  # Remove this in production
+        }
+    except HTTPException:
+        # Always return the same message to prevent email enumeration
+        return {
+            "message": "If the email exists, a password reset link has been sent"
+        }
+
+
+@router.post("/password-reset/confirm")
+def confirm_password_reset(
+    reset_data: dict,
+    db: Session = Depends(get_session)
+):
+    """
+    Confirm password reset with token and new password.
+    """
+    token = reset_data.get("token")
+    new_password = reset_data.get("new_password")
+    
+    if not token or not new_password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Token and new password are required"
+        )
+    
+    if len(new_password) < 8:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password must be at least 8 characters long"
+        )
+    
+    auth_service = AuthService(db)
+    user = auth_service.confirm_password_reset(token, new_password)
+    
+    return {
+        "message": "Password reset successfully",
+        "user": {
+            "id": user.id,
+            "email": user.email,
+            "full_name": user.full_name
+        }
+    }

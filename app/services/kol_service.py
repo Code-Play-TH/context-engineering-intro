@@ -539,3 +539,108 @@ class KOLService:
         
         # Recalculate tier
         self.calculate_tier(social_handle.kol_id)
+    
+    def find_duplicates(self, kol_id: int) -> List[KOL]:
+        """
+        Find potential duplicate KOLs based on email and social handles.
+        
+        Args:
+            kol_id: KOL ID to check for duplicates
+            
+        Returns:
+            List of potential duplicate KOLs
+            
+        Raises:
+            HTTPException: If KOL not found
+        """
+        kol = self.get_kol(kol_id)
+        if not kol:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="KOL not found"
+            )
+        
+        duplicates = []
+        
+        # Check for exact email match
+        if kol.email:
+            email_duplicates = self.db.exec(
+                select(KOL).where(
+                    KOL.email == kol.email,
+                    KOL.id != kol_id,
+                    KOL.status == "active"
+                )
+            ).all()
+            duplicates.extend(email_duplicates)
+        
+        # Check for exact social handle match
+        kol_handles = self.db.exec(
+            select(SocialHandle).where(SocialHandle.kol_id == kol_id)
+        ).all()
+        
+        for handle in kol_handles:
+            handle_duplicates = self.db.exec(
+                select(KOL).join(SocialHandle).where(
+                    SocialHandle.platform == handle.platform,
+                    SocialHandle.handle == handle.handle,
+                    SocialHandle.kol_id != kol_id,
+                    KOL.status == "active"
+                )
+            ).all()
+            duplicates.extend(handle_duplicates)
+        
+        # Remove duplicates from the list
+        unique_duplicates = []
+        seen_ids = set()
+        for dup in duplicates:
+            if dup.id not in seen_ids:
+                unique_duplicates.append(dup)
+                seen_ids.add(dup.id)
+        
+        return unique_duplicates
+
+    def validate_kol_deletion(self, kol_id: int) -> bool:
+        """
+        Validate if KOL can be deleted (no active campaigns).
+        
+        Args:
+            kol_id: KOL ID to validate
+            
+        Returns:
+            True if KOL can be deleted
+            
+        Raises:
+            HTTPException: If KOL has active campaigns
+        """
+        # Check if KOL has active campaigns
+        # Note: This would require campaign_kol relationship table
+        # For now, we'll just check if KOL exists and is not already inactive
+        
+        kol = self.get_kol(kol_id)
+        if not kol:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="KOL not found"
+            )
+        
+        if kol.status == "inactive":
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="KOL is already inactive"
+            )
+        
+        # TODO: Add campaign check when campaign_kol relationship is implemented
+        # active_campaigns = self.db.exec(
+        #     select(func.count(CampaignKOL.id)).where(
+        #         CampaignKOL.kol_id == kol_id,
+        #         CampaignKOL.status.in_(["active", "pending"])
+        #     )
+        # ).one()
+        # 
+        # if active_campaigns > 0:
+        #     raise HTTPException(
+        #         status_code=status.HTTP_400_BAD_REQUEST,
+        #         detail=f"Cannot delete KOL with {active_campaigns} active campaigns"
+        #     )
+        
+        return True

@@ -146,7 +146,7 @@ This task list covers the MVP implementation of user authentication with JWT, ba
 
 ## Phase 6: Password Management (MVP - Basic)
 
--   [ ] 15. Implement password reset flow
+-   [x] 15. Implement password reset flow
 
     -   Add `request_password_reset(email)` to AuthService
     -   Generate reset token (1 hour expiry)
@@ -154,7 +154,8 @@ This task list covers the MVP implementation of user authentication with JWT, ba
     -   POST `/api/v1/auth/password-reset` endpoint
     -   _Requirements: 1.5_
 
--   [ ] 16. Implement password reset confirmation
+-   [x] 16. Implement password reset confirmation
+
     -   Add `confirm_password_reset(token, new_password)` to AuthService
     -   Validate reset token
     -   Update password and invalidate all refresh tokens

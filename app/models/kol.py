@@ -5,6 +5,8 @@ from sqlmodel import Field, SQLModel, Column, ARRAY, String, Relationship
 
 if TYPE_CHECKING:
     from app.models.social_handle import SocialHandle
+    from app.models.brief import Brief
+    from app.models.message import Message
 
 
 class KOL(SQLModel, table=True):
@@ -27,5 +29,5 @@ class KOL(SQLModel, table=True):
     
     # Relationships
     social_handles: List["SocialHandle"] = Relationship(back_populates="kol")
-    # briefs: List["Brief"] = Relationship(back_populates="kol")  # Will be added when brief model is imported
-    # messages: List["Message"] = Relationship(back_populates="kol")  # Will be added when message model is imported
+    briefs: List["Brief"] = Relationship(back_populates="kol")
+    messages: List["Message"] = Relationship(back_populates="kol")
