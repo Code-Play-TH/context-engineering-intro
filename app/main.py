@@ -1,7 +1,7 @@
 """Main FastAPI application."""
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.v1 import auth, users, kols, campaigns, briefs, messages
+from app.api.v1 import auth, users, kols, campaigns, briefs, messages, rate_limits, performance
 from app.core.config import settings
 
 
@@ -27,6 +27,8 @@ app.include_router(kols.router, prefix="/api/v1")
 app.include_router(campaigns.router, prefix="/api/v1")
 app.include_router(briefs.router, prefix="/api/v1")
 app.include_router(messages.router, prefix="/api/v1")
+app.include_router(rate_limits.router, prefix="/api/v1")
+app.include_router(performance.router, prefix="/api/v1")
 
 
 @app.get("/")

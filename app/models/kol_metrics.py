@@ -2,7 +2,8 @@
 from datetime import datetime
 from typing import Optional, Dict, Any
 from decimal import Decimal
-from sqlmodel import SQLModel, Field, Relationship
+from sqlmodel import SQLModel, Field, Relationship, Column
+from sqlalchemy import JSON
 from app.models.post import SocialPlatform
 
 
@@ -43,7 +44,7 @@ class KOLMetrics(SQLModel, table=True):
     engagement_growth_rate: Decimal = Field(default=0, max_digits=5, decimal_places=2)
     
     # Platform-specific metrics (stored as JSON)
-    platform_specific_data: Dict[str, Any] = Field(default_factory=dict, sa_column_kwargs={"type_": "JSON"})
+    platform_specific_data: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
     
     # Collection metadata
     scraped_at: datetime = Field(default_factory=datetime.utcnow, index=True)

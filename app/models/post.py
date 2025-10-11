@@ -1,7 +1,8 @@
 """Post model for tracking KOL social media posts."""
 from datetime import datetime
 from typing import Optional, List
-from sqlmodel import SQLModel, Field, Relationship
+from sqlmodel import SQLModel, Field, Relationship, Column
+from sqlalchemy import JSON
 from enum import Enum
 
 
@@ -37,12 +38,12 @@ class Post(SQLModel, table=True):
     post_url: str
     post_type: PostType
     caption: Optional[str] = Field(default=None)
-    hashtags: List[str] = Field(default_factory=list, sa_column_kwargs={"type_": "JSON"})
-    mentions: List[str] = Field(default_factory=list, sa_column_kwargs={"type_": "JSON"})
+    hashtags: List[str] = Field(default_factory=list, sa_column=Column(JSON))
+    mentions: List[str] = Field(default_factory=list, sa_column=Column(JSON))
     posted_at: datetime = Field(index=True)
     detected_at: datetime = Field(default_factory=datetime.utcnow)
     is_campaign_content: bool = Field(default=False, index=True)
-    campaign_keywords_matched: List[str] = Field(default_factory=list, sa_column_kwargs={"type_": "JSON"})
+    campaign_keywords_matched: List[str] = Field(default_factory=list, sa_column=Column(JSON))
     
     # Initial metrics (captured at detection)
     initial_likes: int = Field(default=0)

@@ -1,7 +1,8 @@
 """Performance alert model for tracking KOL and campaign performance issues."""
 from datetime import datetime
 from typing import Optional, Dict, Any
-from sqlmodel import SQLModel, Field, Relationship
+from sqlmodel import SQLModel, Field, Relationship, Column
+from sqlalchemy import JSON
 from enum import Enum
 
 
@@ -51,7 +52,7 @@ class PerformanceAlert(SQLModel, table=True):
     # Message and context
     title: str
     message: str
-    context_data: Dict[str, Any] = Field(default_factory=dict, sa_column_kwargs={"type_": "JSON"})
+    context_data: Dict[str, Any] = Field(default_factory=dict, sa_column=Column(JSON))
     
     # Thresholds and values
     threshold_value: Optional[float] = Field(default=None)
