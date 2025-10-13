@@ -10,7 +10,7 @@ This task list covers the MVP implementation of report template creation, PowerP
 
 ## Phase 1: Core Models
 
--   [ ] 1. Create ReportTemplate model
+-   [x] 1. Create ReportTemplate model
 
     -   Define `app/models/report_template.py` with ReportTemplate table
     -   Fields: id, name, description, template_type, is_shared, structure (JSON), variables (Array), created_by, created_at, usage_count
@@ -18,7 +18,7 @@ This task list covers the MVP implementation of report template creation, PowerP
     -   Create database migration
     -   _Requirements: 1.1, 5.1_
 
--   [ ] 2. Create ReportGeneration model
+-   [x] 2. Create ReportGeneration model
 
     -   Define `app/models/report_generation.py`
     -   Fields: id, campaign_id, template_id, report_type, status, file_path, download_url, error_message, generated_by, generated_at, expires_at
@@ -26,7 +26,8 @@ This task list covers the MVP implementation of report template creation, PowerP
     -   Create database migration
     -   _Requirements: 3.1, 4.1_
 
--   [ ] 3. Create ReportSchedule model
+-   [x] 3. Create ReportSchedule model
+
     -   Define `app/models/report_schedule.py`
     -   Fields: id, campaign_id, template_id, frequency, recipients (Array), is_active, last_generated_at, next_generation_at, created_at
     -   Add frequency enum (daily, weekly, monthly, campaign_end)

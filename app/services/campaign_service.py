@@ -502,3 +502,428 @@ class CampaignService:
                 "avg_achievement": float(kpi_stats.avg_achievement or 0)
             }
         }
+    
+    def add_kpi(
+        self,
+        campaign_id: int,
+        kpi_type: str,
+        target_value: Decimal,
+        unit: str,
+        description: Optional[str] = None,
+        priority: str = "medium"
+    ) -> CampaignKPI:
+        """
+        Add KPI to campaign.
+        
+        Args:
+            campaign_id: Campaign ID
+            kpi_type: Type of KPI
+            target_value: Target value for the KPI
+            unit: Unit of measurement
+            description: Optional description
+            priority: Priority level
+            
+        Returns:
+            Created CampaignKPI object
+            
+        Raises:
+            HTTPException: If campaign not found or validation fails
+        """
+        campaign = self.get_campaign(campaign_id)
+        if not campaign:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Campaign not found"
+            )
+        
+        # Validate target value
+        if target_value <= 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Target value must be positive"
+            )
+        
+        # Check for duplicate KPI type
+        existing_kpi = self.db.exec(
+            select(CampaignKPI).where(
+                CampaignKPI.campaign_id == campaign_id,
+                CampaignKPI.kpi_type == kpi_type
+            )
+        ).first()
+        
+        if existing_kpi:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"KPI of type '{kpi_type}' already exists for this campaign"
+            )
+        
+        kpi = CampaignKPI(
+            campaign_id=campaign_id,
+            kpi_type=kpi_type,
+            target_value=target_value,
+            unit=unit,
+            description=description,
+            priority=priority
+        )
+        
+        self.db.add(kpi)
+        self.db.commit()
+        self.db.refresh(kpi)
+        
+        return kpi
+    
+    def update_kpi(
+        self,
+        kpi_id: int,
+        target_value: Optional[Decimal] = None,
+        actual_value: Optional[Decimal] = None,
+        unit: Optional[str] = None,
+        description: Optional[str] = None,
+        priority: Optional[str] = None
+    ) -> CampaignKPI:
+        """
+        Update KPI information.
+        
+        Args:
+            kpi_id: KPI ID
+            target_value: New target value
+            actual_value: New actual value
+            unit: New unit
+            description: New description
+            priority: New priority
+            
+        Returns:
+            Updated CampaignKPI object
+            
+        Raises:
+            HTTPException: If KPI not found or validation fails
+        """
+        kpi = self.db.get(CampaignKPI, kpi_id)
+        if not kpi:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="KPI not found"
+            )
+        
+        # Update fields
+        if target_value is not None:
+            if target_value <= 0:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Target value must be positive"
+                )
+            kpi.target_value = target_value
+        
+        if actual_value is not None:
+            if actual_value < 0:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Actual value cannot be negative"
+                )
+            kpi.actual_value = actual_value
+        
+        if unit is not None:
+            kpi.unit = unit
+        if description is not None:
+            kpi.description = description
+        if priority is not None:
+            kpi.priority = priority
+        
+        # Update achievement status
+        kpi.update_achievement()
+        
+        self.db.add(kpi)
+        self.db.commit()
+        self.db.refresh(kpi)
+        
+        return kpi
+    
+    def delete_kpi(self, kpi_id: int) -> None:
+        """
+        Delete KPI.
+        
+        Args:
+            kpi_id: KPI ID
+            
+        Raises:
+            HTTPException: If KPI not found
+        """
+        kpi = self.db.get(CampaignKPI, kpi_id)
+        if not kpi:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="KPI not found"
+            )
+        
+        self.db.delete(kpi)
+        self.db.commit()
+    
+    def add_deliverable(
+        self,
+        campaign_id: int,
+        deliverable_type: str,
+        quantity: int = 1,
+        deadline: Optional[date] = None,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
+        platform_specific_requirements: Optional[str] = None,
+        hashtags: Optional[str] = None,
+        mentions: Optional[str] = None,
+        priority: str = "medium"
+    ) -> Deliverable:
+        """
+        Add deliverable to campaign.
+        
+        Args:
+            campaign_id: Campaign ID
+            deliverable_type: Type of deliverable
+            quantity: Number of deliverables required
+            deadline: Deadline for completion
+            title: Deliverable title
+            description: Deliverable description
+            platform_specific_requirements: Platform-specific requirements
+            hashtags: Required hashtags
+            mentions: Required mentions
+            priority: Priority level
+            
+        Returns:
+            Created Deliverable object
+            
+        Raises:
+            HTTPException: If campaign not found or validation fails
+        """
+        campaign = self.get_campaign(campaign_id)
+        if not campaign:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Campaign not found"
+            )
+        
+        # Validate quantity
+        if quantity <= 0:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Quantity must be positive"
+            )
+        
+        # Validate deadline
+        if deadline and campaign.end_date and deadline > campaign.end_date:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Deliverable deadline cannot be after campaign end date"
+            )
+        
+        deliverable = Deliverable(
+            campaign_id=campaign_id,
+            deliverable_type=deliverable_type,
+            quantity=quantity,
+            deadline=deadline,
+            title=title,
+            description=description,
+            platform_specific_requirements=platform_specific_requirements,
+            hashtags=hashtags,
+            mentions=mentions,
+            priority=priority
+        )
+        
+        self.db.add(deliverable)
+        self.db.commit()
+        self.db.refresh(deliverable)
+        
+        return deliverable
+    
+    def update_deliverable(
+        self,
+        deliverable_id: int,
+        quantity: Optional[int] = None,
+        deadline: Optional[date] = None,
+        title: Optional[str] = None,
+        description: Optional[str] = None,
+        platform_specific_requirements: Optional[str] = None,
+        hashtags: Optional[str] = None,
+        mentions: Optional[str] = None,
+        priority: Optional[str] = None,
+        status: Optional[str] = None,
+        submitted_count: Optional[int] = None,
+        approved_count: Optional[int] = None,
+        published_count: Optional[int] = None,
+        reviewer_notes: Optional[str] = None,
+        rejection_reason: Optional[str] = None
+    ) -> Deliverable:
+        """
+        Update deliverable information.
+        
+        Args:
+            deliverable_id: Deliverable ID
+            quantity: New quantity
+            deadline: New deadline
+            title: New title
+            description: New description
+            platform_specific_requirements: New platform requirements
+            hashtags: New hashtags
+            mentions: New mentions
+            priority: New priority
+            status: New status
+            submitted_count: New submitted count
+            approved_count: New approved count
+            published_count: New published count
+            reviewer_notes: New reviewer notes
+            rejection_reason: New rejection reason
+            
+        Returns:
+            Updated Deliverable object
+            
+        Raises:
+            HTTPException: If deliverable not found or validation fails
+        """
+        deliverable = self.db.get(Deliverable, deliverable_id)
+        if not deliverable:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Deliverable not found"
+            )
+        
+        # Update fields
+        if quantity is not None:
+            if quantity <= 0:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Quantity must be positive"
+                )
+            deliverable.quantity = quantity
+        
+        if deadline is not None:
+            deliverable.deadline = deadline
+        if title is not None:
+            deliverable.title = title
+        if description is not None:
+            deliverable.description = description
+        if platform_specific_requirements is not None:
+            deliverable.platform_specific_requirements = platform_specific_requirements
+        if hashtags is not None:
+            deliverable.hashtags = hashtags
+        if mentions is not None:
+            deliverable.mentions = mentions
+        if priority is not None:
+            deliverable.priority = priority
+        if status is not None:
+            deliverable.status = status
+        if submitted_count is not None:
+            deliverable.submitted_count = max(0, submitted_count)
+        if approved_count is not None:
+            deliverable.approved_count = max(0, approved_count)
+        if published_count is not None:
+            deliverable.published_count = max(0, published_count)
+        if reviewer_notes is not None:
+            deliverable.reviewer_notes = reviewer_notes
+        if rejection_reason is not None:
+            deliverable.rejection_reason = rejection_reason
+        
+        # Update progress
+        deliverable.update_progress()
+        
+        self.db.add(deliverable)
+        self.db.commit()
+        self.db.refresh(deliverable)
+        
+        return deliverable
+    
+    def delete_deliverable(self, deliverable_id: int) -> None:
+        """
+        Delete deliverable.
+        
+        Args:
+            deliverable_id: Deliverable ID
+            
+        Raises:
+            HTTPException: If deliverable not found
+        """
+        deliverable = self.db.get(Deliverable, deliverable_id)
+        if not deliverable:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Deliverable not found"
+            )
+        
+        self.db.delete(deliverable)
+        self.db.commit()
+    
+    def duplicate_campaign(self, campaign_id: int, new_name: Optional[str] = None) -> Campaign:
+        """
+        Duplicate campaign with all KPIs and deliverables.
+        
+        Args:
+            campaign_id: Campaign ID to duplicate
+            new_name: Optional new name for duplicated campaign
+            
+        Returns:
+            Duplicated Campaign object
+            
+        Raises:
+            HTTPException: If campaign not found
+        """
+        original_campaign = self.get_campaign(campaign_id)
+        if not original_campaign:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Campaign not found"
+            )
+        
+        # Create new campaign (exclude dates and status)
+        duplicate_name = new_name or f"{original_campaign.name} (Copy)"
+        
+        new_campaign = Campaign(
+            name=duplicate_name,
+            objectives=original_campaign.objectives,
+            total_budget=original_campaign.total_budget,
+            currency=original_campaign.currency,
+            target_audience=original_campaign.target_audience,
+            status=CampaignStatus.DRAFT,  # Always start as draft
+            created_by=original_campaign.created_by,
+            kol_count=0  # Reset KOL count
+        )
+        
+        self.db.add(new_campaign)
+        self.db.commit()
+        self.db.refresh(new_campaign)
+        
+        # Duplicate KPIs
+        original_kpis = self.db.exec(
+            select(CampaignKPI).where(CampaignKPI.campaign_id == campaign_id)
+        ).all()
+        
+        for kpi in original_kpis:
+            new_kpi = CampaignKPI(
+                campaign_id=new_campaign.id,
+                kpi_type=kpi.kpi_type,
+                target_value=kpi.target_value,
+                unit=kpi.unit,
+                description=kpi.description,
+                priority=kpi.priority
+            )
+            self.db.add(new_kpi)
+        
+        # Duplicate Deliverables
+        original_deliverables = self.db.exec(
+            select(Deliverable).where(Deliverable.campaign_id == campaign_id)
+        ).all()
+        
+        for deliverable in original_deliverables:
+            new_deliverable = Deliverable(
+                campaign_id=new_campaign.id,
+                deliverable_type=deliverable.deliverable_type,
+                quantity=deliverable.quantity,
+                title=deliverable.title,
+                description=deliverable.description,
+                platform_specific_requirements=deliverable.platform_specific_requirements,
+                hashtags=deliverable.hashtags,
+                mentions=deliverable.mentions,
+                priority=deliverable.priority
+                # Reset all progress fields to defaults
+            )
+            self.db.add(new_deliverable)
+        
+        self.db.commit()
+        self.db.refresh(new_campaign)
+        
+        return new_campaign

@@ -1,6 +1,6 @@
 """Campaign management endpoints."""
 from typing import Optional
-from datetime import date
+from datetime import date, datetime
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlmodel import Session
 from app.core.database import get_session
@@ -14,6 +14,16 @@ from app.schemas.campaign import (
     CampaignListResponse,
     CampaignStatusChange,
     CampaignSummaryResponse
+)
+from app.schemas.campaign_kpi import (
+    CampaignKPICreate,
+    CampaignKPIUpdate,
+    CampaignKPIResponse
+)
+from app.schemas.deliverable import (
+    DeliverableCreate,
+    DeliverableUpdate,
+    DeliverableResponse
 )
 from app.models.user import User
 
@@ -186,3 +196,144 @@ def get_campaign_summary(
     summary = campaign_service.get_campaign_summary(campaign_id)
     
     return summary
+
+
+# KPI Management Endpoints
+@router.post("/{campaign_id}/kpis", response_model=CampaignKPIResponse, status_code=status.HTTP_201_CREATED)
+def add_campaign_kpi(
+    campaign_id: int,
+    kpi_data: CampaignKPICreate,
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """Add KPI to campaign."""
+    PermissionService.require_permission(current_user.role, "campaigns", "update")
+    
+    campaign_service = CampaignService(db)
+    kpi = campaign_service.add_kpi(
+        campaign_id=campaign_id,
+        kpi_type=kpi_data.kpi_type,
+        target_value=kpi_data.target_value,
+        unit=kpi_data.unit,
+        description=kpi_data.description,
+        priority=kpi_data.priority
+    )
+    
+    return kpi
+
+
+@router.put("/{campaign_id}/kpis/{kpi_id}", response_model=CampaignKPIResponse)
+def update_campaign_kpi(
+    campaign_id: int,
+    kpi_id: int,
+    kpi_data: CampaignKPIUpdate,
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """Update campaign KPI."""
+    PermissionService.require_permission(current_user.role, "campaigns", "update")
+    
+    campaign_service = CampaignService(db)
+    kpi = campaign_service.update_kpi(
+        kpi_id=kpi_id,
+        target_value=kpi_data.target_value,
+        actual_value=kpi_data.actual_value,
+        unit=kpi_data.unit,
+        description=kpi_data.description,
+        priority=kpi_data.priority
+    )
+    
+    return kpi
+
+
+@router.delete("/{campaign_id}/kpis/{kpi_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_campaign_kpi(
+    campaign_id: int,
+    kpi_id: int,
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """Delete campaign KPI."""
+    PermissionService.require_permission(current_user.role, "campaigns", "update")
+    
+    campaign_service = CampaignService(db)
+    campaign_service.delete_kpi(kpi_id)
+    
+    return None
+
+
+# Deliverable Management Endpoints
+@router.post("/{campaign_id}/deliverables", response_model=DeliverableResponse, status_code=status.HTTP_201_CREATED)
+def add_campaign_deliverable(
+    campaign_id: int,
+    deliverable_data: DeliverableCreate,
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """Add deliverable to campaign."""
+    PermissionService.require_permission(current_user.role, "campaigns", "update")
+    
+    campaign_service = CampaignService(db)
+    deliverable = campaign_service.add_deliverable(
+        campaign_id=campaign_id,
+        deliverable_type=deliverable_data.deliverable_type,
+        quantity=deliverable_data.quantity,
+        deadline=deliverable_data.deadline,
+        title=deliverable_data.title,
+        description=deliverable_data.description,
+        platform_specific_requirements=deliverable_data.platform_specific_requirements,
+        hashtags=deliverable_data.hashtags,
+        mentions=deliverable_data.mentions,
+        priority=deliverable_data.priority
+    )
+    
+    return deliverable
+
+
+@router.put("/{campaign_id}/deliverables/{deliverable_id}", response_model=DeliverableResponse)
+def update_campaign_deliverable(
+    campaign_id: int,
+    deliverable_id: int,
+    deliverable_data: DeliverableUpdate,
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """Update campaign deliverable."""
+    PermissionService.require_permission(current_user.role, "campaigns", "update")
+    
+    campaign_service = CampaignService(db)
+    deliverable = campaign_service.update_deliverable(
+        deliverable_id=deliverable_id,
+        quantity=deliverable_data.quantity,
+        deadline=deliverable_data.deadline,
+        title=deliverable_data.title,
+        description=deliverable_data.description,
+        platform_specific_requirements=deliverable_data.platform_specific_requirements,
+        hashtags=deliverable_data.hashtags,
+        mentions=deliverable_data.mentions,
+        priority=deliverable_data.priority,
+        status=deliverable_data.status,
+        submitted_count=deliverable_data.submitted_count,
+        approved_count=deliverable_data.approved_count,
+        published_count=deliverable_data.published_count,
+        reviewer_notes=deliverable_data.reviewer_notes,
+        rejection_reason=deliverable_data.rejection_reason
+    )
+    
+    return deliverable
+
+
+@router.delete("/{campaign_id}/deliverables/{deliverable_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_campaign_deliverable(
+    campaign_id: int,
+    deliverable_id: int,
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """Delete campaign deliverable."""
+    PermissionService.require_permission(current_user.role, "campaigns", "update")
+    
+    campaign_service = CampaignService(db)
+    campaign_service.delete_deliverable(deliverable_id)
+    
+    return None
