@@ -159,14 +159,15 @@ This task list covers the MVP implementation of KOL database with manual entry, 
 
 ## Phase 6: Validation & Business Logic
 
--   [ ] 16. Add KOL validation
+-   [x] 16. Add KOL validation
 
     -   Validate email format if provided (add email validation to schemas)
     -   Validate phone format if provided (add phone validation to schemas)
     -   Prevent deletion if KOL has active campaigns (check campaign_kol relationship)
     -   _Requirements: 1.1_
 
--   [ ] 17. Add duplicate detection (basic)
+-   [x] 17. Add duplicate detection (basic)
+
     -   Create `find_duplicates(kol_id)` method in KOLService
     -   Check for exact email match
     -   Check for exact social handle match (platform + handle)

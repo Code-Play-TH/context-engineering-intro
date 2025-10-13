@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from app.models.kol_metrics import KOLMetrics
     from app.models.post import Post
     from app.models.performance_alert import PerformanceAlert
+    from app.models.campaign_kol import CampaignKOL
 
 
 class KOL(SQLModel, table=True):
@@ -27,7 +28,7 @@ class KOL(SQLModel, table=True):
     tier: Optional[str] = Field(default=None, max_length=50)  # nano, micro, mid, macro, mega
     tags: List[str] = Field(default=[], sa_column=Column(ARRAY(String)))
     notes: Optional[str] = Field(default=None)
-    status: str = Field(default="active", max_length=50)  # active, inactive
+    status: str = Field(default="active", max_length=50)  # active, inactive, merged
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
     
@@ -44,3 +45,4 @@ class KOL(SQLModel, table=True):
     metrics: List["KOLMetrics"] = Relationship(back_populates="kol")
     posts: List["Post"] = Relationship(back_populates="kol")
     performance_alerts: List["PerformanceAlert"] = Relationship(back_populates="kol")
+    campaign_kols: List["CampaignKOL"] = Relationship(back_populates="kol")

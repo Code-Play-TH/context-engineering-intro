@@ -11,6 +11,9 @@ if TYPE_CHECKING:
     from app.models.refresh_token import RefreshToken
     from app.models.brief import Brief
     from app.models.message import Message
+    from app.models.campaign import Campaign
+    from app.models.client_brief import ClientBrief
+    from app.models.campaign_kol import CampaignKOL
 
 
 class User(SQLModel, table=True):
@@ -60,6 +63,15 @@ class User(SQLModel, table=True):
     
     # Relationships
     refresh_tokens: List["RefreshToken"] = Relationship(back_populates="user")
+    
+    # Campaign relationships
+    campaigns: List["Campaign"] = Relationship(back_populates="creator")
+    client_briefs: List["ClientBrief"] = Relationship(back_populates="creator")
+    approved_client_briefs: List["ClientBrief"] = Relationship(
+        back_populates="approver",
+        sa_relationship_kwargs={"foreign_keys": "[ClientBrief.approved_by]"}
+    )
+    assigned_campaign_kols: List["CampaignKOL"] = Relationship(back_populates="assigner")
     
     # Brief relationships (commented out to avoid circular import issues)
     # created_briefs: List["Brief"] = Relationship(back_populates="creator")

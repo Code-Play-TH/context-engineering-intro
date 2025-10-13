@@ -154,7 +154,19 @@ def delete_kol(
     PermissionService.require_permission(current_user.role, "kols", "delete")
     
     kol_service = KOLService(db)
-    kol_service.soft_delete_kol(kol_id)
+    
+    # Validate deletion is allowed
+    try:
+        kol_service.validate_kol_deletion(kol_id)
+        kol_service.soft_delete_kol(kol_id)
+    except HTTPException as e:
+        # Re-raise with more specific error message
+        if "active campaigns" in str(e.detail):
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=e.detail
+            )
+        raise e
     
     return None
 
@@ -381,7 +393,7 @@ def find_duplicates(
     current_user: User = Depends(get_current_user)
 ):
     """
-    Find potential duplicate KOLs.
+    Find potential duplicate KOLs with match confidence and reasons.
     """
     PermissionService.require_permission(current_user.role, "kols", "read")
     
@@ -393,11 +405,120 @@ def find_duplicates(
         "duplicate_count": len(duplicates),
         "duplicates": [
             {
-                "id": dup.id,
-                "name": dup.name,
-                "email": dup.email,
-                "created_at": dup.created_at
+                "id": dup_data['kol'].id,
+                "name": dup_data['kol'].name,
+                "email": dup_data['kol'].email,
+                "created_at": dup_data['kol'].created_at,
+                "confidence": dup_data['confidence'],
+                "match_reasons": dup_data['match_reasons']
             }
-            for dup in duplicates
+            for dup_data in duplicates
         ]
     }
+
+
+@router.post("/{kol_id}/validate")
+def validate_kol(
+    kol_id: int,
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Validate KOL data and check for issues.
+    """
+    PermissionService.require_permission(current_user.role, "kols", "read")
+    
+    kol_service = KOLService(db)
+    kol = kol_service.get_kol(kol_id)
+    
+    if not kol:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="KOL not found"
+        )
+    
+    validation_results = {
+        "kol_id": kol_id,
+        "is_valid": True,
+        "warnings": [],
+        "errors": []
+    }
+    
+    # Check for missing email
+    if not kol.email:
+        validation_results["warnings"].append("Email address is missing")
+    
+    # Check for missing phone
+    if not kol.phone:
+        validation_results["warnings"].append("Phone number is missing")
+    
+    # Check for social handles
+    if not kol.social_handles:
+        validation_results["errors"].append("No social media handles found")
+        validation_results["is_valid"] = False
+    
+    # Check for duplicates
+    duplicates = kol_service.find_duplicates(kol_id)
+    if duplicates:
+        validation_results["warnings"].append(f"Found {len(duplicates)} potential duplicates")
+    
+    # Check if can be deleted
+    try:
+        kol_service.validate_kol_deletion(kol_id)
+        validation_results["can_delete"] = True
+    except HTTPException:
+        validation_results["can_delete"] = False
+        validation_results["warnings"].append("Cannot delete KOL due to active campaigns")
+    
+    return validation_results
+
+
+@router.get("/duplicates/scan")
+def scan_all_duplicates(
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Scan all KOLs for potential duplicates (Admin only).
+    """
+    PermissionService.require_permission(current_user.role, "kols", "read")
+    
+    # Only allow admins to run full scan
+    if current_user.role != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only administrators can run full duplicate scan"
+        )
+    
+    kol_service = KOLService(db)
+    scan_results = kol_service.scan_all_duplicates()
+    
+    return scan_results
+
+
+@router.post("/{primary_kol_id}/merge/{duplicate_kol_id}", response_model=KOLResponse)
+def merge_kols(
+    primary_kol_id: int,
+    duplicate_kol_id: int,
+    merge_data: Optional[KOLUpdate] = None,
+    db: Session = Depends(get_session),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Merge duplicate KOL into primary KOL.
+    """
+    PermissionService.require_permission(current_user.role, "kols", "update")
+    
+    # Only allow admins and campaign managers to merge
+    if current_user.role not in ["admin", "campaign_manager"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only administrators and campaign managers can merge KOLs"
+        )
+    
+    kol_service = KOLService(db)
+    
+    merge_dict = merge_data.dict(exclude_unset=True) if merge_data else {}
+    merged_kol = kol_service.merge_kols(primary_kol_id, duplicate_kol_id, merge_dict)
+    
+    return merged_kol

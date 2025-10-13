@@ -10,7 +10,7 @@ This task list covers the MVP implementation of basic campaign management with C
 
 ## Phase 1: Core Models
 
--   [ ] 1. Create Campaign model
+-   [x] 1. Create Campaign model
 
     -   Define `app/models/campaign.py` with Campaign table
     -   Fields: id, name, status, start_date, end_date, total_budget, currency, objectives, target_audience (JSON), created_by, created_at, updated_at
@@ -18,7 +18,7 @@ This task list covers the MVP implementation of basic campaign management with C
     -   Create database migration
     -   _Requirements: 2.2_
 
--   [ ] 2. Create ClientBrief model
+-   [x] 2. Create ClientBrief model
 
     -   Define `app/models/client_brief.py`
     -   Fields: id, client_name, campaign_objective, target_audience (JSON), budget, brand_guidelines, content_requirements, status, created_by, created_at
@@ -26,7 +26,7 @@ This task list covers the MVP implementation of basic campaign management with C
     -   Create database migration
     -   _Requirements: 2.1_
 
--   [ ] 3. Create CampaignKPI model
+-   [x] 3. Create CampaignKPI model
 
     -   Define `app/models/campaign_kpi.py`
     -   Fields: id, campaign_id, kpi_type, target_value, actual_value, unit, created_at
@@ -34,7 +34,8 @@ This task list covers the MVP implementation of basic campaign management with C
     -   Create database migration
     -   _Requirements: 2.2_
 
--   [ ] 4. Create Deliverable model
+-   [x] 4. Create Deliverable model
+
     -   Define `app/models/deliverable.py`
     -   Fields: id, campaign_id, deliverable_type, quantity, deadline, status, created_at
     -   Add foreign key to Campaign

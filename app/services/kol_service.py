@@ -43,22 +43,28 @@ class KOLService:
         Raises:
             HTTPException: If validation fails
         """
-        # Validate at least one social handle
-        if not social_handles:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="At least one social media handle is required"
-            )
+        # Validate KOL data
+        kol_data = {
+            'name': name,
+            'email': email,
+            'phone': phone,
+            'location': location,
+            'niche': niche,
+            'tags': tags,
+            'notes': notes,
+            'social_handles': social_handles
+        }
+        kol_data = self.validate_kol_data(kol_data)
         
         # Create KOL
         kol = KOL(
-            name=name,
-            email=email,
-            phone=phone,
-            location=location,
-            niche=niche,
-            tags=tags,
-            notes=notes
+            name=kol_data['name'],
+            email=kol_data.get('email'),
+            phone=kol_data.get('phone'),
+            location=kol_data.get('location'),
+            niche=kol_data.get('niche', []),
+            tags=kol_data.get('tags', []),
+            notes=kol_data.get('notes')
         )
         
         self.db.add(kol)
@@ -273,8 +279,11 @@ class KOLService:
             Deleted KOL object
             
         Raises:
-            HTTPException: If KOL not found
+            HTTPException: If KOL not found or has active campaigns
         """
+        # Validate deletion is allowed
+        self.validate_kol_deletion(kol_id)
+        
         kol = self.get_kol(kol_id)
         if not kol:
             raise HTTPException(
@@ -540,15 +549,15 @@ class KOLService:
         # Recalculate tier
         self.calculate_tier(social_handle.kol_id)
     
-    def find_duplicates(self, kol_id: int) -> List[KOL]:
+    def find_duplicates(self, kol_id: int) -> List[dict]:
         """
-        Find potential duplicate KOLs based on email and social handles.
+        Find potential duplicate KOLs based on email, social handles, and name similarity.
         
         Args:
             kol_id: KOL ID to check for duplicates
             
         Returns:
-            List of potential duplicate KOLs
+            List of potential duplicate KOLs with match reasons
             
         Raises:
             HTTPException: If KOL not found
@@ -560,7 +569,7 @@ class KOLService:
                 detail="KOL not found"
             )
         
-        duplicates = []
+        duplicates = {}  # Use dict to track match reasons
         
         # Check for exact email match
         if kol.email:
@@ -571,11 +580,23 @@ class KOLService:
                     KOL.status == "active"
                 )
             ).all()
-            duplicates.extend(email_duplicates)
+            
+            for dup in email_duplicates:
+                if dup.id not in duplicates:
+                    duplicates[dup.id] = {
+                        'kol': dup,
+                        'match_reasons': [],
+                        'confidence': 0
+                    }
+                duplicates[dup.id]['match_reasons'].append('Exact email match')
+                duplicates[dup.id]['confidence'] += 90
         
         # Check for exact social handle match
         kol_handles = self.db.exec(
-            select(SocialHandle).where(SocialHandle.kol_id == kol_id)
+            select(SocialHandle).where(
+                SocialHandle.kol_id == kol_id,
+                SocialHandle.is_active == True
+            )
         ).all()
         
         for handle in kol_handles:
@@ -584,20 +605,226 @@ class KOLService:
                     SocialHandle.platform == handle.platform,
                     SocialHandle.handle == handle.handle,
                     SocialHandle.kol_id != kol_id,
+                    SocialHandle.is_active == True,
                     KOL.status == "active"
                 )
             ).all()
-            duplicates.extend(handle_duplicates)
+            
+            for dup in handle_duplicates:
+                if dup.id not in duplicates:
+                    duplicates[dup.id] = {
+                        'kol': dup,
+                        'match_reasons': [],
+                        'confidence': 0
+                    }
+                duplicates[dup.id]['match_reasons'].append(f'Same {handle.platform} handle: @{handle.handle}')
+                duplicates[dup.id]['confidence'] += 95
         
-        # Remove duplicates from the list
-        unique_duplicates = []
-        seen_ids = set()
-        for dup in duplicates:
-            if dup.id not in seen_ids:
-                unique_duplicates.append(dup)
-                seen_ids.add(dup.id)
+        # Check for name similarity (basic)
+        name_duplicates = self._find_similar_names(kol.name, kol_id)
+        for dup in name_duplicates:
+            if dup.id not in duplicates:
+                duplicates[dup.id] = {
+                    'kol': dup,
+                    'match_reasons': [],
+                    'confidence': 0
+                }
+            duplicates[dup.id]['match_reasons'].append('Similar name')
+            duplicates[dup.id]['confidence'] += 60
         
-        return unique_duplicates
+        # Convert to list and sort by confidence
+        result = []
+        for dup_data in duplicates.values():
+            # Cap confidence at 100
+            dup_data['confidence'] = min(dup_data['confidence'], 100)
+            result.append(dup_data)
+        
+        # Sort by confidence (highest first)
+        result.sort(key=lambda x: x['confidence'], reverse=True)
+        
+        return result
+    
+    def _find_similar_names(self, name: str, exclude_id: int) -> List[KOL]:
+        """
+        Find KOLs with similar names using basic string matching.
+        
+        Args:
+            name: Name to compare against
+            exclude_id: KOL ID to exclude from results
+            
+        Returns:
+            List of KOLs with similar names
+        """
+        # Simple similarity check - exact match after normalization
+        normalized_name = name.lower().strip()
+        
+        # Remove common prefixes/suffixes
+        normalized_name = normalized_name.replace('official', '').replace('real', '').strip()
+        
+        similar_kols = self.db.exec(
+            select(KOL).where(
+                KOL.id != exclude_id,
+                KOL.status == "active"
+            )
+        ).all()
+        
+        matches = []
+        for kol in similar_kols:
+            kol_normalized = kol.name.lower().strip()
+            kol_normalized = kol_normalized.replace('official', '').replace('real', '').strip()
+            
+            # Check for exact match after normalization
+            if kol_normalized == normalized_name:
+                matches.append(kol)
+            # Check for very similar names (one is substring of another)
+            elif (len(normalized_name) > 3 and normalized_name in kol_normalized) or \
+                 (len(kol_normalized) > 3 and kol_normalized in normalized_name):
+                matches.append(kol)
+        
+        return matches
+    
+    def scan_all_duplicates(self) -> dict:
+        """
+        Scan all active KOLs for potential duplicates.
+        
+        Returns:
+            Dictionary with duplicate statistics and top duplicates
+        """
+        all_kols = self.db.exec(
+            select(KOL).where(KOL.status == "active")
+        ).all()
+        
+        duplicate_pairs = []
+        processed_ids = set()
+        
+        for kol in all_kols:
+            if kol.id in processed_ids:
+                continue
+                
+            duplicates = self.find_duplicates(kol.id)
+            if duplicates:
+                for dup_data in duplicates:
+                    if dup_data['confidence'] >= 80:  # High confidence duplicates only
+                        duplicate_pairs.append({
+                            'primary_kol': {
+                                'id': kol.id,
+                                'name': kol.name,
+                                'email': kol.email
+                            },
+                            'duplicate_kol': {
+                                'id': dup_data['kol'].id,
+                                'name': dup_data['kol'].name,
+                                'email': dup_data['kol'].email
+                            },
+                            'confidence': dup_data['confidence'],
+                            'match_reasons': dup_data['match_reasons']
+                        })
+                        processed_ids.add(dup_data['kol'].id)
+            
+            processed_ids.add(kol.id)
+        
+        return {
+            'total_kols_scanned': len(all_kols),
+            'duplicate_pairs_found': len(duplicate_pairs),
+            'duplicate_pairs': duplicate_pairs[:20]  # Top 20 for performance
+        }
+    
+    def merge_kols(self, primary_kol_id: int, duplicate_kol_id: int, merge_data: dict = None) -> KOL:
+        """
+        Merge duplicate KOL into primary KOL.
+        
+        Args:
+            primary_kol_id: ID of KOL to keep
+            duplicate_kol_id: ID of KOL to merge and deactivate
+            merge_data: Optional data to update primary KOL with
+            
+        Returns:
+            Updated primary KOL
+            
+        Raises:
+            HTTPException: If KOLs not found or merge not allowed
+        """
+        primary_kol = self.get_kol(primary_kol_id)
+        duplicate_kol = self.get_kol(duplicate_kol_id)
+        
+        if not primary_kol or not duplicate_kol:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="One or both KOLs not found"
+            )
+        
+        if primary_kol_id == duplicate_kol_id:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Cannot merge KOL with itself"
+            )
+        
+        # Merge social handles (avoid duplicates)
+        duplicate_handles = self.db.exec(
+            select(SocialHandle).where(
+                SocialHandle.kol_id == duplicate_kol_id,
+                SocialHandle.is_active == True
+            )
+        ).all()
+        
+        primary_handles = self.db.exec(
+            select(SocialHandle).where(
+                SocialHandle.kol_id == primary_kol_id,
+                SocialHandle.is_active == True
+            )
+        ).all()
+        
+        primary_platforms = {h.platform for h in primary_handles}
+        
+        for handle in duplicate_handles:
+            if handle.platform not in primary_platforms:
+                # Transfer handle to primary KOL
+                handle.kol_id = primary_kol_id
+                self.db.add(handle)
+            else:
+                # Deactivate duplicate handle
+                handle.is_active = False
+                self.db.add(handle)
+        
+        # Merge missing data from duplicate to primary
+        if not primary_kol.email and duplicate_kol.email:
+            primary_kol.email = duplicate_kol.email
+        
+        if not primary_kol.phone and duplicate_kol.phone:
+            primary_kol.phone = duplicate_kol.phone
+        
+        if not primary_kol.location and duplicate_kol.location:
+            primary_kol.location = duplicate_kol.location
+        
+        # Merge niches and tags
+        if duplicate_kol.niche:
+            primary_kol.niche = list(set(primary_kol.niche + duplicate_kol.niche))
+        
+        if duplicate_kol.tags:
+            primary_kol.tags = list(set(primary_kol.tags + duplicate_kol.tags))
+        
+        # Apply any additional merge data
+        if merge_data:
+            for key, value in merge_data.items():
+                if hasattr(primary_kol, key) and value is not None:
+                    setattr(primary_kol, key, value)
+        
+        primary_kol.updated_at = datetime.utcnow()
+        
+        # Deactivate duplicate KOL
+        duplicate_kol.status = "merged"
+        duplicate_kol.notes = f"Merged into KOL #{primary_kol_id} on {datetime.utcnow().strftime('%Y-%m-%d')}"
+        duplicate_kol.updated_at = datetime.utcnow()
+        
+        self.db.add(primary_kol)
+        self.db.add(duplicate_kol)
+        self.db.commit()
+        
+        # Recalculate tier for primary KOL
+        self.calculate_tier(primary_kol_id)
+        
+        self.db.refresh(primary_kol)
+        return primary_kol
 
     def validate_kol_deletion(self, kol_id: int) -> bool:
         """
@@ -612,10 +839,6 @@ class KOLService:
         Raises:
             HTTPException: If KOL has active campaigns
         """
-        # Check if KOL has active campaigns
-        # Note: This would require campaign_kol relationship table
-        # For now, we'll just check if KOL exists and is not already inactive
-        
         kol = self.get_kol(kol_id)
         if not kol:
             raise HTTPException(
@@ -629,18 +852,129 @@ class KOLService:
                 detail="KOL is already inactive"
             )
         
-        # TODO: Add campaign check when campaign_kol relationship is implemented
-        # active_campaigns = self.db.exec(
-        #     select(func.count(CampaignKOL.id)).where(
-        #         CampaignKOL.kol_id == kol_id,
-        #         CampaignKOL.status.in_(["active", "pending"])
-        #     )
-        # ).one()
-        # 
-        # if active_campaigns > 0:
-        #     raise HTTPException(
-        #         status_code=status.HTTP_400_BAD_REQUEST,
-        #         detail=f"Cannot delete KOL with {active_campaigns} active campaigns"
-        #     )
+        # Check for active campaigns (when campaign system is implemented)
+        try:
+            from app.models.campaign_kol import CampaignKOL
+            active_campaigns = self.db.exec(
+                select(func.count(CampaignKOL.id)).where(
+                    CampaignKOL.kol_id == kol_id,
+                    CampaignKOL.status.in_(["shortlisted", "assigned", "accepted"])
+                )
+            ).one()
+            
+            if active_campaigns > 0:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Cannot delete KOL with {active_campaigns} active campaigns. Please remove from campaigns first."
+                )
+        except ImportError:
+            # Campaign system not yet implemented, skip check
+            pass
         
         return True
+    
+    def validate_kol_data(self, kol_data: dict) -> dict:
+        """
+        Validate KOL data before creation or update.
+        
+        Args:
+            kol_data: KOL data dictionary
+            
+        Returns:
+            Validated and cleaned KOL data
+            
+        Raises:
+            HTTPException: If validation fails
+        """
+        # Validate required fields
+        if not kol_data.get('name') or not kol_data['name'].strip():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="KOL name is required"
+            )
+        
+        # Clean and validate name
+        kol_data['name'] = kol_data['name'].strip()
+        if len(kol_data['name']) > 255:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="KOL name too long (max 255 characters)"
+            )
+        
+        # Validate email uniqueness if provided
+        if kol_data.get('email'):
+            existing_kol = self.db.exec(
+                select(KOL).where(
+                    KOL.email == kol_data['email'],
+                    KOL.status == "active"
+                )
+            ).first()
+            
+            # Allow update of same KOL
+            if existing_kol and existing_kol.id != kol_data.get('id'):
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Email address already exists for another active KOL"
+                )
+        
+        # Validate social handles if provided
+        if kol_data.get('social_handles'):
+            self._validate_social_handles(kol_data['social_handles'])
+        
+        # Clean arrays
+        if kol_data.get('niche'):
+            kol_data['niche'] = [n.strip() for n in kol_data['niche'] if n.strip()]
+        if kol_data.get('tags'):
+            kol_data['tags'] = [t.strip() for t in kol_data['tags'] if t.strip()]
+        
+        return kol_data
+    
+    def _validate_social_handles(self, social_handles: List[dict]) -> None:
+        """
+        Validate social media handles.
+        
+        Args:
+            social_handles: List of social handle dictionaries
+            
+        Raises:
+            HTTPException: If validation fails
+        """
+        if not social_handles:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="At least one social media handle is required"
+            )
+        
+        platforms_seen = set()
+        for handle_data in social_handles:
+            platform = handle_data.get('platform')
+            handle = handle_data.get('handle')
+            
+            if not platform or not handle:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Platform and handle are required for all social media handles"
+                )
+            
+            # Check for duplicate platforms
+            if platform in platforms_seen:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Duplicate platform '{platform}' in social handles"
+                )
+            platforms_seen.add(platform)
+            
+            # Check for existing handle on same platform
+            existing_handle = self.db.exec(
+                select(SocialHandle).where(
+                    SocialHandle.platform == platform,
+                    SocialHandle.handle == handle.lstrip('@'),
+                    SocialHandle.is_active == True
+                )
+            ).first()
+            
+            if existing_handle:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail=f"Handle '@{handle}' already exists on {platform}"
+                )

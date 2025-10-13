@@ -78,6 +78,29 @@ class KOLBase(BaseModel):
             # Check if it's a valid phone format (starts with + and contains only digits)
             if not re.match(r'^\+?[1-9]\d{1,14}$', phone):
                 raise ValueError('Invalid phone number format. Use international format like +1234567890')
+            
+            # Additional validation for common formats
+            if len(phone.replace('+', '')) < 7:
+                raise ValueError('Phone number too short')
+            if len(phone.replace('+', '')) > 15:
+                raise ValueError('Phone number too long')
+        
+        return v
+    
+    @validator('email')
+    def validate_email_format(cls, v):
+        if v:
+            # Additional email validation beyond EmailStr
+            if len(v) > 254:
+                raise ValueError('Email address too long')
+            
+            # Check for valid domain
+            if '@' in v:
+                local, domain = v.rsplit('@', 1)
+                if len(local) > 64:
+                    raise ValueError('Email local part too long')
+                if not domain or '.' not in domain:
+                    raise ValueError('Invalid email domain')
         
         return v
     
