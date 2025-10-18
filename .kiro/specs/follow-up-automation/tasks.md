@@ -10,7 +10,7 @@ This task list covers the MVP implementation of automated follow-up scheduling, 
 
 ## Phase 1: Core Models
 
--   [ ] 1. Create FollowUp model
+-   [x] 1. Create FollowUp model
 
     -   Define `app/models/follow_up.py` with FollowUp table
     -   Fields: id, original_message_id, kol_id, campaign_id, follow_up_number, scheduled_at, status, sent_at, skipped_reason, template_id, assigned_to, created_at
@@ -18,7 +18,7 @@ This task list covers the MVP implementation of automated follow-up scheduling, 
     -   Create database migration
     -   _Requirements: 1.1, 1.2_
 
--   [ ] 2. Create FollowUpRule model
+-   [x] 2. Create FollowUpRule model
 
     -   Define `app/models/follow_up_rule.py`
     -   Fields: id, campaign_id, intervals (Array), max_follow_ups, escalate_after, is_active, created_at
@@ -26,7 +26,8 @@ This task list covers the MVP implementation of automated follow-up scheduling, 
     -   Create database migration
     -   _Requirements: 1.1, 7.1_
 
--   [ ] 3. Create Escalation model
+-   [x] 3. Create Escalation model
+
     -   Define `app/models/escalation.py`
     -   Fields: id, follow_up_id, kol_id, campaign_id, escalated_from, escalated_to, reason, status, resolved_at, resolution_action, created_at
     -   Add status enum (pending, resolved, dismissed)

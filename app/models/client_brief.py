@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Optional, TYPE_CHECKING
 from decimal import Decimal
 from sqlmodel import Field, SQLModel, Column, JSON, Relationship
+from sqlalchemy import DECIMAL
 from enum import Enum
 
 if TYPE_CHECKING:
@@ -28,7 +29,7 @@ class ClientBrief(SQLModel, table=True):
     client_name: str = Field(max_length=255, index=True)
     campaign_objective: str = Field()
     target_audience: Optional[dict] = Field(default=None, sa_column=Column(JSON))
-    budget: Optional[Decimal] = Field(default=None, max_digits=12, decimal_places=2)
+    budget: Optional[Decimal] = Field(default=None, sa_column=Column(DECIMAL(12, 2)))
     currency: str = Field(default="USD", max_length=3)
     brand_guidelines: Optional[str] = Field(default=None)
     content_requirements: Optional[str] = Field(default=None)

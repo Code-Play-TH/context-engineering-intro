@@ -20,6 +20,6 @@ COPY . .
 EXPOSE 8000
 
 # Run migrations and start server
-CMD alembic upgrade head && \
-    python scripts/seed_admin.py && \
-    uvicorn app.main:app --host 0.0.0.0 --port 8000
+CMD python scripts/docker_startup.py && \
+    alembic upgrade head && \
+    uvicorn simple_main:app --host 0.0.0.0 --port 8000

@@ -10,7 +10,7 @@ This task list covers the MVP implementation of manual KOL selection, AI-powered
 
 ## Phase 1: Core Models
 
--   [ ] 1. Create CampaignKOL model
+-   [x] 1. Create CampaignKOL model
 
     -   Define `app/models/campaign_kol.py` with CampaignKOL table
     -   Fields: id, campaign_id, kol_id, status, fee, notes, added_by, added_at
@@ -19,7 +19,7 @@ This task list covers the MVP implementation of manual KOL selection, AI-powered
     -   Add relationships to Campaign and KOL models
     -   _Requirements: 1.1, 1.4_
 
--   [ ] 2. Create KOLRecommendation model
+-   [x] 2. Create KOLRecommendation model
 
     -   Define `app/models/kol_recommendation.py`
     -   Fields: id, campaign_id, kol_id, overall_score, niche_alignment_score, engagement_score, performance_score, audience_match_score, budget_fit_score, explanation, created_at
@@ -27,7 +27,8 @@ This task list covers the MVP implementation of manual KOL selection, AI-powered
     -   Create database migration
     -   _Requirements: 2.2, 2.4_
 
--   [ ] 3. Create AudienceDemographics model
+-   [x] 3. Create AudienceDemographics model
+
     -   Define `app/models/audience_demographics.py`
     -   Fields: id, kol_id, platform, age_distribution (JSON), gender_distribution (JSON), location_distribution (JSON), interests (Array), fetched_at
     -   Store demographic data from social media APIs

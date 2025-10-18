@@ -1,4 +1,4 @@
-"""Seed script to create default admin user and sample users."""
+"""Simple seed script to create default admin user."""
 import sys
 from pathlib import Path
 
@@ -9,9 +9,6 @@ from sqlmodel import Session, create_engine, select
 from app.core.config import settings
 from app.core.security import hash_password
 from app.models.user import User
-from app.models.enums import Role
-# Import all models to ensure they are registered
-from app.models import *
 
 
 def seed_users():
@@ -30,7 +27,7 @@ def seed_users():
             email="admin@kolmanagement.com",
             hashed_password=hash_password("Admin@123"),
             full_name="System Administrator",
-            role="admin",  # Use string value to match database ENUM
+            role="admin",
             is_active=True
         )
         session.add(admin)
@@ -41,7 +38,7 @@ def seed_users():
             email="manager@kolmanagement.com",
             hashed_password=hash_password("Manager@123"),
             full_name="Campaign Manager",
-            role="campaign_manager",  # Use string value to match database ENUM
+            role="campaign_manager",
             is_active=True
         )
         session.add(campaign_manager)
@@ -52,7 +49,7 @@ def seed_users():
             email="ae@kolmanagement.com",
             hashed_password=hash_password("AccountExec@123"),
             full_name="Account Executive",
-            role="account_executive",  # Use string value to match database ENUM
+            role="account_executive",
             is_active=True
         )
         session.add(account_exec)
@@ -63,7 +60,7 @@ def seed_users():
             email="viewer@kolmanagement.com",
             hashed_password=hash_password("Viewer@123"),
             full_name="Viewer User",
-            role="viewer",  # Use string value to match database ENUM
+            role="viewer",
             is_active=True
         )
         session.add(viewer)

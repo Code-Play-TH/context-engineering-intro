@@ -10,7 +10,7 @@ This task list covers the MVP implementation of campaign timeline visualization,
 
 ## Phase 1: Core Models
 
--   [ ] 1. Create KOLAvailability model
+-   [x] 1. Create KOLAvailability model
 
     -   Define `app/models/kol_availability.py` with KOLAvailability table
     -   Fields: id, kol_id, start_date, end_date, is_available, reason, created_at
@@ -18,7 +18,7 @@ This task list covers the MVP implementation of campaign timeline visualization,
     -   Create database migration
     -   _Requirements: 2.1, 2.4_
 
--   [ ] 2. Create Deadline model
+-   [x] 2. Create Deadline model
 
     -   Define `app/models/deadline.py` with Deadline table
     -   Fields: id, campaign_id, title, description, due_date, priority, status, responsible_user_id, completed_at, created_at
@@ -27,7 +27,8 @@ This task list covers the MVP implementation of campaign timeline visualization,
     -   Create database migration
     -   _Requirements: 3.1, 3.2_
 
--   [ ] 3. Create RecurringEvent model
+-   [x] 3. Create RecurringEvent model
+
     -   Define `app/models/recurring_event.py`
     -   Fields: id, user_id, title, description, frequency, day_of_week, day_of_month, time, is_active, created_at
     -   Add frequency enum (daily, weekly, monthly)

@@ -185,7 +185,7 @@ This task list covers the MVP implementation of user authentication with JWT, ba
 
 ## Phase 8: Testing & Validation
 
--   [ ]\* 19. Write unit tests for authentication
+-   [x]\* 19. Write unit tests for authentication
 
     -   Test password hashing and verification
     -   Test JWT token generation and validation
@@ -193,7 +193,8 @@ This task list covers the MVP implementation of user authentication with JWT, ba
     -   Test token refresh and rotation
     -   _Requirements: All_
 
--   [ ]\* 20. Write integration tests
+-   [x]\* 20. Write integration tests
+
     -   Test complete login flow
     -   Test password reset flow
     -   Test RBAC enforcement

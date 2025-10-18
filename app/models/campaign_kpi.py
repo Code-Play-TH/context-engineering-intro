@@ -2,7 +2,8 @@
 from datetime import datetime
 from typing import Optional, TYPE_CHECKING
 from decimal import Decimal
-from sqlmodel import Field, SQLModel, Relationship
+from sqlmodel import Field, SQLModel, Relationship, Column
+from sqlalchemy import DECIMAL
 from enum import Enum
 
 if TYPE_CHECKING:
@@ -42,8 +43,8 @@ class CampaignKPI(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     campaign_id: int = Field(foreign_key="campaigns.id", index=True)
     kpi_type: KPIType = Field(index=True)
-    target_value: Decimal = Field(max_digits=15, decimal_places=2)
-    actual_value: Optional[Decimal] = Field(default=None, max_digits=15, decimal_places=2)
+    target_value: Decimal = Field(sa_column=Column(DECIMAL(15, 2)))
+    actual_value: Optional[Decimal] = Field(default=None, sa_column=Column(DECIMAL(15, 2)))
     unit: KPIUnit = Field()
     
     # Progress tracking

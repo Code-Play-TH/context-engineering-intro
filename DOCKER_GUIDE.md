@@ -8,9 +8,9 @@ docker-compose up --build
 
 Wait 1-2 minutes for everything to start, then:
 
--   **Frontend**: http://localhost:3000
--   **Backend API**: http://localhost:8000
--   **API Docs**: http://localhost:8000/docs
+-   **Frontend**: http://localhost:3001
+-   **Backend API**: http://localhost:8001
+-   **API Docs**: http://localhost:8001/docs
 
 ---
 
@@ -18,7 +18,7 @@ Wait 1-2 minutes for everything to start, then:
 
 ### 1. PostgreSQL Database
 
--   Starts on port 5432
+-   Starts on port 5433 (mapped from 5432)
 -   Creates database: `kol_management`
 -   User: `postgres` / Password: `postgres`
 
@@ -26,13 +26,13 @@ Wait 1-2 minutes for everything to start, then:
 
 -   Runs migrations automatically
 -   Seeds default users
--   Starts on port 8000
+-   Starts on port 8001 (mapped from 8000)
 -   Auto-reload enabled
 
 ### 3. Frontend (Next.js)
 
 -   Installs dependencies
--   Starts dev server on port 3000
+-   Starts dev server on port 3001 (mapped from 3000)
 -   Hot reload enabled
 
 ---
@@ -121,7 +121,7 @@ docker-compose exec frontend sh
 
 ### Port Already in Use
 
-**Error**: `Bind for 0.0.0.0:3000 failed: port is already allocated`
+**Error**: `Bind for 0.0.0.0:3001 failed: port is already allocated`
 
 **Solution**:
 
@@ -129,7 +129,7 @@ docker-compose exec frontend sh
 # Stop conflicting services
 # Or change ports in docker-compose.yml
 ports:
-  - "3001:3000"  # Use port 3001 instead
+  - "3002:3000"  # Use port 3002 instead
 ```
 
 ### Database Connection Error
@@ -179,9 +179,9 @@ Expected output:
 
 ```
 NAME            STATUS    PORTS
-kol-postgres    Up        0.0.0.0:5432->5432/tcp
-kol-backend     Up        0.0.0.0:8000->8000/tcp
-kol-frontend    Up        0.0.0.0:3000->3000/tcp
+kol-postgres    Up        0.0.0.0:5433->5432/tcp
+kol-backend     Up        0.0.0.0:8001->8000/tcp
+kol-frontend    Up        0.0.0.0:3001->3000/tcp
 ```
 
 ---
@@ -191,14 +191,14 @@ kol-frontend    Up        0.0.0.0:3000->3000/tcp
 ### Backend
 
 ```bash
-curl http://localhost:8000/health
+curl http://localhost:8001/health
 # Expected: {"status":"healthy"}
 ```
 
 ### Frontend
 
 ```bash
-curl http://localhost:3000
+curl http://localhost:3001
 # Expected: HTML response
 ```
 
@@ -253,8 +253,8 @@ docker-compose logs -f backend frontend
 
 ### 4. Test
 
--   Frontend: http://localhost:3000
--   API: http://localhost:8000/docs
+-   Frontend: http://localhost:3001
+-   API: http://localhost:8001/docs
 
 ### 5. Stop When Done
 
@@ -324,7 +324,7 @@ kol-frontend    | ready - started server on 0.0.0.0:3000
 
 **You're ready to go!** 🚀
 
-Open: http://localhost:3000
+Open: http://localhost:3001
 
 ---
 
